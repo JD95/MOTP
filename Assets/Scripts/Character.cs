@@ -35,7 +35,7 @@ public class Character : MonoBehaviour
 	{
 		if (oldHealth > health) {
 			Instantiate (bloodPrefab, transform.position, transform.rotation);
-			audio.Play();
+			GetComponent<AudioSource>().Play();
 		}
 		gameObject.name = "char" + charID;
 		if (avatar != null) {

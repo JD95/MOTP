@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
 		Transform newPlayerTransform = (Transform)Network.Instantiate (prefab, position, transform.rotation, playerNumber);
 		newPlayerTransform.GetComponent<Character>().charID = charNumber++;
 		playerScripts.Add (newPlayerTransform.GetComponent<Hero> ());
-		NetworkView theNetworkView = newPlayerTransform.networkView;
+		NetworkView theNetworkView = newPlayerTransform.GetComponent<NetworkView>();
 		theNetworkView.RPC ("SetPlayer", RPCMode.AllBuffered, player);
 	}
 	

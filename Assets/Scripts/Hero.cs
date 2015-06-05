@@ -61,7 +61,7 @@ public class Hero : MonoBehaviour
 					if (Network.isServer) {
 						SendMovementInput (click.x, click.y, click.z, hitName);
 					} else if (Network.isClient) {
-						networkView.RPC ("SendMovementInput", RPCMode.Server, click.x, click.y, click.z, hitName);
+						GetComponent<NetworkView>().RPC ("SendMovementInput", RPCMode.Server, click.x, click.y, click.z, hitName);
 					}
 				}
 			}
