@@ -93,38 +93,42 @@ public class ThirdPersonController : MonoBehaviour
     {
         moveDirection = transform.TransformDirection(Vector3.forward);
 
-        _animation = GetComponent<Animation>();
-        if (!_animation)
-            Debug.Log("The character you would like to control doesn't have animations. Moving her might look weird.");
+		loadAnimations();
+    }
 
-        /*
+	void loadAnimations()
+	{
+		_animation = GetComponent<Animation>();
+		if (!_animation)
+			Debug.Log("The character you would like to control doesn't have animations. Moving her might look weird.");
+		
+		/*
     public AnimationClip idleAnimation;
     public AnimationClip walkAnimation;
     public AnimationClip runAnimation;
     public AnimationClip jumpPoseAnimation;	
         */
-        if (!idleAnimation)
-        {
-            _animation = null;
-            Debug.Log("No idle animation found. Turning off animations.");
-        }
-        if (!walkAnimation)
-        {
-            _animation = null;
-            Debug.Log("No walk animation found. Turning off animations.");
-        }
-        if (!runAnimation)
-        {
-            _animation = null;
-            Debug.Log("No run animation found. Turning off animations.");
-        }
-        if (!jumpPoseAnimation && canJump)
-        {
-            _animation = null;
-            Debug.Log("No jump animation found and the character has canJump enabled. Turning off animations.");
-        }
-
-    }
+		if (!idleAnimation)
+		{
+			_animation = null;
+			Debug.Log("No idle animation found. Turning off animations.");
+		}
+		if (!walkAnimation)
+		{
+			_animation = null;
+			Debug.Log("No walk animation found. Turning off animations.");
+		}
+		if (!runAnimation)
+		{
+			_animation = null;
+			Debug.Log("No run animation found. Turning off animations.");
+		}
+		if (!jumpPoseAnimation && canJump)
+		{
+			_animation = null;
+			Debug.Log("No jump animation found and the character has canJump enabled. Turning off animations.");
+		}
+	}
 
     private Vector3 lastPos;
 
@@ -289,132 +293,144 @@ public class ThirdPersonController : MonoBehaviour
 
     Vector3 velocity = Vector3.zero;
 
+	// This takes
     void Update()
     {        
-        if (isControllable)
-        {
-            if (Input.GetButtonDown("Jump"))
-            {
-                lastJumpButtonTime = Time.time;
-            }
+		updatePhysics();
 
-            UpdateSmoothedMovementDirection();
+		updateAnimation();
 
-            // Apply gravity
-            // - extra power jump modifies gravity
-            // - controlledDescent mode modifies gravity
-            ApplyGravity();
+		updateMoveDirection();
 
-            // Apply jumping logic
-            ApplyJumping();
+        lastPos = transform.position;
+    }
 
+	void updatePhysics ()
+	{
+		if (isControllable)
+		{
+			if (Input.GetButtonDown("Jump"))
+			{
+				lastJumpButtonTime = Time.time;
+			}
+			
+			UpdateSmoothedMovementDirection();
+			
+			// Apply gravity
+			// - extra power jump modifies gravity
+			// - controlledDescent mode modifies gravity
+			ApplyGravity();
+			
+			// Apply jumping logic
+			ApplyJumping();
+			
+			
+			// Calculate actual motion
+			Vector3 movement = moveDirection * moveSpeed + new Vector3(0, verticalSpeed, 0) + inAirVelocity;
+			movement *= Time.deltaTime;
+			
+			// Move the controller
+			CharacterController controller = GetComponent<CharacterController>();
+			collisionFlags = controller.Move(movement);
+		}
+		velocity = (transform.position - lastPos)*25;
+	}
 
-            // Calculate actual motion
-            Vector3 movement = moveDirection * moveSpeed + new Vector3(0, verticalSpeed, 0) + inAirVelocity;
-            movement *= Time.deltaTime;
+	void updateAnimation()
+	{
+		if (_animation)
+		{
+			if (_characterState == CharacterState.Jumping)
+			{
+				if (!jumpingReachedApex)
+				{
+					_animation[jumpPoseAnimation.name].speed = jumpAnimationSpeed;
+					_animation[jumpPoseAnimation.name].wrapMode = WrapMode.ClampForever;
+					_animation.CrossFade(jumpPoseAnimation.name);
+				}
+				else
+				{
+					_animation[jumpPoseAnimation.name].speed = -landAnimationSpeed;
+					_animation[jumpPoseAnimation.name].wrapMode = WrapMode.ClampForever;
+					_animation.CrossFade(jumpPoseAnimation.name);
+				}
+			}
+			else
+			{
+				if (this.isControllable && velocity.sqrMagnitude < 0.001f)
+				{
+					_characterState = CharacterState.Idle;
+					_animation.CrossFade(idleAnimation.name);
+				}
+				else
+				{
+					if (_characterState == CharacterState.Idle)
+					{
+						_animation.CrossFade(idleAnimation.name);
+					}
+					else if (_characterState == CharacterState.Running)
+					{
+						_animation[runAnimation.name].speed = runMaxAnimationSpeed;
+						if (this.isControllable)
+						{
+							_animation[runAnimation.name].speed = Mathf.Clamp(velocity.magnitude, 0.0f, runMaxAnimationSpeed);
+						}
+						_animation.CrossFade(runAnimation.name);
+					}
+					else if (_characterState == CharacterState.Trotting)
+					{
+						_animation[walkAnimation.name].speed = trotMaxAnimationSpeed;
+						if (this.isControllable)
+						{
+							_animation[walkAnimation.name].speed = Mathf.Clamp(velocity.magnitude, 0.0f, trotMaxAnimationSpeed);
+						}
+						_animation.CrossFade(walkAnimation.name);
+					}
+					else if (_characterState == CharacterState.Walking)
+					{
+						_animation[walkAnimation.name].speed = walkMaxAnimationSpeed;
+						if (this.isControllable)
+						{
+							_animation[walkAnimation.name].speed = Mathf.Clamp(velocity.magnitude, 0.0f, walkMaxAnimationSpeed);
+						}
+						_animation.CrossFade(walkAnimation.name);
+					}
+					
+				}
+			}
+		}
+	}
 
-            // Move the controller
-            CharacterController controller = GetComponent<CharacterController>();
-            collisionFlags = controller.Move(movement);
-        }
-        velocity = (transform.position - lastPos)*25;
-
-        // ANIMATION sector
-        if (_animation)
-        {
-            if (_characterState == CharacterState.Jumping)
-            {
-                if (!jumpingReachedApex)
-                {
-                    _animation[jumpPoseAnimation.name].speed = jumpAnimationSpeed;
-                    _animation[jumpPoseAnimation.name].wrapMode = WrapMode.ClampForever;
-                    _animation.CrossFade(jumpPoseAnimation.name);
-                }
-                else
-                {
-                    _animation[jumpPoseAnimation.name].speed = -landAnimationSpeed;
-                    _animation[jumpPoseAnimation.name].wrapMode = WrapMode.ClampForever;
-                    _animation.CrossFade(jumpPoseAnimation.name);
-                }
-            }
-            else
-            {
-                if (this.isControllable && velocity.sqrMagnitude < 0.001f)
-                {
-                    _characterState = CharacterState.Idle;
-                    _animation.CrossFade(idleAnimation.name);
-                }
-                else
-                {
-                    if (_characterState == CharacterState.Idle)
-                    {
-                        _animation.CrossFade(idleAnimation.name);
-                    }
-                    else if (_characterState == CharacterState.Running)
-                    {
-                        _animation[runAnimation.name].speed = runMaxAnimationSpeed;
-                        if (this.isControllable)
-                        {
-                            _animation[runAnimation.name].speed = Mathf.Clamp(velocity.magnitude, 0.0f, runMaxAnimationSpeed);
-                        }
-                        _animation.CrossFade(runAnimation.name);
-                    }
-                    else if (_characterState == CharacterState.Trotting)
-                    {
-                        _animation[walkAnimation.name].speed = trotMaxAnimationSpeed;
-                        if (this.isControllable)
-                        {
-                            _animation[walkAnimation.name].speed = Mathf.Clamp(velocity.magnitude, 0.0f, trotMaxAnimationSpeed);
-                        }
-                        _animation.CrossFade(walkAnimation.name);
-                    }
-                    else if (_characterState == CharacterState.Walking)
-                    {
-                        _animation[walkAnimation.name].speed = walkMaxAnimationSpeed;
-                        if (this.isControllable)
-                        {
-                            _animation[walkAnimation.name].speed = Mathf.Clamp(velocity.magnitude, 0.0f, walkMaxAnimationSpeed);
-                        }
-                        _animation.CrossFade(walkAnimation.name);
-                    }
-
-                }
-            }
-        }
-        // ANIMATION sector
-
-        // Set rotation to the move direction
-        if (IsGrounded())
-        {
-
-            transform.rotation = Quaternion.LookRotation(moveDirection);
-
-        }
-        else
-        {
-            /* This causes choppy behaviour when colliding with SIDES
+	void updateMoveDirection()
+	{
+		// Set rotation to the move direction
+		if (IsGrounded())
+		{
+			transform.rotation = Quaternion.LookRotation(moveDirection);
+		}
+		else
+		{
+			/* This causes choppy behaviour when colliding with SIDES
              * Vector3 xzMove = velocity;
             xzMove.y = 0;
             if (xzMove.sqrMagnitude > 0.001f)
             {
                 transform.rotation = Quaternion.LookRotation(xzMove);
             }*/
-        }
-
-        // We are in jump mode but just became grounded
-        if (IsGrounded())
-        {
-            lastGroundedTime = Time.time;
-            inAirVelocity = Vector3.zero;
-            if (jumping)
-            {
-                jumping = false;
-                SendMessage("DidLand", SendMessageOptions.DontRequireReceiver);
-            }
-        }
-
-        lastPos = transform.position;
-    }
+		}
+		
+		// We are in jump mode but just became grounded
+		if (IsGrounded())
+		{
+			lastGroundedTime = Time.time;
+			inAirVelocity = Vector3.zero;
+			if (jumping)
+			{
+				jumping = false;
+				SendMessage("DidLand", SendMessageOptions.DontRequireReceiver);
+			}
+		}
+	}
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -422,6 +438,8 @@ public class ThirdPersonController : MonoBehaviour
         if (hit.moveDirection.y > 0.01f)
             return;
     }
+
+	// Gets 
 
     public float GetSpeed()
     {

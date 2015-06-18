@@ -1,5 +1,12 @@
 using UnityEngine;
 
+/* 
+	This handles what attributes of the object are synced across the network.
+	Mostly these would be things related to models and animations and things like
+	health and money would be stored in some kind of central location like the game
+	manager.
+ */
+
 public class NetworkCharacter : Photon.MonoBehaviour
 {
     private Vector3 correctPlayerPos = Vector3.zero; // We lerp towards this
