@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class CameraControl : MonoBehaviour {
@@ -9,15 +9,18 @@ public class CameraControl : MonoBehaviour {
 	private Vector3 desired;
 	
 	void Update () {
-		Vector3 newDesired = target.position;
-		if (desired != newDesired) {
-			time = 0;
-			desired = newDesired;
+		if (target != null && PhotonNetwork.playerList.Length > 0)
+		{
+			Vector3 newDesired = target.position;
+			if (desired != newDesired) {
+				time = 0;
+				desired = newDesired;
+			}
+			time += Time.deltaTime*5;
+			Vector3 lerpTarget = Vector3.Lerp(transform.position - offset, desired, time);
+			transform.position = lerpTarget + offset;
+			transform.LookAt(lerpTarget);
 		}
-		time += Time.deltaTime*5;
-		Vector3 lerpTarget = Vector3.Lerp(transform.position - offset, desired, time);
-		transform.position = lerpTarget + offset;
-		transform.LookAt(lerpTarget);
 	}
 	
 	public void SetTarget(Transform t) {

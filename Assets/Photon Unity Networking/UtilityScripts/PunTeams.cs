@@ -12,7 +12,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 /// Teams are defined by enum Team. Change this to get more / different teams.
 /// There are no rules when / if you can join a team. You could add this in JoinTeam or something.
 /// </remarks>
-public class PunTeams : MonoBehaviour
+public class PunTeams : Photon.MonoBehaviour
 {
     /// <summary>Enum defining the teams available. First team should be neutral (it's the default value any field of this enum gets).</summary>
     public enum Team : byte {none, red, blue};

@@ -1,56 +1,104 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Character : MonoBehaviour
 {
-	public string team;
-	public float health;
-	public float maxHealth;
-	public int creeps = 0;
-	public int level = 1;
-	public float range = 2;
-	public float damage = 1.5f;
 	private Texture2D backgroundTexture;
 	public Texture2D healthTexture;
+
+	public string team;
+
+	public float health;
+	private float oldHealth;
+
+	public float maxHealth;
+
+	public int creeps = 0;
+	public int level = 1;
+
+	public float range = 2;
+	public float damage = 1.5f;
+
 	public int charID = 0;
 	public bool isHero = false;
 	public bool isBase = false;
-	public static int killsA = 0;
-	public static int killsB = 0;
-	public static char victoriousTeam = '0';
+
 	public float xp = 0;
+
 	public GUISkin skin;
 	public Transform bloodPrefab;
 	public Animation avatar;
+
+	private float speed;
+
+	private CharacterController movementControler;
 	
 	void Awake ()
 	{
+		movementControler = GetComponent<CharacterController>();
+
 		backgroundTexture = new Texture2D (1, 1, TextureFormat.RGB24, false);
 		backgroundTexture.SetPixel (0, 0, Color.black);
 		backgroundTexture.Apply ();
+
+		gameObject.name = "char" + charID;
+
+		speed = 10.0F;
 	}
-	
-	private float oldHealth;
+
 	void Update ()
 	{
+		// Damage has been done to character
 		if (oldHealth > health) {
 			Instantiate (bloodPrefab, transform.position, transform.rotation);
 			GetComponent<AudioSource>().Play();
 		}
-		gameObject.name = "char" + charID;
+
+		// Set the health
+		oldHealth = health;
+	}
+
+// Legacy Function
+	/*
+	void animateCharacter ()
+	{
 		if (avatar != null) {
+			
 			Vector3 v = GetComponent<CharacterController>().velocity;
 			v.y = 0;
+			
+			// If the character has velocity, do the walking animation
 			if (v.magnitude > 0f) {
 				avatar.CrossFade("walk-cicle",0.1f);
 			}
 			else {
+				
+				// Otherwise play the idle animation
 				avatar.CrossFade("idle", 0.5f);
 			}
 		}
-		oldHealth = health;
 	}
-	
+	*/ 
+
+	public void doWalkAnimation()
+	{
+		avatar.CrossFade("walk-cicle",0.1f);
+	}
+
+	public void doIdleAnimation()
+	{
+		avatar.CrossFade("idle", 0.5f);
+	}
+
+	public void moveTo (Waypoint location)
+	{
+		Vector3 heading = location.getPosition() - transform.position;
+		float distance = heading.magnitude;
+		Vector3 direction = heading / distance;
+
+		movementControler.SimpleMove(direction * speed);
+	}
+
 	public void Xp(float xp) {
 		this.xp += xp;
 		if (level < 10 && this.xp >= 5) {
@@ -61,7 +109,8 @@ public class Character : MonoBehaviour
 				level = 10;
 		}
 	}
-	
+
+	// Calculate the damage the character should do
 	public float Damage() {
 		if (isHero) {
 			return 2 * (0.833f + level*0.16667f);
@@ -70,47 +119,13 @@ public class Character : MonoBehaviour
 			return damage;
 		}
 	}
-	
-	public void Hit (float damage)
-	{
-		if (victoriousTeam != '0') {
-			return;
-		}
-		if (isHero)
-			health -= damage/level;
-		else
-			health -= damage;
-		if (health < 0) {
-			health = 0;
-			if (isHero) {
-				if (tag == "teamA") {
-					killsB++;
-				}
-				else {
-					killsA++;
-				}
-			}
-			
-			if (isBase) {
-				if (tag == "teamA") {
-					victoriousTeam = 'v';
-				}
-				else {
-					victoriousTeam = 'c';
-				}
-				Debug.Log(victoriousTeam);
-			}
-			
-		} else if (health > maxHealth) {
-			health = maxHealth;
-		}
-	}
-	
+		
 	// Health Bar (all) and level (hero only)
 	void OnGUI ()
 	{
 		if (GameManager.paused)
 			return;
+
 		GUI.skin = skin;
 		GUI.depth = 3;
 
@@ -155,5 +170,8 @@ public class Character : MonoBehaviour
 			
 	}
 	
-	
+	public Vector3 getVelocity()
+	{
+		return movementControler.velocity;
+	}
 }

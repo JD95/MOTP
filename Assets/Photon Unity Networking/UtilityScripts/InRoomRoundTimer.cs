@@ -15,7 +15,7 @@ using UnityEngine;
 /// 
 /// Based on this, you should be able to implement a synchronized timer for turns between players.
 /// </remarks>
-public class InRoomRoundTimer : MonoBehaviour
+public class InRoomRoundTimer : Photon.MonoBehaviour
 {
     public int SecondsPerTurn = 5;                  // time per round/turn
     public double StartTime;                        // this should could also be a private. i just like to see this in inspector

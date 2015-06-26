@@ -22,7 +22,7 @@ public class SmoothSyncMovement : Photon.MonoBehaviour
         }
         else
         {
-            //Network player, receive data
+            //PhotonNetwork player, receive data
             correctPlayerPos = (Vector3)stream.ReceiveNext();
             correctPlayerRot = (Quaternion)stream.ReceiveNext();
         }

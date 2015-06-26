@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class CreepAI : MonoBehaviour
+public class CreepAI : Photon.MonoBehaviour
 {
 	public Waypoint nextWaypoint;
 	private Character c;
@@ -25,7 +25,7 @@ public class CreepAI : MonoBehaviour
 	
 	void Update ()
 	{
-		if (Network.isServer) {
+
 			if (nextWaypoint != null) {
 				if (target == null && !tower) {
 					transform.LookAt (nextWaypoint.transform);
@@ -48,8 +48,8 @@ public class CreepAI : MonoBehaviour
 						if (!tower)
 							movement = Vector3.zero - Vector3.up * 10;
 						if (gunTime <= 0 && target.health > 0) {
-							Network.Instantiate (ShotPrefab, transform.position, transform.rotation, 0);
-							target.Hit (c.Damage ());
+							//PhotonNetwork.Instantiate (ShotPrefab, transform.position, transform.rotation, 0);
+							//target.Hit (c.Damage ());
 							gunTime = 1;
 						}
 						gunTime -= Time.deltaTime;
@@ -61,52 +61,51 @@ public class CreepAI : MonoBehaviour
 			} else if (target == null && !tower) {
 				movement = Vector3.zero - Vector3.up * 10;
 			}
-		}
 
 		// creep died
-		if (Network.isServer && c.health <= 0) {
-			Network.Destroy (gameObject);
+		if (c.health <= 0) {
+			PhotonNetwork.Destroy (gameObject);
 		}
 		if (!tower) {
 			GetComponent<CharacterController> ().Move (this.movement * Time.deltaTime);
 		}
 	}
 	
-	void OnSerializeNetworkView (BitStream stream, NetworkMessageInfo info)
-	{
-		if (stream.isWriting) {
-			Vector3 pos = transform.position;
-			float rot = transform.eulerAngles.y;
-			Vector3 vel = movement;
-			float health = c.health;
-			int id = c.charID;
-			stream.Serialize (ref id);
-			if (!tower) {
-				stream.Serialize (ref pos);
-				stream.Serialize (ref rot);
-				stream.Serialize (ref vel);
-			}
-			stream.Serialize (ref health);
-		} else {
-			Vector3 posReceive = Vector3.zero;
-			float rotReceive = 0;
-			Vector3 velReceive = Vector3.zero;
-			float health = 0;
-			int id = 0;
-			stream.Serialize (ref id);
-			if (!tower) {
-				stream.Serialize (ref posReceive);
-				stream.Serialize (ref rotReceive);
-				stream.Serialize (ref velReceive);
-				transform.position = posReceive;
-				Vector3 rot = transform.eulerAngles;
-				rot.y = rotReceive;
-				transform.eulerAngles = rot;
-				movement = velReceive;
-			}
-			stream.Serialize (ref health);
-			c.health = health;
-			c.charID = id;
-		}
-	}
+//	void OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
+//	{
+//		if (stream.isWriting) {
+//			Vector3 pos = transform.position;
+//			float rot = transform.eulerAngles.y;
+//			Vector3 vel = movement;
+//			float health = c.health;
+//			int id = c.charID;
+//			stream.Serialize (ref id);
+//			if (!tower) {
+//				stream.Serialize (ref pos);
+//				stream.Serialize (ref rot);
+//				stream.Serialize (ref vel);
+//			}
+//			stream.Serialize (ref health);
+//		} else {
+//			Vector3 posReceive = Vector3.zero;
+//			float rotReceive = 0;
+//			Vector3 velReceive = Vector3.zero;
+//			float health = 0;
+//			int id = 0;
+//			stream.Serialize (ref id);
+//			if (!tower) {
+//				stream.Serialize (ref posReceive);
+//				stream.Serialize (ref rotReceive);
+//				stream.Serialize (ref velReceive);
+//				transform.position = posReceive;
+//				Vector3 rot = transform.eulerAngles;
+//				rot.y = rotReceive;
+//				transform.eulerAngles = rot;
+//				movement = velReceive;
+//			}
+//			stream.Serialize (ref health);
+//			c.health = health;
+//			c.charID = id;
+//		}
+//	}
 }

@@ -2,7 +2,7 @@ using System.Text;
 using UnityEngine;
 using System.Collections;
 
-public class SupportLogger : MonoBehaviour
+public class SupportLogger : Photon.MonoBehaviour
 {
     public bool LogTrafficStats = true;
 
@@ -19,7 +19,7 @@ public class SupportLogger : MonoBehaviour
     }
 }
 
-public class SupportLogging : MonoBehaviour
+public class SupportLogging : Photon.MonoBehaviour
 {
     public bool LogTrafficStats;
 

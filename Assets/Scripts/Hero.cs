@@ -1,128 +1,167 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class Hero : MonoBehaviour
+public class Hero : Photon.MonoBehaviour
 {
-
-	public NetworkPlayer theOwner;
-	Vector3 lastClientClick;
-	Vector3 serverCurrentClick;
 	bool clicked = false;
-	private Character c;
-	private CharacterController charController;
-	private Vector3 movement;
-	private Vector3 originalPos;
-	private Character target;
+
+	public bool mine = false;
+
+	public PhotonPlayer theOwner;
+
+	private Character character;
+
+	public Waypoint targetLocation;
+	
+	private float gunTime = 0;
+
 	public Transform ShotPrefab;
 	
 	void Start ()
 	{
-		c = GetComponent<Character> ();
-		charController = GetComponent<CharacterController> ();
+		character = GetComponent<Character> ();
+		targetLocation = GameObject.Find("A").GetComponent<Waypoint>();
 	}
 	
 	void Awake ()
 	{
-		if (Network.isServer) {
-			originalPos = transform.position;
+		if (PhotonNetwork.isMasterClient) {
 		}
-		c = GetComponent<Character> ();
-		charController = GetComponent<CharacterController> ();
 	}
 
 	[RPC]
-	void SetPlayer (NetworkPlayer player)
+	void SetPlayer (PhotonPlayer player)
 	{
 		theOwner = player;
-		if (player == Network.player)
+		if (player == PhotonNetwork.player)
 			enabled = true;
 	}
 	
-	private float gunTime = 0;
 	
 	void Update ()
 	{
-		if (Network.player == theOwner) {
-			Camera.main.GetComponent<CameraControl> ().SetTarget (transform);
-			if (Input.GetButtonDown ("Fire1")) {
-				Vector2 point = Input.mousePosition;
-				RaycastHit hit = new RaycastHit ();
-				Vector3 click = lastClientClick;
-				string hitName = name;
-				if (Physics.Raycast (Camera.main.ScreenPointToRay (point), out hit, 100.0f)) {
-					if (hit.collider.name != transform.name) {
-						click = hit.point;
-						hitName = hit.collider.name;
-					}
-				}
-				
-				if (lastClientClick != click) {
-					lastClientClick = click;
-					if (Network.isServer) {
-						SendMovementInput (click.x, click.y, click.z, hitName);
-					} else if (Network.isClient) {
-						GetComponent<NetworkView>().RPC ("SendMovementInput", RPCMode.Server, click.x, click.y, click.z, hitName);
-					}
-				}
-			}
-		}
+		Camera.main.GetComponent<CameraControl> ().SetTarget (transform);
+
+		adjustDestination();	
+	
+		//testFollowPath();
+
+		if(targetLocation != null)
+			coverDistance (transform.position ,targetLocation.getPosition());
+
+//			gunTime -= Time.deltaTime;
+//			if (target == null) {
+//				float distance = (serverCurrentClick - transform.position).magnitude;
+//				if (serverCurrentClick != Vector3.zero && distance > 1) {
+//					transform.LookAt (serverCurrentClick);
+//					Vector3 euler = transform.localEulerAngles;
+//					euler.x = 0;
+//					euler.z = 0;
+//					transform.localEulerAngles = euler;
+//					movement = transform.TransformDirection (Vector3.forward) * 5 - Vector3.up * 10;
+//				}
+//				else {
+//					movement = Vector3.zero - Vector3.up * 10;
+//				}
+//			} else {
+//				transform.LookAt (target.transform);
+//				float distance = (transform.position - target.transform.position).magnitude;
+//				if (distance < c.range) {
+//					movement = Vector3.zero - Vector3.up * 10;
+//					if (clicked) {
+//						clicked = false;
+//						if (gunTime <= 0) {
+//							gunTime = 0.25f;
+//							if (target.health > 0) {
+//								target.Hit(c.Damage());
+//								PhotonNetwork.Instantiate ("ShotPrefab", transform.position, transform.rotation, 0);
+//								if (target.health <= 0 && target.tag != tag) {
+//									if (target.isHero) {
+//										c.Xp(3);
+//									}
+//									else {
+//										c.creeps++;
+//										c.Xp(1);
+//									}
+//								}
+//							}
+//						}
+//					}
+//				} else {
+//					movement = transform.TransformDirection (Vector3.forward) * 5 - Vector3.up * 10;
+//				}
+//			}
+//			
+//			if (c.health <= 0) {
+//				c.health = c.maxHealth;
+//				transform.position = originalPos;
+//			}
+//			else {
+//				c.Hit(-0.25f * Time.deltaTime);
+//			}
 		
-		if (Network.isServer) {
-			gunTime -= Time.deltaTime;
-			if (target == null) {
-				float distance = (serverCurrentClick - transform.position).magnitude;
-				if (serverCurrentClick != Vector3.zero && distance > 1) {
-					transform.LookAt (serverCurrentClick);
-					Vector3 euler = transform.localEulerAngles;
-					euler.x = 0;
-					euler.z = 0;
-					transform.localEulerAngles = euler;
-					movement = transform.TransformDirection (Vector3.forward) * 5 - Vector3.up * 10;
-				}
-				else {
-					movement = Vector3.zero - Vector3.up * 10;
-				}
-			} else {
-				transform.LookAt (target.transform);
-				float distance = (transform.position - target.transform.position).magnitude;
-				if (distance < c.range) {
-					movement = Vector3.zero - Vector3.up * 10;
-					if (clicked) {
-						clicked = false;
-						if (gunTime <= 0) {
-							gunTime = 0.25f;
-							if (target.health > 0) {
-								target.Hit(c.Damage());
-								Network.Instantiate (ShotPrefab, transform.position, transform.rotation, 0);
-								if (target.health <= 0 && target.tag != tag) {
-									if (target.isHero) {
-										c.Xp(3);
-									}
-									else {
-										c.creeps++;
-										c.Xp(1);
-									}
-								}
-							}
-						}
-					}
-				} else {
-					movement = transform.TransformDirection (Vector3.forward) * 5 - Vector3.up * 10;
-				}
-			}
-			
-			if (c.health <= 0) {
-				c.health = c.maxHealth;
-				transform.position = originalPos;
-			}
-			else {
-				c.Hit(-0.25f * Time.deltaTime);
-			}
-		}
-		
-		charController.Move(movement*Time.deltaTime);
 	}
 
+	void adjustDestination ()
+	{
+		if (Input.GetButtonDown ("Fire1")) { //Debug.Log ("Click!");	
+
+			// Remove old waypoint
+			//GameObject.Destroy(targetLocation);
+
+			// Create a new waypoint on your client only
+			Waypoint clickedLocation = ((GameObject)Resources.Load("WayPoint")).GetComponent<Waypoint>();
+
+			// CURRENTLY NOT RETURNING hitName!
+			clickedLocation.transform.position = checkForObstacles(Input.mousePosition);
+
+			targetLocation = clickedLocation;
+			
+			// Moves Character
+			transform.LookAt(targetLocation.transform.position);
+
+		}
+	}
+
+	void coverDistance(Vector3 currPosition, Vector3 destination)
+	{
+		if (Vector3.Distance(currPosition,destination) >= 0.1){
+
+			character.doWalkAnimation();
+
+			character.moveTo(targetLocation);
+
+		} else {
+			character.doIdleAnimation();
+		}
+	}
+
+	Vector3 checkForObstacles (Vector2 point)
+	{
+		RaycastHit hit = new RaycastHit ();
+		Vector3 click = new Vector3();
+		string hitName = name;
+
+		// If player clicks in the middle of a mountain, if will make the character
+		// Walk towards that area until it reaches the base of the mountain
+		if (Physics.Raycast (Camera.main.ScreenPointToRay (point), out hit, 100.0f)) {
+			if (hit.collider.name != transform.name) {
+				return  hit.point; //hitName = hit.collider.name;
+			}
+		}
+		return point;
+	}
+
+	void testFollowPath()
+	{
+
+		if (transform.position.AlmostEquals(targetLocation.getPosition(), 0.1F))
+			targetLocation = targetLocation.next;
+
+		transform.LookAt(targetLocation.transform.position);
+	}
+
+	/*
 	[RPC]
 	void SendMovementInput (float x, float y, float z, string hitName)
 	{
@@ -138,8 +177,10 @@ public class Hero : MonoBehaviour
 		serverCurrentClick = new Vector3 (x, y, z);
 		clicked = true;
 	}
-	
-	void OnSerializeNetworkView (BitStream stream, NetworkMessageInfo info)
+	*/
+
+	/*
+	void OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
 	{
 		if (stream.isWriting) {
 			Vector3 pos = transform.position;
@@ -192,4 +233,5 @@ public class Hero : MonoBehaviour
 			c.level = level;
 		}
 	}
+	*/
 }

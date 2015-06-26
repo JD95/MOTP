@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 
-public class ServerTime : MonoBehaviour
+public class ServerTime : Photon.MonoBehaviour
 {
     // Update is called once per frame
     void OnGUI()

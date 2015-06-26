@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [RequireComponent(typeof (PhotonView))]
 public class HighlightOwnedGameObj : Photon.MonoBehaviour

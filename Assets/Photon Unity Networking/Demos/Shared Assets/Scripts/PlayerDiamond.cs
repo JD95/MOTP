@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class PlayerDiamond : MonoBehaviour
+public class PlayerDiamond : Photon.MonoBehaviour
 {
     #region Properties
     public Transform HeadTransform;

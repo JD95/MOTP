@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class OnJoinedInstantiate : MonoBehaviour
+public class OnJoinedInstantiate : Photon.MonoBehaviour
 {
     public Transform SpawnPosition;
     public float PositionOffset = 2.0f;

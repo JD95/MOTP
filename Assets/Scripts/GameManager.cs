@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Photon.MonoBehaviour
 {
 	
 	// hero prefabs
@@ -14,89 +14,73 @@ public class GameManager : MonoBehaviour
 	public CreepAI creepPrefabA;
 	public CreepAI creepPrefabB;
 	
-	// lanes
-	public Waypoint spawnA;
-	public Waypoint spawnB;
+	// Hero Spawn Locations
+	public GameObject[] redspawn;
+	public GameObject[] bluespawn;
 	
 	public static bool paused = true;
 	
 	public List<Hero> playerScripts = new List<Hero> ();
 	private int charNumber = 0;
-	public static int players = 0;
-	private int playersConnected = 0;
-	private NetworkPlayer[] networkPlayers;
+	
  	private bool init = false;
 	
 	void Start() {
 		paused = true;
 	}
 	
-	void OnServerInitialized ()
-	{
-		networkPlayers = new NetworkPlayer[players];
-		networkPlayers[playersConnected++] = Network.player;
-		if (playersConnected >= players) {
-			InitGame();
-		}
-	}
-	
-	private void InitGame() {
+	public void InitGame(/*PhotonPlayer[] networkPlayers, int players */) {
 		paused = false;
 		int count = 0;
 		init = true;
-		foreach(NetworkPlayer player in networkPlayers) {
-			if (count < players / 2) {
-				SpawnPlayer (playerPrefabA, player, spawnA.transform.position + new Vector3(-2-2*count,0.5f,0));
-			}
-			else {
-				SpawnPlayer (playerPrefabB, player, spawnB.transform.position + new Vector3(-2-2*count,0.5f,0));
-			}
-			count++;
-		}
+		SpawnPlayer (/*playerPrefabA, player, spawnA.transform.position + new Vector3(-2-2*count,0.5f,0)*/);
 	}
 	
-	void OnPlayerConnected (NetworkPlayer player)
-	{
-		networkPlayers[playersConnected++] = player;
-		if (playersConnected >= players) {
-			InitGame();
-		}
-	}
 	
-	void SpawnPlayer (Transform prefab, NetworkPlayer player, Vector3 position)
+	public void SpawnPlayer (/*Transform prefab, PhotonPlayer player, Vector3 position */)
 	{
-		string tempPlayerString = player.ToString ();
-		int playerNumber = Convert.ToInt32 (tempPlayerString);
-		Transform newPlayerTransform = (Transform)Network.Instantiate (prefab, position, transform.rotation, playerNumber);
-		newPlayerTransform.GetComponent<Character>().charID = charNumber++;
-		playerScripts.Add (newPlayerTransform.GetComponent<Hero> ());
-		NetworkView theNetworkView = newPlayerTransform.GetComponent<NetworkView>();
-		theNetworkView.RPC ("SetPlayer", RPCMode.AllBuffered, player);
+//		string tempPlayerString = player.ToString ();
+//		int playerNumber = Convert.ToInt32 (tempPlayerString);
+//
+//		var newPlayer = PhotonNetwork.Instantiate ("HeroPrefabA", position, transform.rotation, playerNumber);
+//		newPlayer.transform.GetComponent<Character>().charID = charNumber++;
+//
+//
+//		GameObject.Find("Main Camera").GetComponent<CameraControl>().SetTarget(newPlayer.transform);
+		GameObject mySpawn = redspawn[UnityEngine.Random.Range(0,redspawn.Length)];
+		GameObject myPlayer = PhotonNetwork.Instantiate("HeroPrefabA", mySpawn.transform.position, mySpawn.transform.rotation,0);
+
+		// No one else can control our character except for us!
+		myPlayer.GetComponent<Hero>().enabled = true;
+		myPlayer.GetComponent<Character>().enabled = true;
+		myPlayer.GetComponent<AudioSource>().enabled = true;
+		myPlayer.GetComponent<CharacterController>().enabled = true;
+		myPlayer.GetComponent<NetworkCharacter>().enabled = true;
 	}
 	
 	private float time = 15;
 
 	public void Update ()
 	{
-		if (Network.isServer && init && Character.victoriousTeam == '0') {
+		if (init) {
 			if (time >= 15) {
-				// creep A
-				SpawnCreep(creepPrefabA, spawnA, 0);
-				SpawnCreep(creepPrefabA, spawnA, -2);
-				SpawnCreep(creepPrefabA, spawnA, -4);
-				
-				// creep B
-				SpawnCreep(creepPrefabB, spawnB, 0);
-				SpawnCreep(creepPrefabB, spawnB, 2);
-				SpawnCreep(creepPrefabB, spawnB, 4);
-				time = 0;
+//				// creep A
+//				SpawnCreep(creepPrefabA, spawnA, 0);
+//				SpawnCreep(creepPrefabA, spawnA, -2);
+//				SpawnCreep(creepPrefabA, spawnA, -4);
+//				
+//				// creep B
+//				SpawnCreep(creepPrefabB, spawnB, 0);
+//				SpawnCreep(creepPrefabB, spawnB, 2);
+//				SpawnCreep(creepPrefabB, spawnB, 4);
+//				time = 0;
 			}
 			time += Time.deltaTime;
 		}
 	}
 	
 	private void SpawnCreep(CreepAI prefab, Waypoint spawn, int offset) {
-		CreepAI creep = (CreepAI) Network.Instantiate (prefab, spawn.transform.position + new Vector3(offset,0,offset), spawn.transform.rotation, 0);
+		var creep = PhotonNetwork.Instantiate ("CreepPrefabB", spawn.transform.position + new Vector3(offset,0,offset), spawn.transform.rotation, 0).GetComponent<CreepAI>();
 		creep.nextWaypoint = spawn;
 		creep.GetComponent<Character>().charID = charNumber++;
 	}

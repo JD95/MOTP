@@ -4,7 +4,7 @@ using System.Collections;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 
-public class PunPlayerScores : MonoBehaviour
+public class PunPlayerScores : Photon.MonoBehaviour
 {
     public const string PlayerScoreProp = "score";
 }

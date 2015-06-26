@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class ClickDetector : MonoBehaviour
+public class ClickDetector : Photon.MonoBehaviour
 {
 
 	void Update()

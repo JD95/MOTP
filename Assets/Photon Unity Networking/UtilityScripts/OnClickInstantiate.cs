@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class OnClickInstantiate : MonoBehaviour
+public class OnClickInstantiate : Photon.MonoBehaviour
 {
     public GameObject Prefab;
     public int InstantiateType;

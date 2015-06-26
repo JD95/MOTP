@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class IdleRunJump : MonoBehaviour 
+public class IdleRunJump : Photon.MonoBehaviour 
 {
     protected Animator animator;
     public float DirectionDampTime = .25f;
