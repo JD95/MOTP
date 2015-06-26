@@ -25,8 +25,6 @@ public class Hero : Photon.MonoBehaviour
 	
 	void Awake ()
 	{
-		if (PhotonNetwork.isMasterClient) {
-		}
 	}
 
 	[RPC]
@@ -42,7 +40,8 @@ public class Hero : Photon.MonoBehaviour
 	{
 		Camera.main.GetComponent<CameraControl> ().SetTarget (transform);
 
-		adjustDestination();	
+		//if(photonView.isMine)
+			adjustDestination();	
 	
 		//testFollowPath();
 
@@ -125,15 +124,13 @@ public class Hero : Photon.MonoBehaviour
 
 	void coverDistance(Vector3 currPosition, Vector3 destination)
 	{
-		if (Vector3.Distance(currPosition,destination) >= 0.1){
-
-			character.doWalkAnimation();
-
+		if (Vector3.Distance(currPosition,destination) >= 0.1)
+		{
+			character.currentAnimation = Animations.walking;
 			character.moveTo(targetLocation);
+		}else 
+			character.currentAnimation = Animations.idle;
 
-		} else {
-			character.doIdleAnimation();
-		}
 	}
 
 	Vector3 checkForObstacles (Vector2 point)

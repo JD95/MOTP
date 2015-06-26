@@ -56,6 +56,8 @@ public class GameManager : Photon.MonoBehaviour
 		myPlayer.GetComponent<AudioSource>().enabled = true;
 		myPlayer.GetComponent<CharacterController>().enabled = true;
 		myPlayer.GetComponent<NetworkCharacter>().enabled = true;
+
+		GameObject.Find("Main Camera").GetComponent<CameraControl>().SetTarget(transform);
 	}
 	
 	private float time = 15;

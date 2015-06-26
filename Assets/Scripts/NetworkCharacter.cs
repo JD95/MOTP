@@ -11,7 +11,8 @@ public class NetworkCharacter : Photon.MonoBehaviour
 {
     private Vector3 correctPlayerPos = Vector3.zero; // We lerp towards this
     private Quaternion correctPlayerRot = Quaternion.identity; // We lerp towards this
-    // Update is called once per frame
+    
+	// Update is called once per frame
     void Update()
     {
         if (!photonView.isMine)
@@ -29,8 +30,8 @@ public class NetworkCharacter : Photon.MonoBehaviour
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
 
-			CharacterController myC = GetComponent<CharacterController>();
-            stream.SendNext((Vector3)myC.velocity);
+			Character myChar = GetComponent<Character>();
+			stream.SendNext((int)myChar.currentAnimation);
         }
         else
         {
@@ -38,8 +39,8 @@ public class NetworkCharacter : Photon.MonoBehaviour
             this.correctPlayerPos = (Vector3)stream.ReceiveNext();
             this.correctPlayerRot = (Quaternion)stream.ReceiveNext();
 
-			CharacterController myC = GetComponent<CharacterController>();
-			myC.Move( (Vector3)stream.ReceiveNext());
+			Character myChar = GetComponent<Character>();
+			myChar.currentAnimation = (Animations)stream.ReceiveNext();
         }
     }
 }

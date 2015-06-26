@@ -16,6 +16,8 @@ public class NetworkManager : Photon.MonoBehaviour {
 	private int playersConnected = 0;
 	private PhotonPlayer[] networkPlayers;
 	public static int playerCount = 0;
+
+	private int playerID;
 	
 	public delegate bool gameJoin();
 
@@ -60,10 +62,13 @@ public class NetworkManager : Photon.MonoBehaviour {
 	void OnJoinedRoom ()
 	{
 		Debug.Log("Player Connected");
+
 //		networkPlayers[playersConnected++] = player;
 //		if (playersConnected >= playerCount) {
 //			gameManager.InitGame(networkPlayers, playerCount);
 //		}
+
+		playerID = playerCount++;
 		gameManager.InitGame();
 	}
 	

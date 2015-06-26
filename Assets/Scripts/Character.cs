@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+
+public enum Animations {idle, walking};
+
 public class Character : MonoBehaviour
 {
 	private Texture2D backgroundTexture;
@@ -32,7 +35,9 @@ public class Character : MonoBehaviour
 	private float speed;
 
 	private CharacterController movementControler;
-	
+
+	public Animations currentAnimation = Animations.idle;
+
 	void Awake ()
 	{
 		movementControler = GetComponent<CharacterController>();
@@ -53,6 +58,8 @@ public class Character : MonoBehaviour
 			Instantiate (bloodPrefab, transform.position, transform.rotation);
 			GetComponent<AudioSource>().Play();
 		}
+
+		animate ();
 
 		// Set the health
 		oldHealth = health;
@@ -79,15 +86,17 @@ public class Character : MonoBehaviour
 		}
 	}
 	*/ 
+	
 
-	public void doWalkAnimation()
+	void animate()
 	{
-		avatar.CrossFade("walk-cicle",0.1f);
-	}
-
-	public void doIdleAnimation()
-	{
-		avatar.CrossFade("idle", 0.5f);
+		switch (currentAnimation)
+		{
+		case Animations.idle:
+			avatar.CrossFade("idle",0.5f); break;
+		case Animations.walking:
+			avatar.CrossFade("walk-cicle",0.1f); break;
+		}
 	}
 
 	public void moveTo (Waypoint location)
