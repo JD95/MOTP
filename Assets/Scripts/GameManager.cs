@@ -50,16 +50,22 @@ public class GameManager : Photon.MonoBehaviour
 		GameObject mySpawn = redspawn[UnityEngine.Random.Range(0,redspawn.Length)];
 		GameObject myPlayer = PhotonNetwork.Instantiate("HeroPrefabA", mySpawn.transform.position, mySpawn.transform.rotation,0);
 
-		// No one else can control our character except for us!
-		myPlayer.GetComponent<Hero>().enabled = true;
-		myPlayer.GetComponent<Character>().enabled = true;
-		myPlayer.GetComponent<AudioSource>().enabled = true;
-		myPlayer.GetComponent<CharacterController>().enabled = true;
-		myPlayer.GetComponent<NetworkCharacter>().enabled = true;
+		enablePlayer (myPlayer);
 
-		GameObject.Find("Main Camera").GetComponent<CameraControl>().SetTarget(transform);
+		GameObject.Find("Main Camera").GetComponent<CameraControl>().SetTarget(myPlayer.transform);
 	}
-	
+
+	void enablePlayer(GameObject player)
+	{
+		// No one else can control our character except for us!
+		player.GetComponent<Hero>().enabled = true;
+		player.GetComponent<Character>().enabled = true;
+		player.GetComponent<AudioSource>().enabled = true;
+		player.GetComponent<CharacterController>().enabled = true;
+		player.GetComponent<NetworkCharacter>().enabled = true;
+
+	}
+
 	private float time = 15;
 
 	public void Update ()

@@ -6,11 +6,13 @@ public enum Animations {idle, walking};
 
 public class Character : MonoBehaviour
 {
+	static int numchars;
 	private Texture2D backgroundTexture;
 	public Texture2D healthTexture;
 
 	public string team;
 
+	// Combat info
 	public float health;
 	private float oldHealth;
 
@@ -22,12 +24,14 @@ public class Character : MonoBehaviour
 	public float range = 2;
 	public float damage = 1.5f;
 
+	// Map stuff
 	public int charID = 0;
 	public bool isHero = false;
 	public bool isBase = false;
 
 	public float xp = 0;
 
+	// Character Model
 	public GUISkin skin;
 	public Transform bloodPrefab;
 	public Animation avatar;
@@ -46,6 +50,7 @@ public class Character : MonoBehaviour
 		backgroundTexture.SetPixel (0, 0, Color.black);
 		backgroundTexture.Apply ();
 
+		charID = numchars++;
 		gameObject.name = "char" + charID;
 
 		speed = 10.0F;
@@ -65,28 +70,6 @@ public class Character : MonoBehaviour
 		oldHealth = health;
 	}
 
-// Legacy Function
-	/*
-	void animateCharacter ()
-	{
-		if (avatar != null) {
-			
-			Vector3 v = GetComponent<CharacterController>().velocity;
-			v.y = 0;
-			
-			// If the character has velocity, do the walking animation
-			if (v.magnitude > 0f) {
-				avatar.CrossFade("walk-cicle",0.1f);
-			}
-			else {
-				
-				// Otherwise play the idle animation
-				avatar.CrossFade("idle", 0.5f);
-			}
-		}
-	}
-	*/ 
-	
 
 	void animate()
 	{
@@ -119,14 +102,34 @@ public class Character : MonoBehaviour
 		}
 	}
 
-	// Calculate the damage the character should do
-	public float Damage() {
-		if (isHero) {
-			return 2 * (0.833f + level*0.16667f);
+	public void recieve_Damage_Physical(float amount)
+	{
+		this.health -= amount;
+
+		if (this.health <= 0)
+		{	
+			// deathAnimation();
+			// createTimer_to_destory model();
+			GameObject.Destroy(gameObject);
 		}
-		else {
-			return damage;
-		}
+	}
+
+	public void recieve_Damage_Magic(float amount)
+	{
+		// magicResistance();
+		this.health -= amount;
+	}
+
+	public void recieve_Healing(float amount)
+	{
+		// healingBuffs();
+		this.health += amount;
+	}
+
+	public void cause_Damage_Physical(Character target)
+	{
+		// damageBuffs();
+		target.recieve_Damage_Physical(10.0f);
 	}
 		
 	// Health Bar (all) and level (hero only)
@@ -182,5 +185,10 @@ public class Character : MonoBehaviour
 	public Vector3 getVelocity()
 	{
 		return movementControler.velocity;
+	}
+
+	public Vector3 getPosition()
+	{
+		return transform.position;
 	}
 }

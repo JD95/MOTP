@@ -30,15 +30,17 @@ public class NetworkCharacter : Photon.MonoBehaviour
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
 
+			// Send animation state
 			Character myChar = GetComponent<Character>();
 			stream.SendNext((int)myChar.currentAnimation);
         }
         else
         {
-            // PhotonNetwork player, receive data
+            // Sync player rotatation and position
             this.correctPlayerPos = (Vector3)stream.ReceiveNext();
             this.correctPlayerRot = (Quaternion)stream.ReceiveNext();
 
+			// Sync Character animations
 			Character myChar = GetComponent<Character>();
 			myChar.currentAnimation = (Animations)stream.ReceiveNext();
         }

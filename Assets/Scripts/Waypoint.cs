@@ -1,7 +1,9 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Waypoint : MonoBehaviour {
+
 	public Waypoint next;
 
 	public Waypoint(Vector3 position)
@@ -13,4 +15,7 @@ public class Waypoint : MonoBehaviour {
 	{
 		return transform.position;
 	}
+
 }
+
+
