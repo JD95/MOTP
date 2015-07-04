@@ -12,24 +12,11 @@ public class Character : MonoBehaviour
 
 	public string team;
 
-	// Combat info
-	public float health;
-	private float oldHealth;
-
-	public float maxHealth;
-
-	public int creeps = 0;
-	public int level = 1;
-
-	public float range = 2;
-	public float damage = 1.5f;
 
 	// Map stuff
 	public int charID = 0;
 	public bool isHero = false;
 	public bool isBase = false;
-
-	public float xp = 0;
 
 	// Character Model
 	public GUISkin skin;
@@ -39,12 +26,14 @@ public class Character : MonoBehaviour
 	private float speed;
 
 	private CharacterController movementControler;
+	private Combat combatData;
 
 	public Animations currentAnimation = Animations.idle;
 
 	void Awake ()
 	{
 		movementControler = GetComponent<CharacterController>();
+		combatData = GetComponent<Combat>();
 
 		backgroundTexture = new Texture2D (1, 1, TextureFormat.RGB24, false);
 		backgroundTexture.SetPixel (0, 0, Color.black);
@@ -58,16 +47,17 @@ public class Character : MonoBehaviour
 
 	void Update ()
 	{
-		// Damage has been done to character
-		if (oldHealth > health) {
+		// Damage has been done to character, so make blood
+		if (combatData.beenDamaged()) {
 			Instantiate (bloodPrefab, transform.position, transform.rotation);
 			GetComponent<AudioSource>().Play();
 		}
 
+		// Perform next animation
 		animate ();
 
-		// Set the health
-		oldHealth = health;
+		// We are done with the health so it swaps old with new
+		combatData.updateHealth();
 	}
 
 
@@ -91,46 +81,6 @@ public class Character : MonoBehaviour
 		movementControler.SimpleMove(direction * speed);
 	}
 
-	public void Xp(float xp) {
-		this.xp += xp;
-		if (level < 10 && this.xp >= 5) {
-			level++;
-			this.health = maxHealth;
-			this.xp = 0;
-			if (level >= 10)
-				level = 10;
-		}
-	}
-
-	public void recieve_Damage_Physical(float amount)
-	{
-		this.health -= amount;
-
-		if (this.health <= 0)
-		{	
-			// deathAnimation();
-			// createTimer_to_destory model();
-			GameObject.Destroy(gameObject);
-		}
-	}
-
-	public void recieve_Damage_Magic(float amount)
-	{
-		// magicResistance();
-		this.health -= amount;
-	}
-
-	public void recieve_Healing(float amount)
-	{
-		// healingBuffs();
-		this.health += amount;
-	}
-
-	public void cause_Damage_Physical(Character target)
-	{
-		// damageBuffs();
-		target.recieve_Damage_Physical(10.0f);
-	}
 		
 	// Health Bar (all) and level (hero only)
 	void OnGUI ()
@@ -171,13 +121,13 @@ public class Character : MonoBehaviour
 		GUI.BeginGroup (new Rect (viewPos.x - backgroundBarWidth / 2, posYHealthBar, backgroundBarWidth, backgroundBarHeight));
 		GUI.DrawTexture (new Rect (0, 0, backgroundBarWidth, backgroundBarHeight), backgroundTexture, ScaleMode.StretchToFill);
 			
-		float healthPercent = (health / maxHealth);
+		float healthPercent = combatData.healthPercent();
 		GUI.DrawTexture (new Rect (2, 2, innerBarWidth * healthPercent, innerBarHeight), healthTexture, ScaleMode.StretchToFill);
 		
 		GUI.EndGroup ();
 		
 		if (isHero) {
-			GUI.Label(new Rect (viewPos.x - 50, posYHealthBar - 23, 100, 25), "Level "+level);
+			GUI.Label(new Rect (viewPos.x - 50, posYHealthBar - 23, 100, 25), "Level "+combatData.level);
 		}
 			
 	}

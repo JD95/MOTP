@@ -15,6 +15,7 @@ GameObject:
   - 114: {fileID: 11454182}
   - 114: {fileID: 11495030}
   - 195: {fileID: 19563318}
+  - 114: {fileID: 11442006}
   m_Layer: 0
   m_Name: HeroPrefabA
   m_TagString: teamA
@@ -1231,7 +1232,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .567659378, y: 1.07928467, z: 16.8376045}
+  m_LocalPosition: {x: -4.2151165, y: 1.39957619, z: -9.67781258}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400144}
@@ -2374,16 +2375,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthTexture: {fileID: 2800000, guid: 6d28d934293344837bfbc57e3b213ce0, type: 3}
   team: 
-  health: 10
-  maxHealth: 10
-  creeps: 0
-  level: 1
-  range: 4
-  damage: 1.25
   charID: 0
   isHero: 1
   isBase: 0
-  xp: 0
   skin: {fileID: 11400000, guid: 0d8c1e8d1885e4413bd69a5712677a99, type: 2}
   bloodPrefab: {fileID: 400000, guid: 8682bbbb15f5b48a8bc0e4f7451c5103, type: 2}
   avatar: {fileID: 11100000}
@@ -2400,9 +2394,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroTeam: teamA
-  target: {fileID: 0}
-  attackDistance: 1
   targetLocation: {fileID: 0}
+--- !u!114 &11442006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae22ef4fcf9b33d43b415269e22e7523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 500
+  maxHealth: 500
+  creeps: 0
+  level: 1
+  range: 2
+  damage: 1.5
+  target: {fileID: 0}
+  attackRange: 0
+  baseAttackSpeed: 1
 --- !u!114 &11454182
 MonoBehaviour:
   m_ObjectHideFlags: 1

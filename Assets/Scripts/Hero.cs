@@ -9,10 +9,8 @@ public class Hero : Photon.MonoBehaviour
 	public string heroTeam;
 
 	private Character character;
-	public Transform target;
-
-	// Combat
-	public float attackDistance;
+	private Combat combatData;
+	
 
 	// Navigation
 	private NavMeshAgent navigation;
@@ -23,18 +21,20 @@ public class Hero : Photon.MonoBehaviour
 	void Start ()
 	{
 		character = GetComponent<Character> ();
+
 		targetLocation = GameObject.Find("A").GetComponent<Waypoint>();
+
 		navigation = GetComponent<NavMeshAgent>();
+		navigation.stoppingDistance = 0;
+
+		combatData = GetComponent<Combat>();
 	}
-	
-	void Awake ()
-	{}
 
 	// Called every frame
 	void Update ()
 	{
 		adjustDestination();
-		autoAttack();
+		combatData.autoAttack();
 	}
 
 	/*-- Movement ---------------------------------------------------------------------------*/
@@ -51,10 +51,15 @@ public class Hero : Photon.MonoBehaviour
 
 		}
 
-		if(navigation.destination == transform.position)
+		// If you have arrived at destination, play idle animation
+		if(within_Destination())
 			character.currentAnimation = Animations.idle;
 	}
 
+	bool within_Destination()
+	{
+		return Vector3.Distance(navigation.destination, transform.position).AlmostEquals(navigation.stoppingDistance,1f);
+	}
 	
 	/*
 	 *	Checks for obstacles in the current path to
@@ -76,23 +81,23 @@ public class Hero : Photon.MonoBehaviour
 				{
 					Debug.Log("Click detection sucessful!");
 
-					target = hit.transform;
+					combatData.target = hit.transform;
+					navigation.stoppingDistance = combatData.attackRange;
+
+					return hit.point;
+
+				}else{
+
+					navigation.stoppingDistance = 0;
+					return  hit.point; //hitName = hit.collider.name;
 				}
 
-				return  hit.point; //hitName = hit.collider.name;
 			}
 		}
 		return point;
 	}
 
-	void autoAttack()
-	{
-		if(target != null && Vector3.Distance(target.position, transform.position) <= attackDistance)
-		{
-			character.cause_Damage_Physical(target.GetComponent<Character>());
-		}
-	}
-
+	
 	public string oppositeTeam(string thisPlayer)
 	{
 		if(thisPlayer == TeamA)return TeamB;
