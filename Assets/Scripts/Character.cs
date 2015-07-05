@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 
-public enum Animations {idle, walking};
+public enum Animations {idle, run, attack, die, gethit};
 
 public class Character : MonoBehaviour
 {
@@ -11,7 +11,6 @@ public class Character : MonoBehaviour
 	public Texture2D healthTexture;
 
 	public string team;
-
 
 	// Map stuff
 	public int charID = 0;
@@ -24,16 +23,18 @@ public class Character : MonoBehaviour
 	public Animation avatar;
 
 	private float speed;
+	private NavMeshAgent navigation;
 
-	private CharacterController movementControler;
+	//private CharacterController movementControler;
 	private Combat combatData;
 
 	public Animations currentAnimation = Animations.idle;
 
 	void Awake ()
 	{
-		movementControler = GetComponent<CharacterController>();
+		//movementControler = GetComponent<CharacterController>();
 		combatData = GetComponent<Combat>();
+		navigation = GetComponent<NavMeshAgent>();
 
 		backgroundTexture = new Texture2D (1, 1, TextureFormat.RGB24, false);
 		backgroundTexture.SetPixel (0, 0, Color.black);
@@ -67,18 +68,38 @@ public class Character : MonoBehaviour
 		{
 		case Animations.idle:
 			avatar.CrossFade("idle",0.5f); break;
-		case Animations.walking:
-			avatar.CrossFade("walk-cicle",0.1f); break;
+		case Animations.run:
+			avatar.CrossFade("run",0.1f); break;
+		case Animations.attack:
+			avatar.CrossFade("attack",0.1f); break;
+		case Animations.gethit:
+			avatar.CrossFade("gethit",0.1f); break;
 		}
 	}
 
-	public void moveTo (Waypoint location)
+	public bool within_Destination()
 	{
-		Vector3 heading = location.getPosition() - transform.position;
-		float distance = heading.magnitude;
-		Vector3 direction = heading / distance;
+		return Vector3.Distance(navigation.destination, transform.position).AlmostEquals(navigation.stoppingDistance,1f);
+	}
 
-		movementControler.SimpleMove(direction * speed);
+	public void moveTo (Transform location)
+	{
+		// If its asking to move to your current destination
+		if (navigation.destination == location.position)
+		{
+			// If you are close enough to destination
+			if(within_Destination())
+			{
+				currentAnimation = Animations.idle;
+			}else{
+				currentAnimation = Animations.run;
+			}
+		}else {
+			navigation.destination = location.position;
+			moveTo(location);
+		}
+
+		//movementControler.SimpleMove(direction * speed);
 	}
 
 		
@@ -132,10 +153,10 @@ public class Character : MonoBehaviour
 			
 	}
 	
-	public Vector3 getVelocity()
-	{
-		return movementControler.velocity;
-	}
+//	public Vector3 getVelocity()
+//	{
+//		return movementControler.velocity;
+//	}
 
 	public Vector3 getPosition()
 	{

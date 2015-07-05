@@ -28,11 +28,12 @@ public class Combat : MonoBehaviour {
 	public float attackRange;
 	public float baseAttackSpeed;
 	
-
+	private Character character;
 
 	// Use this for initialization
 	void Start () {
 		lastAttackTime = 0;
+		character = GetComponent<Character>();
 	}
 	
 	// Update is called once per frame
@@ -110,7 +111,7 @@ public class Combat : MonoBehaviour {
 
 	public void autoAttack()
 	{
-		//Debug.Log("Auto Attack was called!");
+		transform.LookAt(target);
 
 		if(target != null && Time.time - lastAttackTime > attackSpeed() &&
 		   targetWithin_AttackRange() )
@@ -119,6 +120,8 @@ public class Combat : MonoBehaviour {
 			cause_Damage_Physical(target.GetComponent<Combat>());
 			lastAttackTime = Time.time;
 		}
+
+		character.currentAnimation = Animations.attack;
 	}
 
 	/*-------------------------------------------------------------*/

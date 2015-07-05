@@ -47,20 +47,16 @@ public class Hero : Photon.MonoBehaviour
 		if (Input.GetButtonDown ("Fire1")) { //Debug.Log ("Click!");	
 
 			navigation.destination = checkForObstacles(Input.mousePosition);
-			character.currentAnimation = Animations.walking;
+			character.currentAnimation = Animations.run;
 
 		}
 
 		// If you have arrived at destination, play idle animation
-		if(within_Destination())
+		if(character.within_Destination())
 			character.currentAnimation = Animations.idle;
 	}
 
-	bool within_Destination()
-	{
-		return Vector3.Distance(navigation.destination, transform.position).AlmostEquals(navigation.stoppingDistance,1f);
-	}
-	
+
 	/*
 	 *	Checks for obstacles in the current path to
 	 *	clicked location

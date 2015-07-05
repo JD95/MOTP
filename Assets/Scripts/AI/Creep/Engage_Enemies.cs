@@ -5,7 +5,7 @@ using System.Linq;
 public class Engage_Enemies : Photon.MonoBehaviour, AI_Objective {
 
 	private Combat combatData;
-	private NavMeshAgent navigation;
+	private Character character;
 
 	/* 	Keeps track of all enemies within fight range
 	 * 	While enemies are within range, the character
@@ -19,7 +19,7 @@ public class Engage_Enemies : Photon.MonoBehaviour, AI_Objective {
 	{
 		inRangeEnemies = new List<Transform>();
 		combatData = GetComponent<Combat>();
-		navigation = GetComponent<NavMeshAgent>();
+		character = GetComponent<Character>();
 	}
 
 	void OnTriggerStay (Collider _other) {
@@ -82,7 +82,7 @@ public class Engage_Enemies : Photon.MonoBehaviour, AI_Objective {
 	// Tells the AI to begin this objective
 	public bool begin()
 	{
-		return combatData.target != null;
+		return enemiesInRange();
 	}
 
 	// Take this action while competing the objective
@@ -92,7 +92,7 @@ public class Engage_Enemies : Photon.MonoBehaviour, AI_Objective {
 		{
 			// Persue target
 			if(combatData.target != null)
-				navigation.destination = combatData.target.position;
+				character.moveTo(combatData.target);
 
 		}else{
 			//if(combatData.target != null) // Just for testing
