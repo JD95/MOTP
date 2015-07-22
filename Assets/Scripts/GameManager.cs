@@ -71,26 +71,23 @@ public class GameManager : Photon.MonoBehaviour
 	public void Update ()
 	{
 		if (init) {
-			if (time >= 15) {
+			if (time >= 2) {
 //				// creep A
-//				SpawnCreep(creepPrefabA, spawnA, 0);
-//				SpawnCreep(creepPrefabA, spawnA, -2);
-//				SpawnCreep(creepPrefabA, spawnA, -4);
+				SpawnCreep("Creep_TeamA", GameObject.Find("blueSpawn1").GetComponent<Waypoint>(), 0);
 //				
 //				// creep B
-//				SpawnCreep(creepPrefabB, spawnB, 0);
-//				SpawnCreep(creepPrefabB, spawnB, 2);
-//				SpawnCreep(creepPrefabB, spawnB, 4);
-//				time = 0;
+				SpawnCreep("Creep_TeamB", GameObject.Find("redSpawn1").GetComponent<Waypoint>(), 0);
+				time = 0;
 			}
 			time += Time.deltaTime;
 		}
 	}
 	
-	private void SpawnCreep(CreepAI prefab, Waypoint spawn, int offset) {
-		var creep = PhotonNetwork.Instantiate ("CreepPrefabB", spawn.transform.position + new Vector3(offset,0,offset), spawn.transform.rotation, 0).GetComponent<CreepAI>();
-		creep.nextWaypoint = spawn;
-		creep.GetComponent<Character>().charID = charNumber++;
+	private void SpawnCreep(String prefab, Waypoint spawn, int offset) {
+		PhotonNetwork.Instantiate (prefab, 
+		                           spawn.transform.position + new Vector3(offset,0,offset), 
+		                           spawn.transform.rotation, 0)
+			.GetComponent<Character>().charID = charNumber++;
 	}
 	
 }

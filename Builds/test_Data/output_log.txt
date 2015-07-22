@@ -1,0 +1,69 @@
+Initialize engine version: 5.0.1f1 (5a2e8fe35a68)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 9.0c [nvd3dum.dll 10.18.13.5330]
+    Renderer: NVIDIA GeForce GTX 460M 
+    Vendor:   NVIDIA
+    VRAM:     1485 MB (via DXGI)
+    Caps:     Shader=30 DepthRT=1 NativeDepth=1 NativeShadow=1 DF16=0 INTZ=1 NULL=1 RESZ=0 SlowINTZ=0
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\Assembly-UnityScript-firstpass.dll (this message is harmless)
+Loading C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\Assembly-UnityScript-firstpass.dll into Unity Child Domain
+Platform assembly: C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\Photon3Unity3D.dll (this message is harmless)
+Loading C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\Photon3Unity3D.dll into Unity Child Domain
+- Completed reload, in  0.476 seconds
+desktop: 1920x1080 60Hz; virtual: 3840x1080 at -1920,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+Platform assembly: C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Jeff\Desktop\Current_Project\Moba of the Pacific\MiniMOBA\Builds\test_Data\Managed\System.dll (this message is harmless)
+Shader 'Nature/Terrain/Specular': dependency 'BaseMapShader' shader 'Hidden/TerrainEngine/Splatmap/Specular-Base' not found
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 26f0 -> priority: 1 
+  Thread -> id: 115c -> priority: 1 
+Connect() failed: System.Net.Sockets.SocketException: No such host is known.
+
+  at System.Net.Dns.GetHostByName (System.String hostName) [0x00000] in <filename unknown>:0 
+  at System.Net.Dns.GetHostEntry (System.String hostNameOrAddress) [0x00000] in <filename unknown>:0 
+  at ExitGames.Client.Photon.IPhotonSocket.GetIpAddress (System.String serverIp) [0x00000] in <filename unknown>:0 
+  at ExitGames.Client.Photon.SocketUdp.DnsAndConnect () [0x00000] in <filename unknown>:0 
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebug.gen.cpp Line: 56)
+
+JoinRandomRoom failed. Client is not on Master Server or not yet ready to call operations. Wait for callback: OnJoinedLobby or OnConnectedToMaster.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebug.gen.cpp Line: 56)
+
+Can't execute Disconnect() while not connected. Nothing changed. State: PeerCreated
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebug.gen.cpp Line: 56)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 4.269012 ms
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 324.
+Total: 1.407438 ms (FindLiveObjects: 0.117208 ms CreateObjectMapping: 0.060705 ms MarkObjects: 0.635075 ms  DeleteObjects: 0.592581 ms)
+
+JoinRandomRoom failed. Client is not on Master Server or not yet ready to call operations. Wait for callback: OnJoinedLobby or OnConnectedToMaster.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebug.gen.cpp Line: 56)
+
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.512973 ms
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 324.
+Total: 1.346732 ms (FindLiveObjects: 0.064908 ms CreateObjectMapping: 0.054168 ms MarkObjects: 0.625268 ms  DeleteObjects: 0.600519 ms)
+
+Player Connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebug.gen.cpp Line: 56)
+

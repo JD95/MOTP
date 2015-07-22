@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class Engage_Enemies : Photon.MonoBehaviour, AI_Objective {
+public class Engage_Enemies : AI_Objective {
 
 	private Combat combatData;
 	private Character character;
@@ -13,24 +13,26 @@ public class Engage_Enemies : Photon.MonoBehaviour, AI_Objective {
 	 * 	giving up
 	 * 
 	 * */
-	List<Transform> inRangeEnemies;
+	List<Target> inRangeEnemies;
 
-	public void Start()
+	public override void init()
 	{
-		inRangeEnemies = new List<Transform>();
-		combatData = GetComponent<Combat>();
-		character = GetComponent<Character>();
+		inRangeEnemies = new List<Target>();
+
+		combatData = gameObject.GetComponent<Combat>();
+		character = gameObject.GetComponent<Character>();
 	}
 
-	void OnTriggerStay (Collider _other) {
-		var other = _other.GetComponent<Transform>();
 
-		if (other == transform)
+	void OnTriggerStay (Collider _other) {
+		Target other = _other.GetComponent<Combat>().self;
+
+		if (other.Equals(gameObject.transform))
 			return;
 
 		if (isEnemy(other) && !inList(other)) {
 
-			Debug.Log ("Adding " + other.name);
+			Debug.Log ("Adding " + other.location.name);
 
 			if (noCurrentTarget()){
 				Debug.Log ("New target Selected!");
@@ -41,10 +43,10 @@ public class Engage_Enemies : Photon.MonoBehaviour, AI_Objective {
 		}
 	}
 
-	bool isEnemy(Transform other)
+	bool isEnemy(Target other)
 	{
 		//Debug.Log ("Tag 1: " + other.tag + " Tag2: " + transform.tag);
-		return other.tag != transform.tag;
+		return other.location.tag != gameObject.transform.tag;
 	}
 
 	bool noCurrentTarget()
@@ -52,26 +54,28 @@ public class Engage_Enemies : Photon.MonoBehaviour, AI_Objective {
 		return combatData.target == null;
 	}
 
-	bool inList(Transform other)
+	bool inList(Target other)
 	{
 		return inRangeEnemies.Contains(other);
 	}
 
 	bool enemiesInRange()
 	{
-		return inRangeEnemies.Count() == 0;
+		return inRangeEnemies.FindAll(x => x.selectable && !x.dead).Count() != 0;
 	}
 
 	void OnTriggerExit (Collider _other) {
 
-		var other = _other.GetComponent<Transform>();
+		Target other = _other.GetComponent<Combat>().self;
 
 		// If the target goes out of range change target
-		if (isEnemy (other) && inList(other))
+		if (!other.dead && isEnemy (other) && inList(other))
 		{
 			// Deselect that enemy
-			if (other.transform != combatData.target)
+			if (other != combatData.target)
+			{
 				combatData.target = null;
+			}
 
 			// Remove from in rage enemies
 			inRangeEnemies.Remove(other);
@@ -80,35 +84,42 @@ public class Engage_Enemies : Photon.MonoBehaviour, AI_Objective {
 	}
 
 	// Tells the AI to begin this objective
-	public bool begin()
+	public override bool begin()
 	{
 		return enemiesInRange();
 	}
 
-	// Take this action while competing the objective
-	public void Update () // Just for testing
+	public override void progress()
 	{
-		if (!combatData.targetWithin_AttackRange())
+		if (combatData.target != null && !combatData.targetWithin_AttackRange())
 		{
 			// Persue target
-			if(combatData.target != null)
-				character.moveTo(combatData.target);
+			character.moveTo(combatData.target.location);
+			
+		}else if(combatData.target.dead){
+				
+			Debug.Log("My target is dead!");
+			inRangeEnemies.Remove(combatData.target);
+			combatData.target = inRangeEnemies.Find(x => x.selectable && !x.dead);
+
+		}else if(!combatData.target.selectable){
+
+			// Finds the first target that is both selectable and not dead
+			combatData.target = inRangeEnemies.Find(x => x.selectable && !x.dead);
+
 
 		}else{
-			//if(combatData.target != null) // Just for testing
-				combatData.autoAttack();
+
+			combatData.autoAttack();
 		}
 	}
 
-	public void progress()
-	{
-
-	}
-
 	// Tells the AI that the objective is complete
-	public bool end()
+	public override bool end()
 	{
 		// If there are no enemies in range then nothing to attack
 		return !enemiesInRange();
 	}
+
+
 }

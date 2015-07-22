@@ -588,9 +588,9 @@ GameObject:
   - 114: {fileID: 11464668}
   - 136: {fileID: 13690978}
   - 135: {fileID: 13504888}
-  - 114: {fileID: 11475762}
   - 114: {fileID: 11476468}
   - 195: {fileID: 19547734}
+  - 114: {fileID: 11443738}
   m_Layer: 0
   m_Name: Creep_TeamB
   m_TagString: teamB
@@ -1296,6 +1296,17 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 1
+--- !u!114 &11443738
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 195562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36b1fea6484b2472ca80ad96b5766f3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11464518
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1341,17 +1352,6 @@ MonoBehaviour:
   viewIdField: 0
   instantiationId: -1
   isRuntimeInstantiated: 0
---- !u!114 &11475762
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 195562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f088a991218578c408ae171b0337012b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11476468
 MonoBehaviour:
   m_ObjectHideFlags: 1

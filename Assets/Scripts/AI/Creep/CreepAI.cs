@@ -1,111 +1,93 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
-public class CreepAI : Photon.MonoBehaviour
+public class CreepAI : MonoBehaviour
 {
-	public Waypoint nextWaypoint;
-	private Character c;
-	public Character target = null;
-	public Vector3 movement;
-	public float speed = 2;
-	public bool tower = false;
-	public Transform ShotPrefab;
+	List<AI_Objective> secondary_Objectives;
+	Stack<AI_Objective> active_Objectives;
+
+	AI_Objective main_Objective;
 	
 	void Start ()
 	{
-		//c = GetComponent<Character> ();
+		active_Objectives = new Stack<AI_Objective>();
+		secondary_Objectives = new List<AI_Objective>();
+
+		// The main objective for creeps
+		//main_Objective = createObjective<Destroy_Nexus>();
+		main_Objective = createObjective<Destroy_Nexus>();
+		active_Objectives.Push(main_Objective);
+
+		// All other objectives
+		fillSecondaryObjectives();
+
 	}
-	
-	void Awake ()
+
+	// This is where the creep's secondary objectives are added
+	void fillSecondaryObjectives()
 	{
-		c = GetComponent<Character> ();
+		secondary_Objectives.Add(createObjective<Engage_Enemies>());
 	}
-	
-	float gunTime = 0;
-	
+
+	// Creates and disables an objective for the current game object
+	T createObjective<T>() where T : AI_Objective
+	{
+		var objective = gameObject.AddComponent<T>();
+		objective.GetComponent<T>().enabled = false;
+		objective.init();
+
+		return objective;
+	}
+
 	void Update ()
 	{
+		// Debug.Log(active_Objectives.Count.ToString());
+		active_Objectives.Peek().turnOn();
 
-//			if (nextWaypoint != null) {
-//				if (target == null && !tower) {
-//					transform.LookAt (nextWaypoint.transform);
-//					float distance = (transform.position - nextWaypoint.transform.position).magnitude;
-//					if (distance < 1f) {
-//						nextWaypoint = nextWaypoint.next;
-//					} else {
-//						movement = transform.TransformDirection (Vector3.forward) * speed - Vector3.up * 10;
-//					}
-//				} else if (target != null) {
-//					if (!tower) {
-//						transform.LookAt (target.transform);
-//						Vector3 euler = transform.localEulerAngles;
-//						euler.x = 0;
-//						euler.z = 0;
-//						transform.localEulerAngles = euler;
-//					}
-//					float distance = (transform.position - target.transform.position).magnitude;
-//					if (distance < c.range) {
-//						if (!tower)
-//							movement = Vector3.zero - Vector3.up * 10;
-//						if (gunTime <= 0 && target.health > 0) {
-//							//PhotonNetwork.Instantiate (ShotPrefab, transform.position, transform.rotation, 0);
-//							//target.Hit (c.Damage ());
-//							gunTime = 1;
-//						}
-//						gunTime -= Time.deltaTime;
-//					} else if (!tower) {
-//						movement = transform.TransformDirection (Vector3.forward) * speed - Vector3.up * 10;
-//					}
-//				}
-//			
-//			} else if (target == null && !tower) {
-//				movement = Vector3.zero - Vector3.up * 10;
-//			}
-//
-//		// creep died
-//		if (c.health <= 0) {
-//			PhotonNetwork.Destroy (gameObject);
-//		}
-//		if (!tower) {
-//			GetComponent<CharacterController> ().Move (this.movement * Time.deltaTime);
-//		}
+		if(active_Objectives.Peek().end())
+		{
+			popObjective();
+			Debug.Log(gameObject.name + ": Objective Complete");
+		}
+
+		foreach(var objective in secondary_Objectives)
+		{
+			if(!objective.enabled && objective.begin())
+			{
+				pushObjective(objective);
+				Debug.Log(gameObject.name + ": Adding New Objective");
+			}
+		}
+
+		active_Objectives.Peek().progress();
+
 	}
-	
-//	void OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
-//	{
-//		if (stream.isWriting) {
-//			Vector3 pos = transform.position;
-//			float rot = transform.eulerAngles.y;
-//			Vector3 vel = movement;
-//			float health = c.health;
-//			int id = c.charID;
-//			stream.Serialize (ref id);
-//			if (!tower) {
-//				stream.Serialize (ref pos);
-//				stream.Serialize (ref rot);
-//				stream.Serialize (ref vel);
-//			}
-//			stream.Serialize (ref health);
-//		} else {
-//			Vector3 posReceive = Vector3.zero;
-//			float rotReceive = 0;
-//			Vector3 velReceive = Vector3.zero;
-//			float health = 0;
-//			int id = 0;
-//			stream.Serialize (ref id);
-//			if (!tower) {
-//				stream.Serialize (ref posReceive);
-//				stream.Serialize (ref rotReceive);
-//				stream.Serialize (ref velReceive);
-//				transform.position = posReceive;
-//				Vector3 rot = transform.eulerAngles;
-//				rot.y = rotReceive;
-//				transform.eulerAngles = rot;
-//				movement = velReceive;
-//			}
-//			stream.Serialize (ref health);
-//			c.health = health;
-//			c.charID = id;
-//		}
-//	}
+
+	// When adding a new objective to the stack
+	void pushObjective(AI_Objective objective)
+	{
+		// Turn off previous objective
+		if(active_Objectives.Count != 0)
+		active_Objectives.Peek().turnOff();
+
+		// Add new objective
+		active_Objectives.Push(objective);
+
+		// Activate it
+		active_Objectives.Peek().turnOn();
+	}
+
+	// When adding a new objective to the stack
+	void popObjective()
+	{
+		// Turn off previous objective
+		active_Objectives.Peek().turnOff();
+		
+		// Pop the main objective back into secondary objectives
+		secondary_Objectives.Add(active_Objectives.Pop());
+		
+		// Activate previous objective
+		active_Objectives.Peek().turnOn();
+	}
+
 }

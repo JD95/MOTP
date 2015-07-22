@@ -70,14 +70,14 @@ public class Hero : Photon.MonoBehaviour
 		// If player clicks in the middle of a mountain, if will make the character
 		// Walk towards that area until it reaches the base of the mountain
 		if (Physics.Raycast (Camera.main.ScreenPointToRay (point), out hit, 100.0f)) {
-			Debug.Log(hit.collider.name);
+			//Debug.Log(hit.collider.name);
 			if (hit.collider.name != transform.name) {
 
 				if(hit.collider.CompareTag(oppositeTeam(heroTeam)))
 				{
-					Debug.Log("Click detection sucessful!");
+					//Debug.Log("Click detection sucessful!");
 
-					combatData.target = hit.transform;
+					combatData.target = new Target(hit.transform,true, false);
 					navigation.stoppingDistance = combatData.attackRange;
 
 					return hit.point;

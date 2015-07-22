@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 /*
  * 	Handles all combat functionality. Location of Health and other combat data
@@ -20,7 +20,9 @@ public class Combat : MonoBehaviour {
 	public float range = 2;
 	public float damage = 1.5f;
 
-	public Transform target;
+	public Target self;
+	public Target target;
+	public List<Target> targetingMe;
 
 	// Combat
 	private float lastAttackTime;
@@ -34,6 +36,7 @@ public class Combat : MonoBehaviour {
 	void Start () {
 		lastAttackTime = 0;
 		character = GetComponent<Character>();
+		self = new Target(transform,true, false);
 	}
 	
 	// Update is called once per frame
@@ -66,7 +69,7 @@ public class Combat : MonoBehaviour {
 	public bool targetWithin_AttackRange()
 	{
 		if (target != null)
-			return Vector3.Distance(target.position, transform.position) <= attackRange;
+			return Vector3.Distance(target.location.position, transform.position) <= attackRange;
 		else return false;
 	}
 
@@ -84,7 +87,7 @@ public class Combat : MonoBehaviour {
 		{	
 			// deathAnimation();
 			// createTimer_to_destory model();
-			GameObject.Destroy(gameObject);
+			die();
 		}
 	}
 
@@ -111,19 +114,65 @@ public class Combat : MonoBehaviour {
 
 	public void autoAttack()
 	{
-		transform.LookAt(target);
+		if(target != null){
+			transform.LookAt(target.location);
 
-		if(target != null && Time.time - lastAttackTime > attackSpeed() &&
-		   targetWithin_AttackRange() )
+			 if(Time.time - lastAttackTime > attackSpeed() &&
+			   targetWithin_AttackRange() )
+			{
+				//Debug.Log("Attack!");
+				cause_Damage_Physical(target.location.GetComponent<Combat>());
+				lastAttackTime = Time.time;
+			}
+
+			character.currentAnimation = Animations.attack;
+		}
+	}
+
+	private void die()
+	{
+		if(/*prevent_Death()*/ false)
 		{
-			//Debug.Log("Attack!");
-			cause_Damage_Physical(target.GetComponent<Combat>());
-			lastAttackTime = Time.time;
+			// do something...
+
+		}else{
+
+			//broadcastDeath();
+			//stopMovement();
+			//deathAnimation();
+			if(/*reverse_Death()*/ false)
+			{
+				//revive();
+			}
+			
+			//giveKillPoints();
+			//if(hero) startRespawn_Timer();
+			//self.selectable = false;
+			self.dead = true;
+
+			Debug.Log (gameObject.name + "is dead");
+			System.Threading.Thread.Sleep(100);
+			//gameObject.SetActive(false);
+			GameObject.Destroy(gameObject);
 		}
 
-		character.currentAnimation = Animations.attack;
 	}
 
 	/*-------------------------------------------------------------*/
 
+}
+		                  
+public class Target {
+			
+	public bool selectable;
+	public bool dead;
+	
+	public Transform location;
+	
+	public Target(Transform loc, bool select, bool d)
+	{
+		location = loc;
+		selectable = select;
+		dead = d;
+	}
 }

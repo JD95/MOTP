@@ -8,11 +8,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   - 82: {fileID: 8200000}
   - 136: {fileID: 13600000}
   - 114: {fileID: 11454936}
+  - 114: {fileID: 11430942}
   m_Layer: 0
   m_Name: TowerPrefabB
   m_TagString: teamB
@@ -94,7 +94,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: -.915698647, z: 0, w: .401865661}
-  m_LocalPosition: {x: 20.4459229, y: 2.43556929, z: 14.055727}
+  m_LocalPosition: {x: 31.1545906, y: .48661828, z: 23.5540161}
   m_LocalScale: {x: 1, y: 3.30134892, z: 1.0163666}
   m_Children:
   - {fileID: 400002}
@@ -283,23 +283,6 @@ Light:
   m_ShadowRadius: 0
   m_ShadowAngle: 0
   m_AreaSize: {x: 1, y: 1}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36b1fea6484b2472ca80ad96b5766f3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextWaypoint: {fileID: 0}
-  target: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  speed: 0
-  tower: 1
-  ShotPrefab: {fileID: 400000, guid: b12ba460b84a4495aae72fdaf9e11619, type: 2}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -311,21 +294,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621afe67e67e444cba6a698c80f873f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 
-  health: 50
-  maxHealth: 50
-  creeps: 0
-  level: 1
-  range: 8
-  damage: 2
   healthTexture: {fileID: 2800000, guid: 6d28d934293344837bfbc57e3b213ce0, type: 3}
+  team: 
   charID: -1
   isHero: 0
   isBase: 0
-  xp: 0
   skin: {fileID: 0}
   bloodPrefab: {fileID: 400000, guid: 8682bbbb15f5b48a8bc0e4f7451c5103, type: 2}
   avatar: {fileID: 0}
+  currentAnimation: 0
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -337,6 +314,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28f8aac9cb7a445eda1627b4a8c80c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11430942
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae22ef4fcf9b33d43b415269e22e7523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 50
+  maxHealth: 50
+  creeps: 0
+  level: 1
+  range: 2
+  damage: 1.5
+  target: {fileID: 0}
+  attackRange: 0
+  baseAttackSpeed: 0
 --- !u!114 &11454936
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -351,7 +348,7 @@ MonoBehaviour:
   ownerId: 0
   group: 0
   prefixBackup: -1
-  observed: {fileID: 11400000}
+  observed: {fileID: 0}
   synchronization: 1
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
