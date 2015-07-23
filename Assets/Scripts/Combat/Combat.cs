@@ -32,16 +32,22 @@ public class Combat : MonoBehaviour {
 	
 	private Character character;
 
+	private Effect_Management.Attribute_Manager attributes;
+
 	// Use this for initialization
 	void Start () {
 		lastAttackTime = 0;
 		character = GetComponent<Character>();
 		self = new Target(transform,true, false);
+		attributes = new Effect_Management.Attribute_Manager();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+
+		attributes.stepTime();
+		updateHealth();
+		
 	}
 
 	/*---Utility Functions----------------------------------------------------------*/
@@ -53,6 +59,11 @@ public class Combat : MonoBehaviour {
 
 	public void updateHealth()
 	{
+		float healthChanges = (float) attributes.getHPChanges();
+
+		//Debug.Log(healthChanges.ToString());
+		health += healthChanges;
+
 		oldHealth = health;
 	}
 

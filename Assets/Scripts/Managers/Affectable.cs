@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+namespace Effect_Management{
 /*
  * 	Affectable T defines a range of types that
  * 	can be managed by effect mangers. All of these
@@ -19,28 +20,38 @@ using System.Collections;
  * 	would with attributes for champs, or combining graphical
  * 	changes as you would with graphical effects.
  */ 
-public interface Affectable<T> {
-	
-	T add(T other);
-	T zero();
-}
+	public abstract class Affectable<T> where T : new(){
+		
+		public abstract T add(T other);
+		public static T zero()
+		{
+			return new T();
+		}
+	}
 
 public class Attribute : Affectable<Attribute>{
 
-	public double value;
+		public double value;
 
-	public Attribute (double _value)
-	{
-		value = _value;
-	}
+		public Attribute () {
+			value = 0;
+		}
 
-	Attribute add(Attribute other)
-	{
-		return new Attribute(other.value + this.value);
-	}
+		public Attribute (double _value)
+		{
+			value = _value;
+		}
 
-	Attribute zero()
-	{
-		return new Attribute(0);
+		public override Attribute add(Attribute other)
+		{
+			Attribute test = new Attribute(other.value + this.value);
+			//Debug.Log("I ran add! I got " + test.ToString());
+			return test;
+		}
+
+		public override string ToString ()
+		{
+			return value.ToString();
+		}
 	}
 }

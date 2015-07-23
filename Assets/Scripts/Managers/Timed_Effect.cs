@@ -2,37 +2,45 @@
 using System.Collections;
 using System;
 
-public delegate T EffectApply<T>(DateTime time) where T : Affectable<T>;
-public delegate void EffectStop();
+namespace Effect_Management{
 
-public class Timed_Effect<T> {
+	public delegate T EffectApply<T>(DateTime time) where T : Affectable<T>, new();
+	public delegate void EffectStop();
 
-	// When the effect should stop
-	private DateTime stopTime;
-	private EffectApply<T> app;
-	private EffectStop end;
-	
-	public DateTime getStopTime()
-	{
-		return stopTime;
-	}
+	public class Timed_Effect<T> {
 
-	// Provide both the time the effect begins and the duration
-	// What happens at certain times and what happens when the event ends?
-	public Timed_Effect (DateTime birthTime, double duration_seconds, EffectApply<T> _app, EffectStop _stop)
-	{
-		stopTime = birthTime.Add(TimeSpan.FromSeconds(duration_seconds));
-	}
+		// When the effect should stop
+		private DateTime stopTime;
+		private EffectApply<T> app;
+		private EffectStop end;
+		
+		public DateTime getStopTime()
+		{
+			return stopTime;
+		}
 
-	// Depending on the time, return either an effect or a "zero" value
-	public T apply(DateTime time)
-	{
-		return app(time);
-	}
+		// Provide both the time the effect begins and the duration
+		// What happens at certain times and what happens when the event ends?
+		public Timed_Effect (DateTime birthTime, double duration_seconds, EffectApply<T> _app, EffectStop _stop)
+		{
+			stopTime = birthTime.Add(TimeSpan.FromSeconds(duration_seconds));
+			app = _app;
+			end = _stop;
+		}
 
-	// What is done when the effect stops
-	public void stop()
-	{
-		end();
+		// Depending on the time, return either an effect or a "zero" value
+		public T apply(DateTime time)
+		{
+			T test = app(time);
+			//Debug.Log("app returned " + test.ToString());
+			return test;
+
+		}
+
+		// What is done when the effect stops
+		public void stop()
+		{
+			end();
+		}
 	}
 }

@@ -77,6 +77,7 @@ public class GameManager : Photon.MonoBehaviour
 //				
 //				// creep B
 				SpawnCreep("Creep_TeamB", GameObject.Find("redSpawn1").GetComponent<Waypoint>(), 0);
+
 				time = 0;
 			}
 			time += Time.deltaTime;
