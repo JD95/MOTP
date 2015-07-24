@@ -21,15 +21,19 @@ namespace Effect_Management{
  * 	changes as you would with graphical effects.
  */ 
 	public abstract class Affectable<T> where T : new(){
-		
+
+		public static void doNothing(){} // Some zero functions need a doNothing value
+
 		public abstract T add(T other);
+
 		public static T zero()
 		{
 			return new T();
 		}
 	}
 
-public class Attribute : Affectable<Attribute>{
+	// The value that attribute effects produce
+	public class Attribute : Affectable<Attribute>{
 
 		public double value;
 
@@ -54,4 +58,61 @@ public class Attribute : Affectable<Attribute>{
 			return value.ToString();
 		}
 	}
-}
+
+	/*
+	 * Graphical effects are collected by their container and then
+	 * executed all together. Thus the value of the Graphical is a
+	 * function.
+	 * 
+	 */
+	public class Graphical : Affectable<Graphical>
+	{
+		public delegate void Update();
+
+		public Update value;
+
+		public Graphical()
+		{
+			value = doNothing;
+		}
+
+		public Graphical(Update other)
+		{
+			value = other;
+		}
+
+		public override Graphical add(Graphical other)
+		{
+			return new Graphical(()=>
+			        {
+						value();
+						other.value();
+					});// Do this value, then do the next one
+		}
+	}
+
+	// Like graphical effects, CharacterState effects return functions of those changes
+	// Requires a game object to work with though
+	public class CharacterState : Affectable<CharacterState>
+	{
+		public delegate void Update(GameObject obj);
+
+		public Update value;
+
+		public CharacterState()
+		{
+			value = (x => doNothing());
+		}
+
+		public CharacterState(Update other)
+		{
+			value = other;
+		}
+
+		public override CharacterState add (CharacterState other)
+		{
+			return new CharacterState(x => {value(x); other.value(x);});
+		}
+	}
+
+} //End of namespace

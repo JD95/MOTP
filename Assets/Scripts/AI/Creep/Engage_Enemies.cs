@@ -24,18 +24,21 @@ public class Engage_Enemies : AI_Objective {
 	}
 
 
-	void OnTriggerStay (Collider _other) {
-		Target other = _other.GetComponent<Combat>().self;
+	void OnTriggerEnter (Collider _other) {
+
+		//Debug.Log ("Object hit my radius!");
+
+		Target other = _other.GetComponentInParent<Combat>().self;
 
 		if (other.Equals(gameObject.transform))
 			return;
 
 		if (isEnemy(other) && !inList(other)) {
 
-			Debug.Log ("Adding " + other.location.name);
+			//Debug.Log ("Adding " + other.location.name);
 
 			if (noCurrentTarget()){
-				Debug.Log ("New target Selected!");
+				//Debug.Log ("New target Selected!");
 				combatData.target = other; // Make new target
 			}
 
@@ -66,7 +69,7 @@ public class Engage_Enemies : AI_Objective {
 
 	void OnTriggerExit (Collider _other) {
 
-		Target other = _other.GetComponent<Combat>().self;
+		Target other = _other.GetComponentInParent<Combat>().self;
 
 		// If the target goes out of range change target
 		if (!other.dead && isEnemy (other) && inList(other))
@@ -91,14 +94,17 @@ public class Engage_Enemies : AI_Objective {
 
 	public override void progress()
 	{
+		//Debug.Log("AI progressing");
+
 		if (combatData.target != null && !combatData.targetWithin_AttackRange())
 		{
+			//Debug.Log ("Moving towards target!");
 			// Persue target
 			character.moveTo(combatData.target.location);
 			
-		}else if(combatData.target.dead){
+		}else if(combatData.target == null || combatData.target.dead){
 				
-			Debug.Log("My target is dead!");
+			//Debug.Log("My target is dead!");
 			inRangeEnemies.Remove(combatData.target);
 			combatData.target = inRangeEnemies.Find(x => x.selectable && !x.dead);
 
@@ -109,7 +115,7 @@ public class Engage_Enemies : AI_Objective {
 
 
 		}else{
-
+			//Debug.Log ("Auto attack go!");
 			combatData.autoAttack();
 		}
 	}

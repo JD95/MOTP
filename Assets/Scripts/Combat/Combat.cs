@@ -79,7 +79,7 @@ public class Combat : MonoBehaviour {
 
 	public bool targetWithin_AttackRange()
 	{
-		if (target != null)
+		if (target.location != null && transform != null)
 			return Vector3.Distance(target.location.position, transform.position) <= attackRange;
 		else return false;
 	}
@@ -90,7 +90,7 @@ public class Combat : MonoBehaviour {
 	/*---Combat Functions----------------------------------------------------------*/
 
 	// Character takes physical damage
-	public void recieve_Damage_Physical(float amount)
+	public void recieve_Damage_Physical(float amount, Target enemy_target)
 	{
 		this.health -= amount;
 		
@@ -98,12 +98,13 @@ public class Combat : MonoBehaviour {
 		{	
 			// deathAnimation();
 			// createTimer_to_destory model();
+			enemy_target = null;
 			die();
 		}
 	}
 
 	// Character takes magic damage
-	public void recieve_Damage_Magic(float amount)
+	public void recieve_Damage_Magic(float amount, Target enemy)
 	{
 		// magicResistance();
 		this.health -= amount;
@@ -117,19 +118,18 @@ public class Combat : MonoBehaviour {
 	}
 
 	// Character causes physical damage (Auto Attack)
-	public void cause_Damage_Physical(Combat target)
+	public void cause_Damage_Physical(Combat _target)
 	{
 		// damageBuffs();
-		target.recieve_Damage_Physical(damage);
+		_target.recieve_Damage_Physical(damage, target);
 	}
 
 	public void autoAttack()
 	{
-		if(target != null){
+		if(target != null && targetWithin_AttackRange()){
 			transform.LookAt(target.location);
 
-			 if(Time.time - lastAttackTime > attackSpeed() &&
-			   targetWithin_AttackRange() )
+			 if(Time.time - lastAttackTime > attackSpeed())
 			{
 				//Debug.Log("Attack!");
 				cause_Damage_Physical(target.location.GetComponent<Combat>());
@@ -161,10 +161,10 @@ public class Combat : MonoBehaviour {
 			//self.selectable = false;
 			self.dead = true;
 
-			Debug.Log (gameObject.name + "is dead");
-			System.Threading.Thread.Sleep(100);
-			//gameObject.SetActive(false);
-			GameObject.Destroy(gameObject);
+			GetComponent<CreepAI>().enabled = false;
+			GetComponent<NavMeshAgent>().enabled = false;
+			character.characterState.addLivingChange(gameObject);
+
 		}
 
 	}

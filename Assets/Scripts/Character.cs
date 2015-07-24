@@ -30,8 +30,12 @@ public class Character : MonoBehaviour
 
 	public Animations currentAnimation = Animations.idle;
 
+	public Effect_Management.CharacterState_Manager characterState;	
+
 	void Awake ()
 	{
+
+
 		//movementControler = GetComponent<CharacterController>();
 		combatData = GetComponent<Combat>();
 		navigation = GetComponent<NavMeshAgent>();
@@ -44,6 +48,11 @@ public class Character : MonoBehaviour
 		gameObject.name = "char" + charID;
 
 		speed = 10.0F;
+	}
+
+	void Start()
+	{
+		characterState = new Effect_Management.CharacterState_Manager(gameObject);
 	}
 
 	void Update ()
@@ -59,6 +68,9 @@ public class Character : MonoBehaviour
 
 		// We are done with the health so it swaps old with new
 		combatData.updateHealth();
+
+		characterState.stepTime();
+		//characterState.applyLivingChanges(game);
 	}
 
 
@@ -84,6 +96,8 @@ public class Character : MonoBehaviour
 
 	public void moveTo (Transform location)
 	{
+		if (location == null) return;
+
 		// If its asking to move to your current destination
 		if (navigation.destination == location.position)
 		{

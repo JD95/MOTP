@@ -46,7 +46,7 @@ public class Hero : Photon.MonoBehaviour
 	{
 		if (Input.GetButtonDown ("Fire1")) { //Debug.Log ("Click!");	
 
-			navigation.destination = checkForObstacles(Input.mousePosition);
+			navigation.destination = filterClick(Input.mousePosition);
 			character.currentAnimation = Animations.run;
 
 		}
@@ -61,15 +61,20 @@ public class Hero : Photon.MonoBehaviour
 	 *	Checks for obstacles in the current path to
 	 *	clicked location
 	 */
-	Vector3 checkForObstacles (Vector2 point)
+	Vector3 filterClick (Vector2 point)
 	{
-		RaycastHit hit = new RaycastHit ();
+		RaycastHit[] hits;
 		Vector3 click = new Vector3();
 		string hitName = name;
 
-		// If player clicks in the middle of a mountain, if will make the character
-		// Walk towards that area until it reaches the base of the mountain
-		if (Physics.Raycast (Camera.main.ScreenPointToRay (point), out hit, 100.0f)) {
+		hits = Physics.RaycastAll(Camera.main.ScreenPointToRay (point),100.0F,~(1<<8));
+
+		foreach (var hit in hits)
+		{
+			//if (hit.collider.name == "Sphere Collider") continue;
+
+			Debug.Log (hit.collider.name);
+
 			//Debug.Log(hit.collider.name);
 			if (hit.collider.name != transform.name) {
 
@@ -90,6 +95,7 @@ public class Hero : Photon.MonoBehaviour
 
 			}
 		}
+		
 		return point;
 	}
 

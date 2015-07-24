@@ -86,6 +86,7 @@ namespace Effect_Management{
 		// Tick through time for the container
 		public void stepTime()
 		{
+
 			// If there are timed elements and the first one is expired
 			if(timed_effects.Count != 0 && timed_effects.First().expiredCheck())
 			{

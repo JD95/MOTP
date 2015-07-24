@@ -35,10 +35,10 @@ namespace Effect_Management {
 			switch (DateTime.Now.CompareTo(stopTime))
 			{
 				// stop time is before current time
-			case -1: return false;  break;
+			case -1: return false; break;
 				
 				// it is currently stop time
-			case  0: return true;  break;
+			case  0: return true; break;
 				
 				// it is not yet stop time
 			case  1: return true; break;

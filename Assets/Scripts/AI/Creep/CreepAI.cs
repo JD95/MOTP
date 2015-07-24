@@ -47,7 +47,7 @@ public class CreepAI : MonoBehaviour
 		if(active_Objectives.Peek().end())
 		{
 			popObjective();
-			Debug.Log(gameObject.name + ": Objective Complete");
+			//Debug.Log(gameObject.name + ": Objective Complete");
 		}
 
 		foreach(var objective in secondary_Objectives)
@@ -55,7 +55,7 @@ public class CreepAI : MonoBehaviour
 			if(!objective.enabled && objective.begin())
 			{
 				pushObjective(objective);
-				Debug.Log(gameObject.name + ": Adding New Objective");
+				//Debug.Log(gameObject.name + ": Adding New Objective");
 			}
 		}
 

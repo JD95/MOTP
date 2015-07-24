@@ -15,11 +15,12 @@ namespace Effect_Management{
 		public Attribute_Manager()
 		{
 			HP = new Effect_Container<Attribute>();
-			HP.add_timedEffect(new Timed_Effect<Attribute>(
+			/* HP.add_timedEffect(new Timed_Effect<Attribute>(
 				DateTime.Now,								// Birth time
 				10.0,										// Durration in seconds
 				Attribute_Effects.periodic_changeBy(5.0,-1.0),	// Application funtion
 				Attribute_Effects.doNothing));							// Stopping function
+				*/
 		}
 
 		public void stepTime()
@@ -55,4 +56,4 @@ namespace Effect_Management{
 	}
 
 
-}
+} // End of namespace

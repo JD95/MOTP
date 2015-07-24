@@ -66,12 +66,12 @@ public class GameManager : Photon.MonoBehaviour
 
 	}
 
-	private float time = 15;
+	private float time = 30;
 
 	public void Update ()
 	{
 		if (init) {
-			if (time >= 2) {
+			if (time >= 30) {
 //				// creep A
 				SpawnCreep("Creep_TeamA", GameObject.Find("blueSpawn1").GetComponent<Waypoint>(), 0);
 //				
