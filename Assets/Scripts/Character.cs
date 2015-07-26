@@ -134,6 +134,9 @@ public class Character : MonoBehaviour
 		if (GameManager.paused)
 			return;
 
+		if(combatData.health <= 0)
+			return;
+
 		GUI.skin = skin;
 		GUI.depth = 3;
 
