@@ -44,9 +44,10 @@ public class Character : MonoBehaviour
 		backgroundTexture.SetPixel (0, 0, Color.black);
 		backgroundTexture.Apply ();
 
-		charID = numchars++;
-		gameObject.name = "char" + charID;
-
+		if(!isBase){
+			charID = numchars++;
+			gameObject.name = "char" + charID;
+		}
 		speed = 10.0F;
 	}
 
@@ -76,6 +77,8 @@ public class Character : MonoBehaviour
 
 	void animate()
 	{
+		if(avatar == null) return;
+
 		switch (currentAnimation)
 		{
 		case Animations.idle:
@@ -98,6 +101,8 @@ public class Character : MonoBehaviour
 	{
 		if (location == null) return;
 
+
+
 		// If its asking to move to your current destination
 		if (navigation.destination == location.position)
 		{
@@ -109,14 +114,20 @@ public class Character : MonoBehaviour
 				currentAnimation = Animations.run;
 			}
 		}else {
-			navigation.destination = location.position;
-			moveTo(location);
+			// I have new destination
+			navigation.SetDestination(location.position);
+			navigation.Resume();
+			//moveTo(location);
 		}
 
 		//movementControler.SimpleMove(direction * speed);
 	}
 
-		
+	public void stopNavigation()
+	{
+		navigation.Stop();
+	}
+
 	// Health Bar (all) and level (hero only)
 	void OnGUI ()
 	{

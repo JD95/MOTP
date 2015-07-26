@@ -47,7 +47,7 @@ public class GameManager : Photon.MonoBehaviour
 //
 //
 //		GameObject.Find("Main Camera").GetComponent<CameraControl>().SetTarget(newPlayer.transform);
-		GameObject mySpawn = redspawn[UnityEngine.Random.Range(0,redspawn.Length)];
+		GameObject mySpawn = bluespawn[UnityEngine.Random.Range(0,redspawn.Length)];
 		GameObject myPlayer = PhotonNetwork.Instantiate("HeroPrefabA", mySpawn.transform.position, mySpawn.transform.rotation,0);
 
 		enablePlayer (myPlayer);
@@ -73,10 +73,10 @@ public class GameManager : Photon.MonoBehaviour
 		if (init) {
 			if (time >= 30) {
 //				// creep A
-				SpawnCreep("Creep_TeamA", GameObject.Find("blueSpawn1").GetComponent<Waypoint>(), 0);
+				SpawnCreep("Creep(ranged)_TeamA", GameObject.Find("blueSpawn1").GetComponent<Waypoint>(), 0);
 //				
 //				// creep B
-				SpawnCreep("Creep_TeamB", GameObject.Find("redSpawn1").GetComponent<Waypoint>(), 0);
+				SpawnCreep("Creep(ranged)_TeamB", GameObject.Find("redSpawn1").GetComponent<Waypoint>(), 0);
 
 				time = 0;
 			}

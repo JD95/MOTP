@@ -48,6 +48,7 @@ public class Hero : Photon.MonoBehaviour
 
 			navigation.destination = filterClick(Input.mousePosition);
 			character.currentAnimation = Animations.run;
+			navigation.Resume();
 
 		}
 
@@ -63,39 +64,36 @@ public class Hero : Photon.MonoBehaviour
 	 */
 	Vector3 filterClick (Vector2 point)
 	{
-		RaycastHit[] hits;
+		RaycastHit hit;
 		Vector3 click = new Vector3();
 		string hitName = name;
 
-		hits = Physics.RaycastAll(Camera.main.ScreenPointToRay (point),100.0F,~(1<<8));
-
-		foreach (var hit in hits)
+		if(Physics.Raycast(Camera.main.ScreenPointToRay (point), out hit, 100.0F,~(1<<8)))
 		{
-			//if (hit.collider.name == "Sphere Collider") continue;
-
 			Debug.Log (hit.collider.name);
 
-			//Debug.Log(hit.collider.name);
 			if (hit.collider.name != transform.name) {
 
-				if(hit.collider.CompareTag(oppositeTeam(heroTeam)))
-				{
-					//Debug.Log("Click detection sucessful!");
+				Debug.Log("Not me!");
 
-					combatData.target = new Target(hit.transform,true, false);
+				if(hit.collider.tag.Equals(oppositeTeam(heroTeam)))
+				{
+					Debug.Log("Click detection sucessful!");
+
+					combatData.target = hit.collider.GetComponent<Combat>().self;
 					navigation.stoppingDistance = combatData.attackRange;
 
 					return hit.point;
 
 				}else{
-
+					// You are travelling to a location on terrain
 					navigation.stoppingDistance = 0;
 					return  hit.point; //hitName = hit.collider.name;
 				}
 
 			}
 		}
-		
+
 		return point;
 	}
 

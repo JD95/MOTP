@@ -1,36 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class CreepAI : MonoBehaviour
+public abstract class CreepAI : MonoBehaviour
 {
-	List<AI_Objective> secondary_Objectives;
-	Stack<AI_Objective> active_Objectives;
+	protected List<AI_Objective> secondary_Objectives;
+	protected Stack<AI_Objective> active_Objectives;
 
-	AI_Objective main_Objective;
-	
-	void Start ()
-	{
-		active_Objectives = new Stack<AI_Objective>();
-		secondary_Objectives = new List<AI_Objective>();
-
-		// The main objective for creeps
-		//main_Objective = createObjective<Destroy_Nexus>();
-		main_Objective = createObjective<Destroy_Nexus>();
-		active_Objectives.Push(main_Objective);
-
-		// All other objectives
-		fillSecondaryObjectives();
-
-	}
+	protected AI_Objective main_Objective;
 
 	// This is where the creep's secondary objectives are added
-	void fillSecondaryObjectives()
-	{
-		secondary_Objectives.Add(createObjective<Engage_Enemies>());
-	}
+	protected abstract void fillSecondaryObjectives();
+	
 
 	// Creates and disables an objective for the current game object
-	T createObjective<T>() where T : AI_Objective
+	protected T createObjective<T>() where T : AI_Objective
 	{
 		var objective = gameObject.AddComponent<T>();
 		objective.GetComponent<T>().enabled = false;
@@ -39,17 +22,17 @@ public class CreepAI : MonoBehaviour
 		return objective;
 	}
 
-	void Update ()
+	protected void runObjectives()
 	{
 		// Debug.Log(active_Objectives.Count.ToString());
 		active_Objectives.Peek().turnOn();
-
+		
 		if(active_Objectives.Peek().end())
 		{
 			popObjective();
 			//Debug.Log(gameObject.name + ": Objective Complete");
 		}
-
+		
 		foreach(var objective in secondary_Objectives)
 		{
 			if(!objective.enabled && objective.begin())
@@ -58,13 +41,12 @@ public class CreepAI : MonoBehaviour
 				//Debug.Log(gameObject.name + ": Adding New Objective");
 			}
 		}
-
+		
 		active_Objectives.Peek().progress();
-
 	}
 
 	// When adding a new objective to the stack
-	void pushObjective(AI_Objective objective)
+	protected void pushObjective(AI_Objective objective)
 	{
 		// Turn off previous objective
 		if(active_Objectives.Count != 0)
@@ -78,7 +60,7 @@ public class CreepAI : MonoBehaviour
 	}
 
 	// When adding a new objective to the stack
-	void popObjective()
+	protected void popObjective()
 	{
 		// Turn off previous objective
 		active_Objectives.Peek().turnOff();

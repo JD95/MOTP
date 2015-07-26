@@ -24,6 +24,8 @@ public class Combat : MonoBehaviour {
 	public Target target;
 	public List<Target> targetingMe;
 
+	public bool isRanged = false;
+
 	// Combat
 	private float lastAttackTime;
 
@@ -127,13 +129,24 @@ public class Combat : MonoBehaviour {
 	public void autoAttack()
 	{
 		if(target != null && targetWithin_AttackRange()){
+
 			transform.LookAt(target.location);
+
 
 			 if(Time.time - lastAttackTime > attackSpeed())
 			{
-				//Debug.Log("Attack!");
-				cause_Damage_Physical(target.location.GetComponent<Combat>());
-				lastAttackTime = Time.time;
+				character.stopNavigation();
+
+				if(isRanged)
+				{
+					GetComponentInChildren<Projectile_Launcher>().fire(target);
+					lastAttackTime = Time.time;
+
+				}else{
+					//Debug.Log("Attack!");
+					cause_Damage_Physical(target.location.GetComponent<Combat>());
+					lastAttackTime = Time.time;
+				}
 			}
 
 			character.currentAnimation = Animations.attack;
@@ -161,7 +174,11 @@ public class Combat : MonoBehaviour {
 			//self.selectable = false;
 			self.dead = true;
 
-			GetComponent<CreepAI>().enabled = false;
+			CreepAI test;
+			if( test = GetComponent<CreepAI>())
+				test.enabled = false;
+
+
 			GetComponent<NavMeshAgent>().enabled = false;
 			character.characterState.addLivingChange(gameObject);
 

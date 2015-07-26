@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class Engage_Enemies : AI_Objective {
+public abstract class Engage_Enemies : AI_Objective {
 
-	private Combat combatData;
-	private Character character;
+	protected Combat combatData;
+	protected Character character;
 
 	/* 	Keeps track of all enemies within fight range
 	 * 	While enemies are within range, the character
@@ -13,7 +13,7 @@ public class Engage_Enemies : AI_Objective {
 	 * 	giving up
 	 * 
 	 * */
-	List<Target> inRangeEnemies;
+	protected List<Target> inRangeEnemies;
 
 	public override void init()
 	{
@@ -24,64 +24,70 @@ public class Engage_Enemies : AI_Objective {
 	}
 
 
-	void OnTriggerEnter (Collider _other) {
+	void OnTriggerEnter(Collider _other) {
 
-		//Debug.Log ("Object hit my radius!");
+		//Debug.Log(_other.name + " is in my range!");
 
-		Target other = _other.GetComponentInParent<Combat>().self;
+		Combat other;
+		if (other = _other.GetComponentInParent<Combat>())
+		{
+			if (other.self.Equals(gameObject.transform))
+				return;
 
-		if (other.Equals(gameObject.transform))
-			return;
+			if (isEnemy(other.self) && !inList(other.self)) {
 
-		if (isEnemy(other) && !inList(other)) {
+				//Debug.Log ("Adding " + other.location.name);
 
-			//Debug.Log ("Adding " + other.location.name);
+				if (noCurrentTarget()){
+					//Debug.Log ("New target Selected!");
+					combatData.target = other.self; // Make new target
+				}
 
-			if (noCurrentTarget()){
-				//Debug.Log ("New target Selected!");
-				combatData.target = other; // Make new target
+				inRangeEnemies.Add(other.self);
 			}
-
-			inRangeEnemies.Add(other);
 		}
 	}
 
-	bool isEnemy(Target other)
+	protected bool isEnemy(Target other)
 	{
 		//Debug.Log ("Tag 1: " + other.tag + " Tag2: " + transform.tag);
 		return other.location.tag != gameObject.transform.tag;
 	}
 
-	bool noCurrentTarget()
+	protected bool noCurrentTarget()
 	{
 		return combatData.target == null;
 	}
 
-	bool inList(Target other)
+	protected bool inList(Target other)
 	{
 		return inRangeEnemies.Contains(other);
 	}
 
-	bool enemiesInRange()
+	protected bool enemiesInRange()
 	{
 		return inRangeEnemies.FindAll(x => x.selectable && !x.dead).Count() != 0;
 	}
 
 	void OnTriggerExit (Collider _other) {
 
-		Target other = _other.GetComponentInParent<Combat>().self;
+		Combat other;
 
-		// If the target goes out of range change target
-		if (!other.dead && isEnemy (other) && inList(other))
+		if(other = _other.GetComponentInParent<Combat>())
 		{
-			// Deselect that enemy
-			if (other != combatData.target)
-			{
-				combatData.target = null;
-			}
 
-			// Remove from in rage enemies
-			inRangeEnemies.Remove(other);
+			// If the target goes out of range change target
+			if (!other.self.dead && isEnemy (other.self) && inList(other.self))
+			{
+				// Deselect that enemy
+				if (other.self != combatData.target)
+				{
+					combatData.target = null;
+				}
+
+				// Remove from in rage enemies
+				inRangeEnemies.Remove(other.self);
+			}
 		}
 
 	}
@@ -98,9 +104,7 @@ public class Engage_Enemies : AI_Objective {
 
 		if (combatData.target != null && !combatData.targetWithin_AttackRange())
 		{
-			//Debug.Log ("Moving towards target!");
-			// Persue target
-			character.moveTo(combatData.target.location);
+			handle_OutofRange();
 			
 		}else if(combatData.target == null || combatData.target.dead){
 				
@@ -119,6 +123,8 @@ public class Engage_Enemies : AI_Objective {
 			combatData.autoAttack();
 		}
 	}
+
+	protected abstract void handle_OutofRange();
 
 	// Tells the AI that the objective is complete
 	public override bool end()

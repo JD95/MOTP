@@ -8,14 +8,14 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
-  - 114: {fileID: 11400000}
   - 114: {fileID: 11400002}
   - 65: {fileID: 6500000}
   - 82: {fileID: 8200000}
   - 114: {fileID: 11445586}
+  - 114: {fileID: 11496328}
   m_Layer: 0
   m_Name: BasePrefabB
-  m_TagString: teamB
+  m_TagString: teamA
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -59,9 +59,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: -.448592424, z: 0, w: .893736482}
-  m_LocalPosition: {x: 19.6156864, y: 1.84223461, z: 18.5597992}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalRotation: {x: .894266605, y: .0231817849, z: .446716726, w: .0139343897}
+  m_LocalPosition: {x: 42.4055405, y: 2.21960878, z: 33.377594}
+  m_LocalScale: {x: 6.36460686, y: -3.33396387, z: 7.53614664}
   m_Children:
   - {fileID: 400004}
   - {fileID: 400002}
@@ -235,23 +235,6 @@ Light:
   m_ShadowRadius: 0
   m_ShadowAngle: 0
   m_AreaSize: {x: 1, y: 1}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36b1fea6484b2472ca80ad96b5766f3b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextWaypoint: {fileID: 0}
-  target: {fileID: 0}
-  movement: {x: 0, y: 0, z: 0}
-  speed: 0
-  tower: 1
-  ShotPrefab: {fileID: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -263,21 +246,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621afe67e67e444cba6a698c80f873f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 
-  health: 50
-  maxHealth: 50
-  creeps: 0
-  level: 1
-  range: 8
-  damage: 4.5
   healthTexture: {fileID: 2800000, guid: 6d28d934293344837bfbc57e3b213ce0, type: 3}
+  team: 
   charID: -7
   isHero: 0
   isBase: 1
-  xp: 0
   skin: {fileID: 0}
   bloodPrefab: {fileID: 400000, guid: 8682bbbb15f5b48a8bc0e4f7451c5103, type: 2}
   avatar: {fileID: 0}
+  currentAnimation: 0
 --- !u!114 &11445586
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -292,16 +269,37 @@ MonoBehaviour:
   ownerId: 0
   group: 0
   prefixBackup: -1
-  observed: {fileID: 11400000}
+  observed: {fileID: 0}
   synchronization: 1
   onSerializeTransformOption: 3
   onSerializeRigidBodyOption: 2
   ownershipTransfer: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
   isRuntimeInstantiated: 0
+--- !u!114 &11496328
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae22ef4fcf9b33d43b415269e22e7523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 10
+  maxHealth: 10
+  creeps: 0
+  level: 1
+  range: 0
+  damage: 0
+  isRanged: 0
+  attackRange: 0
+  baseAttackSpeed: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

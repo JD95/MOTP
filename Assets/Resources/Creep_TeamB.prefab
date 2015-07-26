@@ -199,6 +199,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &126784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 464388}
+  - 135: {fileID: 13566246}
+  m_Layer: 8
+  m_Name: AI_Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &128894
 GameObject:
   m_ObjectHideFlags: 1
@@ -586,11 +602,10 @@ GameObject:
   - 82: {fileID: 8239816}
   - 114: {fileID: 11464668}
   - 136: {fileID: 13690978}
-  - 135: {fileID: 13504888}
   - 114: {fileID: 11476468}
   - 195: {fileID: 19547734}
-  - 114: {fileID: 11443738}
   - 143: {fileID: 14347046}
+  - 114: {fileID: 11433398}
   m_Layer: 0
   m_Name: Creep_TeamB
   m_TagString: teamB
@@ -713,10 +728,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195562}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.42000008, y: 0, z: -4.05999994}
+  m_LocalPosition: {x: 19.2700005, y: .629364669, z: 24.8643608}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 433092}
+  - {fileID: 464388}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!4 &421840
@@ -987,6 +1003,18 @@ Transform:
   m_Children:
   - {fileID: 467904}
   m_Father: {fileID: 423096}
+  m_RootOrder: 1
+--- !u!4 &464388
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 126784}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 420474}
   m_RootOrder: 1
 --- !u!4 &467904
 Transform:
@@ -1296,7 +1324,7 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 1
---- !u!114 &11443738
+--- !u!114 &11433398
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1304,7 +1332,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 195562}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36b1fea6484b2472ca80ad96b5766f3b, type: 3}
+  m_Script: {fileID: 11500000, guid: 75e99497b1edf1741aef092088b46448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11464518
@@ -1369,14 +1397,15 @@ MonoBehaviour:
   level: 1
   range: 2
   damage: 1.5
+  isRanged: 0
   attackRange: 3
   baseAttackSpeed: 1
---- !u!135 &13504888
+--- !u!135 &13566246
 SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 195562}
+  m_GameObject: {fileID: 126784}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
@@ -1390,7 +1419,7 @@ CapsuleCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 195562}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: .310646057
   m_Height: 3.5
@@ -1508,6 +1537,10 @@ Prefab:
     m_Modifications:
     - target: {fileID: 0}
       propertyPath: m_StoppingDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -25,10 +25,10 @@ public class Destroy_Nexus : AI_Objective {
 	{
 		if(gameObject.CompareTag("teamA"))
 		{
-			return "Nexus B";
+			return "NexusB";
 		}
 		else{
-			return "Nexus A";
+			return "NexusA";
 		}
 	}
 
@@ -36,7 +36,8 @@ public class Destroy_Nexus : AI_Objective {
 	{
 		if(movement.destination != nexus.position)
 		{
-			movement.destination = nexus.position;
+			movement.SetDestination(nexus.position);
+			movement.Resume();
 		}
 
 		// When in range of Nexus auto attack it
