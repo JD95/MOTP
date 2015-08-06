@@ -51,10 +51,7 @@ public class Hero : Photon.MonoBehaviour
 			navigation.Resume();
 
 		}
-
-		// If you have arrived at destination, play idle animation
-		if(character.within_Destination())
-			character.currentAnimation = Animations.idle;
+	
 	}
 
 
@@ -74,11 +71,11 @@ public class Hero : Photon.MonoBehaviour
 
 			if (hit.collider.name != transform.name) {
 
-				Debug.Log("Not me!");
+				//Debug.Log("Not me!");
 
 				if(hit.collider.tag.Equals(oppositeTeam(heroTeam)))
 				{
-					Debug.Log("Click detection sucessful!");
+					//Debug.Log("Click detection sucessful!");
 
 					combatData.target = hit.collider.GetComponent<Combat>().self;
 					navigation.stoppingDistance = combatData.attackRange;

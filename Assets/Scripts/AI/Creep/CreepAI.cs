@@ -16,7 +16,8 @@ public abstract class CreepAI : MonoBehaviour
 	protected T createObjective<T>() where T : AI_Objective
 	{
 		var objective = gameObject.AddComponent<T>();
-		objective.GetComponent<T>().enabled = false;
+		//objective.GetComponent<T>().enabled = false;
+		objective.turnOff();
 		objective.init();
 
 		return objective;
@@ -25,20 +26,20 @@ public abstract class CreepAI : MonoBehaviour
 	protected void runObjectives()
 	{
 		// Debug.Log(active_Objectives.Count.ToString());
-		active_Objectives.Peek().turnOn();
+		//active_Objectives.Peek().turnOn();
 		
 		if(active_Objectives.Peek().end())
 		{
 			popObjective();
-			//Debug.Log(gameObject.name + ": Objective Complete");
+			Debug.Log(gameObject.name + ": Objective Complete");
 		}
 		
 		foreach(var objective in secondary_Objectives)
 		{
-			if(!objective.enabled && objective.begin())
+			if(!objective.isActive() && objective.begin())
 			{
+				Debug.Log(gameObject.name + ": Adding New Objective");
 				pushObjective(objective);
-				//Debug.Log(gameObject.name + ": Adding New Objective");
 			}
 		}
 		
@@ -49,19 +50,23 @@ public abstract class CreepAI : MonoBehaviour
 	protected void pushObjective(AI_Objective objective)
 	{
 		// Turn off previous objective
-		if(active_Objectives.Count != 0)
-		active_Objectives.Peek().turnOff();
+		if(active_Objectives.Count != 0){
+			//active_Objectives.Peek().turnOff();
+		}
+
+		objective.turnOn();
 
 		// Add new objective
 		active_Objectives.Push(objective);
 
 		// Activate it
-		active_Objectives.Peek().turnOn();
+		//active_Objectives.Peek().turnOn();
 	}
 
 	// When adding a new objective to the stack
 	protected void popObjective()
 	{
+		Debug.Log(gameObject.name +"Removing objective!");
 		// Turn off previous objective
 		active_Objectives.Peek().turnOff();
 		

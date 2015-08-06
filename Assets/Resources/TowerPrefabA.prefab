@@ -15,6 +15,7 @@ GameObject:
   - 114: {fileID: 11407162}
   - 208: {fileID: 20806412}
   - 136: {fileID: 13611810}
+  - 54: {fileID: 5455058}
   m_Layer: 0
   m_Name: TowerPrefabA
   m_TagString: teamA
@@ -111,7 +112,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: .984267294, z: 0, w: -.176686242}
-  m_LocalPosition: {x: 28.7800007, y: 2.16000009, z: 26.3600006}
+  m_LocalPosition: {x: 28.7800007, y: .560000002, z: 26.3600006}
   m_LocalScale: {x: 1, y: 3.30134892, z: 1.0163666}
   m_Children:
   - {fileID: 491854}
@@ -128,7 +129,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: -.707106829, y: 0, z: -0, w: .707106829}
-  m_LocalPosition: {x: -0, y: -.5, z: 0}
+  m_LocalPosition: {x: -0, y: -.0199999996, z: 0}
   m_LocalScale: {x: 1, y: 1, z: .300000012}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -140,7 +141,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.08899999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -152,7 +153,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106709}
-  m_LocalPosition: {x: 0, y: -.5, z: 0}
+  m_LocalPosition: {x: 0, y: .0450000018, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -164,7 +165,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 157210}
   m_LocalRotation: {x: -.515247524, y: .395461082, z: -.62652266, w: -.430813134}
-  m_LocalPosition: {x: -.00999999978, y: .797200024, z: .43900001}
+  m_LocalPosition: {x: -.00999999978, y: 1.26900005, z: .43900001}
   m_LocalScale: {x: .332799822, y: .354505479, z: .149494335}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -212,6 +213,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_Mesh: {fileID: 4300000, guid: 3d76bbe2e312a8a4193275e403b9ac42, type: 3}
+--- !u!54 &5455058
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
@@ -395,10 +411,10 @@ MonoBehaviour:
   maxHealth: 1000
   creeps: 0
   level: 1
-  range: 100
+  range: 10
   damage: 1.5
   isRanged: 1
-  attackRange: 200
+  attackRange: 10
   baseAttackSpeed: 1
 --- !u!135 &13574480
 SphereCollider:

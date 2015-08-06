@@ -5,7 +5,7 @@ using System.Linq;
 public abstract class Engage_Enemies : AI_Objective {
 
 	protected Combat combatData;
-	protected Character character;
+	protected Navigation nav;
 
 	/* 	Keeps track of all enemies within fight range
 	 * 	While enemies are within range, the character
@@ -20,16 +20,17 @@ public abstract class Engage_Enemies : AI_Objective {
 		inRangeEnemies = new List<Target>();
 
 		combatData = gameObject.GetComponent<Combat>();
-		character = gameObject.GetComponent<Character>();
+		nav = gameObject.GetComponent<Navigation>();
+
 	}
+	
+	protected void OnTriggerEnter(Collider _other) {
 
-
-	void OnTriggerEnter(Collider _other) {
-
+		if(_other.name == "AI_Collider") return;
 		//Debug.Log(_other.name + " is in my range!");
 
 		Combat other;
-		if (other = _other.GetComponentInParent<Combat>())
+		if (other = _other.GetComponent<Combat>())
 		{
 			if (other.self.Equals(gameObject.transform))
 				return;
@@ -69,7 +70,7 @@ public abstract class Engage_Enemies : AI_Objective {
 		return inRangeEnemies.FindAll(x => x.selectable && !x.dead).Count() != 0;
 	}
 
-	void OnTriggerExit (Collider _other) {
+	protected void OnTriggerExit (Collider _other) {
 
 		Combat other;
 
@@ -95,6 +96,9 @@ public abstract class Engage_Enemies : AI_Objective {
 	// Tells the AI to begin this objective
 	public override bool begin()
 	{
+		if(enemiesInRange())
+			Debug.Log("Beginning combat!");
+
 		return enemiesInRange();
 	}
 
@@ -119,6 +123,7 @@ public abstract class Engage_Enemies : AI_Objective {
 
 
 		}else{
+			nav.stopNav();
 			//Debug.Log ("Auto attack go!");
 			combatData.autoAttack();
 		}
@@ -130,6 +135,8 @@ public abstract class Engage_Enemies : AI_Objective {
 	public override bool end()
 	{
 		// If there are no enemies in range then nothing to attack
+		if (!enemiesInRange ())
+			Debug.Log("No more enemies!");
 		return !enemiesInRange();
 	}
 

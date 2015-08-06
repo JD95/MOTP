@@ -29,8 +29,8 @@ GameObject:
   - 136: {fileID: 13677720}
   - 114: {fileID: 11438364}
   - 195: {fileID: 19577086}
-  - 143: {fileID: 14353728}
   - 114: {fileID: 11458216}
+  - 54: {fileID: 5464690}
   m_Layer: 0
   m_Name: Creep(ranged)_TeamB
   m_TagString: teamB
@@ -1249,6 +1249,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 110306}
   m_Mesh: {fileID: 4300000, guid: 8f85035f01d2f2444afad412ca98568b, type: 3}
+--- !u!54 &5464690
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102366}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!82 &8258646
 AudioSource:
   m_ObjectHideFlags: 1
@@ -1532,23 +1547,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -.000313028693, y: .0213951916, z: .0368932486}
     m_Extent: {x: .423230648, y: .404112399, z: .566300035}
   m_DirtyAABB: 0
---- !u!143 &14353728
-CharacterController:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 102366}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2
-  m_Radius: .5
-  m_SlopeLimit: 45
-  m_StepOffset: .300000012
-  m_SkinWidth: .0799999982
-  m_MinMoveDistance: .00100000005
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &19577086
 NavMeshAgent:
   m_ObjectHideFlags: 1

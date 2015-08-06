@@ -21,10 +21,7 @@ public class Character : MonoBehaviour
 	public GUISkin skin;
 	public Transform bloodPrefab;
 	public Animation avatar;
-
-	private float speed;
-	private NavMeshAgent navigation;
-
+	
 	//private CharacterController movementControler;
 	private Combat combatData;
 
@@ -35,10 +32,8 @@ public class Character : MonoBehaviour
 	void Awake ()
 	{
 
-
 		//movementControler = GetComponent<CharacterController>();
 		combatData = GetComponent<Combat>();
-		navigation = GetComponent<NavMeshAgent>();
 
 		backgroundTexture = new Texture2D (1, 1, TextureFormat.RGB24, false);
 		backgroundTexture.SetPixel (0, 0, Color.black);
@@ -48,7 +43,6 @@ public class Character : MonoBehaviour
 			charID = numchars++;
 			gameObject.name = "char" + charID;
 		}
-		speed = 10.0F;
 	}
 
 	void Start()
@@ -66,9 +60,6 @@ public class Character : MonoBehaviour
 
 		// Perform next animation
 		animate ();
-
-		// We are done with the health so it swaps old with new
-		combatData.updateHealth();
 
 		characterState.stepTime();
 		//characterState.applyLivingChanges(game);
@@ -92,41 +83,9 @@ public class Character : MonoBehaviour
 		}
 	}
 
-	public bool within_Destination()
-	{
-		return Vector3.Distance(navigation.destination, transform.position).AlmostEquals(navigation.stoppingDistance,1f);
-	}
-
-	public void moveTo (Transform location)
-	{
-		if (location == null) return;
 
 
-
-		// If its asking to move to your current destination
-		if (navigation.destination == location.position)
-		{
-			// If you are close enough to destination
-			if(within_Destination())
-			{
-				currentAnimation = Animations.idle;
-			}else{
-				currentAnimation = Animations.run;
-			}
-		}else {
-			// I have new destination
-			navigation.SetDestination(location.position);
-			navigation.Resume();
-			//moveTo(location);
-		}
-
-		//movementControler.SimpleMove(direction * speed);
-	}
-
-	public void stopNavigation()
-	{
-		navigation.Stop();
-	}
+	
 
 	// Health Bar (all) and level (hero only)
 	void OnGUI ()

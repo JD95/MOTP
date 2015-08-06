@@ -3,6 +3,8 @@ using System.Collections;
 
 public abstract class AI_Objective : MonoBehaviour{
 
+	protected bool active = false;
+
 	/*
 	 * The equivalent of a Start() function, it is
 	 * needed because Unity will not call start given
@@ -32,13 +34,18 @@ public abstract class AI_Objective : MonoBehaviour{
 	 */
 	public abstract bool end();
 
+	public bool isActive()
+	{
+		return active;
+	}
+
 	public void turnOff()
 	{
-		this.enabled = false;
+		active = false;
 	}
 	
 	public void turnOn()
 	{
-		this.enabled = true;
+		active = true;
 	}
 }

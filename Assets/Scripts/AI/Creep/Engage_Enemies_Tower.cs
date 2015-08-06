@@ -5,6 +5,6 @@ public class Engage_Enemies_Tower : Engage_Enemies {
 
 	protected override void handle_OutofRange()
 	{
-		// Do Nothing	
+		Debug.Log (	"I am a tower and my target is out of range!");
 	}
 }

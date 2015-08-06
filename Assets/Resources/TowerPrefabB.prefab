@@ -15,6 +15,7 @@ GameObject:
   - 114: {fileID: 11463230}
   - 208: {fileID: 20892102}
   - 136: {fileID: 13607360}
+  - 54: {fileID: 5480384}
   m_Layer: 0
   m_Name: TowerPrefabB
   m_TagString: teamB
@@ -111,7 +112,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: -.0858488381, z: 0, w: .996308208}
-  m_LocalPosition: {x: 18.9588566, y: 2.4000001, z: .561635971}
+  m_LocalPosition: {x: 18.9588566, y: .589999974, z: .561635971}
   m_LocalScale: {x: 1, y: 3.30134892, z: 1.0163666}
   m_Children:
   - {fileID: 491054}
@@ -128,7 +129,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: -.707106829, y: 0, z: -0, w: .707106829}
-  m_LocalPosition: {x: -0, y: -.5, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: .300000012}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -140,7 +141,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .00568923168, z: -0}
+  m_LocalPosition: {x: 0, y: 1.09899998, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -152,7 +153,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: -.707106829, y: 0, z: 0, w: .707106709}
-  m_LocalPosition: {x: 0, y: -.5, z: 0}
+  m_LocalPosition: {x: 0, y: .00999999978, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -164,7 +165,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 114442}
   m_LocalRotation: {x: -.470647246, y: -.518965423, z: .660682797, w: -.269563228}
-  m_LocalPosition: {x: .0359999985, y: .850000024, z: .0799999982}
+  m_LocalPosition: {x: .0359999985, y: 1.21399999, z: .0799999982}
   m_LocalScale: {x: .324901551, y: .309125423, z: .128240749}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -176,7 +177,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 199604}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -.0419999994, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -212,6 +213,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_Mesh: {fileID: 4300000, guid: 3d76bbe2e312a8a4193275e403b9ac42, type: 3}
+--- !u!54 &5480384
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
@@ -348,10 +364,10 @@ MonoBehaviour:
   maxHealth: 1000
   creeps: 0
   level: 1
-  range: 100
-  damage: 1.5
+  range: 10
+  damage: 0
   isRanged: 1
-  attackRange: 200
+  attackRange: 10
   baseAttackSpeed: 1
 --- !u!114 &11436898
 MonoBehaviour:
@@ -421,10 +437,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: .5
-  m_Height: 1
+  m_Radius: .530957401
+  m_Height: 1.79032433
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: .5, z: 0}
 --- !u!198 &19800000
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -1513,11 +1529,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 1, y: 1, z: 1}
+  m_Extents: {x: .5, y: .5, z: .5}
   m_MoveThreshold: .100000001
   m_Carve: 0
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: .5, z: 0}
   m_TimeToStationary: .5
 --- !u!1001 &100100000
 Prefab:

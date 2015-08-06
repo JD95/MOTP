@@ -604,7 +604,6 @@ GameObject:
   - 136: {fileID: 13690978}
   - 114: {fileID: 11476468}
   - 195: {fileID: 19547734}
-  - 143: {fileID: 14347046}
   - 114: {fileID: 11433398}
   m_Layer: 0
   m_Name: Creep_TeamB
@@ -1491,23 +1490,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -.000313028693, y: .0213951916, z: .0368932486}
     m_Extent: {x: .423230648, y: .404112399, z: .566300035}
   m_DirtyAABB: 0
---- !u!143 &14347046
-CharacterController:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 195562}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2
-  m_Radius: .5
-  m_SlopeLimit: 45
-  m_StepOffset: .300000012
-  m_SkinWidth: .0799999982
-  m_MinMoveDistance: .00100000005
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &19547734
 NavMeshAgent:
   m_ObjectHideFlags: 1

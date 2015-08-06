@@ -18,7 +18,7 @@ public class Combat : MonoBehaviour {
 	public int level = 1;
 	
 	public float range = 2;
-	public float damage = 1.5f;
+	public float damage = 0.0F;
 
 	public Target self;
 	public Target target;
@@ -132,10 +132,8 @@ public class Combat : MonoBehaviour {
 
 			transform.LookAt(target.location);
 
-
 			 if(Time.time - lastAttackTime > attackSpeed())
 			{
-				character.stopNavigation();
 
 				if(isRanged)
 				{
@@ -151,6 +149,7 @@ public class Combat : MonoBehaviour {
 
 			character.currentAnimation = Animations.attack;
 		}
+
 	}
 
 	private void die()

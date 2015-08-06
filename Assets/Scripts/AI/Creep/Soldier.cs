@@ -11,6 +11,7 @@ public class Soldier : CreepAI {
 		// The main objective for creeps
 		//main_Objective = createObjective<Destroy_Nexus>();
 		main_Objective = createObjective<Destroy_Nexus>();
+		main_Objective.turnOn();
 		active_Objectives.Push(main_Objective);
 		
 		// All other objectives
@@ -26,6 +27,7 @@ public class Soldier : CreepAI {
 	// This is where the creep's secondary objectives are added
 	protected override void  fillSecondaryObjectives()
 	{
+		//secondary_Objectives.Add(createObjective<Destroy_Nexus>());
 		secondary_Objectives.Add(createObjective<Engage_Enemies_Creep>());
 	}
 }

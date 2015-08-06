@@ -34,8 +34,9 @@ public class Destroy_Nexus : AI_Objective {
 
 	public override void progress()
 	{
-		if(movement.destination != nexus.position)
+		if(!movement.destination.Equals(nexus.position))
 		{
+			//Debug.Log("Target is now set to nexus");
 			movement.SetDestination(nexus.position);
 			movement.Resume();
 		}

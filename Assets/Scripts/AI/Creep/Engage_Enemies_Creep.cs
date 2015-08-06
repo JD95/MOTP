@@ -5,8 +5,8 @@ public class Engage_Enemies_Creep : Engage_Enemies {
 
 	protected override void handle_OutofRange()
 	{
-		//Debug.Log ("Moving towards target!");
+		Debug.Log ("I am creep and I am moving towards " + combatData.target.location.name);
 		// Persue target
-		character.moveTo(combatData.target.location);
+		nav.moveTo(combatData.target.location);
 	}
 }
