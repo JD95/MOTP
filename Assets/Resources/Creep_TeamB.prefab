@@ -221,12 +221,12 @@ GameObject:
   - 114: {fileID: 11444460}
   - 82: {fileID: 8277042}
   - 114: {fileID: 11418650}
-  - 136: {fileID: 13640336}
   - 114: {fileID: 11473098}
   - 195: {fileID: 19555904}
   - 114: {fileID: 11473498}
   - 54: {fileID: 5486348}
   - 114: {fileID: 11445520}
+  - 136: {fileID: 13644160}
   m_Layer: 0
   m_Name: Creep_TeamB
   m_TagString: teamB
@@ -757,7 +757,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 144076}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 27.5499992, y: .623589575, z: -.99000001}
+  m_LocalPosition: {x: 28.6058769, y: .358033657, z: 15.0540695}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 484574}
@@ -1232,7 +1232,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: .0500000007
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -1396,6 +1396,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a19b39e7aab7ab049a31c991ae67f321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inCombat: 0
+  withinRange: 0
 --- !u!114 &11473098
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1408,10 +1410,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 20
+  targetName: 
   maxHealth: 20
   creeps: 0
   level: 1
   damage: 1.5
+  selectable: 1
+  dead: 0
+  target: {fileID: 0}
   isRanged: 0
   attackRange: 3
   baseAttackSpeed: 1
@@ -1426,6 +1432,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75e99497b1edf1741aef092088b46448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flicker: 0
+  secondObjectivesNames: []
+  activeObjectiveNames: []
 --- !u!135 &13546610
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -1438,19 +1447,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &13640336
+--- !u!136 &13644160
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 144076}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: .310646057
-  m_Height: 3.5
+  m_Radius: .5
+  m_Height: 3
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!137 &13724558
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -1525,13 +1534,13 @@ NavMeshAgent:
   m_GameObject: {fileID: 144076}
   m_Enabled: 1
   m_Radius: .5
-  m_Speed: 3.5
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
@@ -1547,6 +1556,22 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: m_TagString
       value: teamB
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_AutoBraking
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_IsKinematic
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

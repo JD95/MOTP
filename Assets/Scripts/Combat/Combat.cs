@@ -23,9 +23,9 @@ public class Combat : MonoBehaviour {
 	//public float range = 2;
 	public float damage = 0.0F;
 
-	public Target self;
-	public Target target;
-	public List<Target> targetingMe;
+	public bool selectable = true;
+	public bool dead = false;
+	public GameObject target;
 
 	public bool isRanged = false;
 
@@ -43,14 +43,7 @@ public class Combat : MonoBehaviour {
 	void Start () {
 		basicAttackCoolDown = 0;
 		character = GetComponent<Character>();
-		self = new Target(transform,true, false);
 		attributes = new Effect_Management.Attribute_Manager();
-	}
-
-	void OnDestroy()
-	{
-		Debug.Log("destroying combat");
-		self = null;
 	}
 
 	// Update is called once per frame
@@ -61,11 +54,13 @@ public class Combat : MonoBehaviour {
 			basicAttackCoolDown--;
 		}
 
-		if(target != null && target.location != null)
+		if(target != null && target.transform != null)
 		{
-			targetName = target.location.name;
-		}else{
-			targetName = "none";
+			targetName = target.name;
+		}else if (target == null){
+			targetName = "Target is null";
+		}else {
+			targetName = "Target location is null";
 		}
 
 		attributes.stepTime();
@@ -102,8 +97,8 @@ public class Combat : MonoBehaviour {
 
 	public bool targetWithin_AttackRange()
 	{
-		if (target.location != null && transform != null)
-			return Vector3.Distance(target.location.position, transform.position) <= attackRange;
+		if (target.transform != null && transform != null)
+			return Vector3.Distance(target.transform.position, transform.position) <= attackRange;
 		else return false;
 	}
 
@@ -113,7 +108,7 @@ public class Combat : MonoBehaviour {
 	/*---Combat Functions----------------------------------------------------------*/
 
 	// Character takes physical damage
-	public void recieve_Damage_Physical(float amount, ref Target enemy_target)
+	public void recieve_Damage_Physical(float amount)
 	{
 		this.health -= amount;
 		
@@ -121,14 +116,13 @@ public class Combat : MonoBehaviour {
 		{	
 			// deathAnimation();
 			// createTimer_to_destory model();
-			enemy_target.dead = true;
-			enemy_target = null;
+
 			die();
 		}
 	}
 
 	// Character takes magic damage
-	public void recieve_Damage_Magic(float amount,  Target enemy)
+	public void recieve_Damage_Magic(float amount)
 	{
 		// magicResistance();
 		this.health -= amount;
@@ -145,14 +139,14 @@ public class Combat : MonoBehaviour {
 	public void cause_Damage_Physical(Combat _target)
 	{
 		// damageBuffs();
-		_target.recieve_Damage_Physical(damage, ref target);
+		_target.recieve_Damage_Physical(damage);
 	}
 
 	public void autoAttack()
 	{
 		if(target != null && targetWithin_AttackRange()){
 
-			transform.LookAt(target.location);
+			transform.LookAt(target.transform);
 
 			if(basicAttackCoolDown <= 0)
 			{
@@ -162,7 +156,7 @@ public class Combat : MonoBehaviour {
 					basicAttackCoolDown = attackSpeed();
 				}else{
 					//Debug.Log("Attack!");
-					cause_Damage_Physical(target.location.GetComponent<Combat>());
+					cause_Damage_Physical(target.GetComponent<Combat>());
 				}
 
 				basicAttackCoolDown = attackSpeed();
@@ -190,7 +184,8 @@ public class Combat : MonoBehaviour {
 			//giveKillPoints();
 			//if(hero) startRespawn_Timer();
 			//self.selectable = false;
-			self.dead = true;
+			this.dead = true;
+			this.selectable = false;
 
 			CreepAI test;
 			if( test = GetComponent<CreepAI>())
@@ -215,33 +210,4 @@ public class Combat : MonoBehaviour {
 
 	/*-------------------------------------------------------------*/
 
-}
-		                  
-public class Target : IEquatable<Target> {
-			
-	public bool selectable;
-	public bool dead;
-	
-	public Transform location;
-
-	public bool Equals (Target right)
-	{
-		if (right == null) return false;
-
-		return right.location.Equals(this.location) 
-			&& right.selectable == this.selectable 
-				&& right.dead == this.dead;
-	}
-
-	public Target(Transform loc, bool select, bool d)
-	{
-		location = loc;
-		selectable = select;
-		dead = d;
-	}
-
-	public override string ToString ()
-	{
-		return location.name;
-	}
 }

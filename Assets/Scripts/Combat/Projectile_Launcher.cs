@@ -6,7 +6,7 @@ public class Projectile_Launcher : MonoBehaviour {
 	public Rigidbody projectile;
 
 	// Use this for initialization
-	public void fire (Target _target) {
+	public void fire (GameObject _target) {
 	
 		Rigidbody projClone = (Rigidbody) Instantiate(projectile, transform.position, transform.rotation);
 

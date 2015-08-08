@@ -7,7 +7,10 @@ public class Soldier : CreepAI {
 	{
 		active_Objectives = new Stack<AI_Objective>();
 		secondary_Objectives = new List<AI_Objective>();
-		
+
+		secondObjectivesNames = new List<string>();
+		activeObjectiveNames = new List<string>();
+
 		// The main objective for creeps
 		//main_Objective = createObjective<Destroy_Nexus>();
 		main_Objective = createObjective<Destroy_Nexus>();
@@ -19,9 +22,34 @@ public class Soldier : CreepAI {
 		
 	}
 
+	public List<string> secondObjectivesNames;
+	public List<string> activeObjectiveNames;
+	
+	private List<string> convertStack()
+	{	
+		List<string> newList = new List<string>();
+		
+		foreach (var item in active_Objectives)
+		{
+			newList.Add(item.ToString());
+		}
+		
+		return newList;
+	}
+	private List<string> convertList()
+	{	
+		List<string> newList = new List<string>();
+		
+		secondary_Objectives.ForEach(x => newList.Add(x.ToString()));
+		
+		return newList;
+	}
+
 	void Update()
 	{
 		runObjectives();
+		secondObjectivesNames = convertList();
+		activeObjectiveNames = convertStack();
 	}
 
 	void OnDestroy()

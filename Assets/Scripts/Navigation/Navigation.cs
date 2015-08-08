@@ -59,6 +59,8 @@ public class Navigation : MonoBehaviour {
 
 	void updateMoving()
 	{
+		if(!navAgent.enabled) return;
+
 		if(inCombat && withinRange)
 		{
 			navAgent.Stop();
@@ -75,6 +77,8 @@ public class Navigation : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Debug.Log(navAgent.destination.ToString());
+
+		updateMoving();
 	}
 
 	public void stopNav()

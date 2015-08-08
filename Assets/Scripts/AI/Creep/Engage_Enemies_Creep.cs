@@ -8,8 +8,8 @@ public class Engage_Enemies_Creep : Engage_Enemies {
 		//Debug.Log ("I am creep and I am moving towards " + combatData.target.location.name);
 		// Persue target
 
-		if(combatData.target.location != null){
-			nav.moveTo(combatData.target.location.position, combatData.attackRange);
+		if(combatData.target.transform != null){
+			nav.moveTo(combatData.target.transform.position, combatData.attackRange);
 		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class AI_Objective : MonoBehaviour{
 
-	protected bool active = false;
+	public bool objectiveActive = false;
 
 	/*
 	 * The equivalent of a Start() function, it is
@@ -36,16 +36,17 @@ public abstract class AI_Objective : MonoBehaviour{
 
 	public bool isActive()
 	{
-		return active;
+		return objectiveActive;
 	}
 
 	public void turnOff()
 	{
-		active = false;
+		objectiveActive = false;
 	}
 	
 	public void turnOn()
 	{
-		active = true;
+		objectiveActive = true;
 	}
+
 }

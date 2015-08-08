@@ -73,7 +73,7 @@ public class Hero : Photon.MonoBehaviour
 
 			if(hit.collider.tag.Equals(oppositeTeam(heroTeam)))
 			{
-				combatData.target = hit.collider.GetComponent<Combat>().self;
+				combatData.target = hit.collider.gameObject;
 				return new Tuple<Vector3, float>(hit.point, combatData.attackRange);
 
 			}else{
