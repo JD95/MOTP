@@ -14,10 +14,12 @@ public abstract class Engage_Enemies : AI_Objective {
 	 * 
 	 * */
 	protected List<Target> inRangeEnemies;
+	public List<string> enemyNames;
 
 	public override void init()
 	{
 		inRangeEnemies = new List<Target>();
+		enemyNames = new List<string>();
 
 		combatData = gameObject.GetComponent<Combat>();
 		nav = gameObject.GetComponent<Navigation>();
@@ -32,12 +34,11 @@ public abstract class Engage_Enemies : AI_Objective {
 		Combat other;
 		if (other = _other.GetComponent<Combat>())
 		{
-			if (other.self.Equals(gameObject.transform))
-				return;
+			//if (other.self.Equals(gameObject.transform)) return;
 
 			if (isEnemy(other.self) && !inList(other.self)) {
 
-				//Debug.Log ("Adding " + other.location.name);
+				//Debug.Log ("Adding " + other.gameObject.name);
 
 				if (noCurrentTarget()){
 					//Debug.Log ("New target Selected!");
@@ -52,7 +53,7 @@ public abstract class Engage_Enemies : AI_Objective {
 	protected bool isEnemy(Target other)
 	{
 		//Debug.Log ("Tag 1: " + other.tag + " Tag2: " + transform.tag);
-		return other.location.tag != gameObject.transform.tag;
+		return other.location.tag != gameObject.tag;
 	}
 
 	protected bool noCurrentTarget()
@@ -67,7 +68,7 @@ public abstract class Engage_Enemies : AI_Objective {
 
 	protected bool enemiesInRange()
 	{
-		return inRangeEnemies.FindAll(x => x.selectable && !x.dead).Count() != 0;
+		return inRangeEnemies.Any(x => x.selectable && !x.dead);
 	}
 
 	protected void OnTriggerExit (Collider _other) {
@@ -96,34 +97,51 @@ public abstract class Engage_Enemies : AI_Objective {
 	// Tells the AI to begin this objective
 	public override bool begin()
 	{
-		if(enemiesInRange())
-			Debug.Log("Beginning combat!");
+		if(nav != null && enemiesInRange())
+		{
+			// Creep is in combat
+			nav.turnOn_inCombat();
+		}
 
 		return enemiesInRange();
+	}
+
+	private List<string> convertList()
+	{	
+		List<string> newList = new List<string>();
+		inRangeEnemies.ForEach(x => newList.Add(x.ToString()));
+
+		return newList;
 	}
 
 	public override void progress()
 	{
 		//Debug.Log("AI progressing");
+		inRangeEnemies.RemoveAll(item => item == null || item.location == null);
+		enemyNames = convertList();
 
+		// Target alive but not in attack range
 		if (combatData.target != null && !combatData.targetWithin_AttackRange())
 		{
+			//Creep is not in range
+			if(nav != null)
+			{nav.turnOff_withinRange();}
 			handle_OutofRange();
-			
-		}else if(combatData.target == null || combatData.target.dead){
+		
+		// Target cannot be attacked
+		}else if(combatData.target == null || combatData.target.location == null || combatData.target.dead || !combatData.target.selectable){
 				
-			//Debug.Log("My target is dead!");
+			Debug.Log("Changing target!");
 			inRangeEnemies.Remove(combatData.target);
 			combatData.target = inRangeEnemies.Find(x => x.selectable && !x.dead);
-
-		}else if(!combatData.target.selectable){
-
-			// Finds the first target that is both selectable and not dead
-			combatData.target = inRangeEnemies.Find(x => x.selectable && !x.dead);
-
-
+		
+		// Target cam be attacl amd is in range
 		}else{
-			nav.stopNav();
+
+			//Creep is within range
+			if(nav != null)
+			{nav.turnOn_withinRange();}
+
 			//Debug.Log ("Auto attack go!");
 			combatData.autoAttack();
 		}
@@ -135,8 +153,11 @@ public abstract class Engage_Enemies : AI_Objective {
 	public override bool end()
 	{
 		// If there are no enemies in range then nothing to attack
-		if (!enemiesInRange ())
-			Debug.Log("No more enemies!");
+		if (nav != null && !enemiesInRange ())
+		{
+			nav.turnOff_inCombat();
+		}
+
 		return !enemiesInRange();
 	}
 

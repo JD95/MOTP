@@ -14,10 +14,10 @@ public class Projectile : MonoBehaviour {
 
 	void Update(){
 
-		if(target == null) return;
-
-
-
+		if(target.location == null) 
+		{
+			GameObject.Destroy(gameObject); return;
+		}
 		if(transform.position != target.location.position)
 		{
 			transform.position = Vector3.Lerp(transform.position, target.location.position, (speed / 60.0F)); 
@@ -33,13 +33,12 @@ public class Projectile : MonoBehaviour {
 
 		if (targetHit = hit.GetComponent<Combat>()){
 
-
-
 			if (targetHit.self == target)
 			{
-				targetHit.recieve_Damage_Physical(damage, target);
+				targetHit.recieve_Damage_Physical(damage, ref target);
 				GameObject.Destroy(gameObject);
 			}
 		}
 	}
+	
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class Hero : Photon.MonoBehaviour
@@ -13,7 +14,7 @@ public class Hero : Photon.MonoBehaviour
 	
 
 	// Navigation
-	private NavMeshAgent navigation;
+	private Navigation navigation;
 	public Waypoint targetLocation;
 
 
@@ -24,8 +25,7 @@ public class Hero : Photon.MonoBehaviour
 
 		targetLocation = GameObject.Find("A").GetComponent<Waypoint>();
 
-		navigation = GetComponent<NavMeshAgent>();
-		navigation.stoppingDistance = 0;
+		navigation = GetComponent<Navigation>();
 
 		combatData = GetComponent<Combat>();
 	}
@@ -46,9 +46,8 @@ public class Hero : Photon.MonoBehaviour
 	{
 		if (Input.GetButtonDown ("Fire1")) { //Debug.Log ("Click!");	
 
-			navigation.destination = filterClick(Input.mousePosition);
-			character.currentAnimation = Animations.run;
-			navigation.Resume();
+			Tuple<Vector3, float> clicked =  filterClick(Input.mousePosition);
+			navigation.moveTo(clicked.First, clicked.Second);
 
 		}
 	
@@ -59,41 +58,32 @@ public class Hero : Photon.MonoBehaviour
 	 *	Checks for obstacles in the current path to
 	 *	clicked location
 	 */
-	Vector3 filterClick (Vector2 point)
+
+	Tuple<Vector3,float> filterClick (Vector2 point)
 	{
 		RaycastHit hit;
 		Vector3 click = new Vector3();
 		string hitName = name;
 
-		if(Physics.Raycast(Camera.main.ScreenPointToRay (point), out hit, 100.0F,~(1<<8)))
-		{
-			Debug.Log (hit.collider.name);
+		Physics.Raycast(Camera.main.ScreenPointToRay (point), out hit, 100.0F,~(1<<8));
 
-			if (hit.collider.name != transform.name) {
+		//Debug.Log (hit.collider.name);
 
-				//Debug.Log("Not me!");
+		if (hit.collider.name != transform.name) {
 
-				if(hit.collider.tag.Equals(oppositeTeam(heroTeam)))
-				{
-					//Debug.Log("Click detection sucessful!");
+			if(hit.collider.tag.Equals(oppositeTeam(heroTeam)))
+			{
+				combatData.target = hit.collider.GetComponent<Combat>().self;
+				return new Tuple<Vector3, float>(hit.point, combatData.attackRange);
 
-					combatData.target = hit.collider.GetComponent<Combat>().self;
-					navigation.stoppingDistance = combatData.attackRange;
+			}else{
 
-					return hit.point;
-
-				}else{
-					// You are travelling to a location on terrain
-					navigation.stoppingDistance = 0;
-					return  hit.point; //hitName = hit.collider.name;
-				}
-
+				return  new Tuple<Vector3, float>(hit.point, 0); //hitName = hit.collider.name;
 			}
+		} else {
+			return new Tuple<Vector3, float>(gameObject.transform.position, 0);
 		}
-
-		return point;
 	}
-
 	
 	public string oppositeTeam(string thisPlayer)
 	{
@@ -101,13 +91,4 @@ public class Hero : Photon.MonoBehaviour
 		else return TeamA;
 	}
 
-	/*-- Tests ---------------------------------------------------------------------------*/
-	void testFollowPath()
-	{
-
-		if (transform.position.AlmostEquals(targetLocation.getPosition(), 0.1F))
-			targetLocation = targetLocation.next;
-
-		transform.LookAt(targetLocation.transform.position);
-	}
 }

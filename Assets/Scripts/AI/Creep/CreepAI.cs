@@ -27,13 +27,15 @@ public abstract class CreepAI : MonoBehaviour
 	{
 		// Debug.Log(active_Objectives.Count.ToString());
 		//active_Objectives.Peek().turnOn();
-		
+
+		// If the current objective is done
 		if(active_Objectives.Peek().end())
 		{
 			popObjective();
 			Debug.Log(gameObject.name + ": Objective Complete");
 		}
-		
+
+		// Add objectives to stack if they should begin
 		foreach(var objective in secondary_Objectives)
 		{
 			if(!objective.isActive() && objective.begin())
@@ -72,7 +74,8 @@ public abstract class CreepAI : MonoBehaviour
 		
 		// Pop the main objective back into secondary objectives
 		secondary_Objectives.Add(active_Objectives.Pop());
-		
+		//active_Objectives.Pop();
+
 		// Activate previous objective
 		active_Objectives.Peek().turnOn();
 	}

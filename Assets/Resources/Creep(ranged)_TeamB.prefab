@@ -31,6 +31,7 @@ GameObject:
   - 195: {fileID: 19577086}
   - 114: {fileID: 11458216}
   - 54: {fileID: 5464690}
+  - 114: {fileID: 11462916}
   m_Layer: 0
   m_Name: Creep(ranged)_TeamB
   m_TagString: teamB
@@ -996,7 +997,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 102366}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.3700008, y: .629364669, z: 20.2299995}
+  m_LocalPosition: {x: 32.9399986, y: .247267485, z: 1.72681046}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 439348}
@@ -1403,7 +1404,6 @@ MonoBehaviour:
   maxHealth: 20
   creeps: 0
   level: 1
-  range: 2
   damage: 1.5
   isRanged: 1
   attackRange: 7
@@ -1417,6 +1417,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75e99497b1edf1741aef092088b46448, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11462916
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a19b39e7aab7ab049a31c991ae67f321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &11466582

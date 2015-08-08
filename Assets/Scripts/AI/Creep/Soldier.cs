@@ -24,6 +24,16 @@ public class Soldier : CreepAI {
 		runObjectives();
 	}
 
+	void OnDestroy()
+	{
+		var objectives = gameObject.GetComponents<AI_Objective>();
+
+		foreach(var objective in objectives)
+		{
+			GameObject.Destroy(objective);
+		}
+	}
+
 	// This is where the creep's secondary objectives are added
 	protected override void  fillSecondaryObjectives()
 	{

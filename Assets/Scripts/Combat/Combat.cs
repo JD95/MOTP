@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 /*
@@ -11,13 +12,15 @@ public class Combat : MonoBehaviour {
 
 	public float health;
 	private float oldHealth;
-	
+
+	public string targetName;
+
 	public float maxHealth;
 	
 	public int creeps = 0;
 	public int level = 1;
 	
-	public float range = 2;
+	//public float range = 2;
 	public float damage = 0.0F;
 
 	public Target self;
@@ -27,7 +30,7 @@ public class Combat : MonoBehaviour {
 	public bool isRanged = false;
 
 	// Combat
-	private float lastAttackTime;
+	private float basicAttackCoolDown = 0;
 
 	public float attackRange;
 	public float baseAttackSpeed;
@@ -38,14 +41,32 @@ public class Combat : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		lastAttackTime = 0;
+		basicAttackCoolDown = 0;
 		character = GetComponent<Character>();
 		self = new Target(transform,true, false);
 		attributes = new Effect_Management.Attribute_Manager();
 	}
-	
+
+	void OnDestroy()
+	{
+		Debug.Log("destroying combat");
+		self = null;
+	}
+
 	// Update is called once per frame
 	void Update () {
+
+		if(basicAttackCoolDown != 0 && System.DateTime.Now.Millisecond <= 20)
+		{
+			basicAttackCoolDown--;
+		}
+
+		if(target != null && target.location != null)
+		{
+			targetName = target.location.name;
+		}else{
+			targetName = "none";
+		}
 
 		attributes.stepTime();
 		updateHealth();
@@ -92,7 +113,7 @@ public class Combat : MonoBehaviour {
 	/*---Combat Functions----------------------------------------------------------*/
 
 	// Character takes physical damage
-	public void recieve_Damage_Physical(float amount, Target enemy_target)
+	public void recieve_Damage_Physical(float amount, ref Target enemy_target)
 	{
 		this.health -= amount;
 		
@@ -100,13 +121,14 @@ public class Combat : MonoBehaviour {
 		{	
 			// deathAnimation();
 			// createTimer_to_destory model();
+			enemy_target.dead = true;
 			enemy_target = null;
 			die();
 		}
 	}
 
 	// Character takes magic damage
-	public void recieve_Damage_Magic(float amount, Target enemy)
+	public void recieve_Damage_Magic(float amount,  Target enemy)
 	{
 		// magicResistance();
 		this.health -= amount;
@@ -123,7 +145,7 @@ public class Combat : MonoBehaviour {
 	public void cause_Damage_Physical(Combat _target)
 	{
 		// damageBuffs();
-		_target.recieve_Damage_Physical(damage, target);
+		_target.recieve_Damage_Physical(damage, ref target);
 	}
 
 	public void autoAttack()
@@ -132,22 +154,19 @@ public class Combat : MonoBehaviour {
 
 			transform.LookAt(target.location);
 
-			 if(Time.time - lastAttackTime > attackSpeed())
+			if(basicAttackCoolDown <= 0)
 			{
-
 				if(isRanged)
 				{
 					GetComponentInChildren<Projectile_Launcher>().fire(target);
-					lastAttackTime = Time.time;
-
+					basicAttackCoolDown = attackSpeed();
 				}else{
 					//Debug.Log("Attack!");
 					cause_Damage_Physical(target.location.GetComponent<Combat>());
-					lastAttackTime = Time.time;
 				}
-			}
 
-			character.currentAnimation = Animations.attack;
+				basicAttackCoolDown = attackSpeed();
+			}
 		}
 
 	}
@@ -175,10 +194,19 @@ public class Combat : MonoBehaviour {
 
 			CreepAI test;
 			if( test = GetComponent<CreepAI>())
+			{
+				var objectives = GetComponents<AI_Objective>();
+				foreach(var objective in objectives)
+				{
+					objective.enabled = false;
+				}
+
 				test.enabled = false;
+			}
 
 
 			GetComponent<NavMeshAgent>().enabled = false;
+			GetComponent<Rigidbody>().useGravity = false;
 			character.characterState.addLivingChange(gameObject);
 
 		}
@@ -189,17 +217,31 @@ public class Combat : MonoBehaviour {
 
 }
 		                  
-public class Target {
+public class Target : IEquatable<Target> {
 			
 	public bool selectable;
 	public bool dead;
 	
 	public Transform location;
-	
+
+	public bool Equals (Target right)
+	{
+		if (right == null) return false;
+
+		return right.location.Equals(this.location) 
+			&& right.selectable == this.selectable 
+				&& right.dead == this.dead;
+	}
+
 	public Target(Transform loc, bool select, bool d)
 	{
 		location = loc;
 		selectable = select;
 		dead = d;
+	}
+
+	public override string ToString ()
+	{
+		return location.name;
 	}
 }

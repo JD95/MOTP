@@ -212,6 +212,7 @@ GameObject:
   - 195: {fileID: 19574350}
   - 114: {fileID: 11491224}
   - 54: {fileID: 5407508}
+  - 114: {fileID: 11484124}
   m_Layer: 0
   m_Name: Creep_TeamA
   m_TagString: teamA
@@ -1354,7 +1355,6 @@ MonoBehaviour:
   maxHealth: 20
   creeps: 0
   level: 1
-  range: 2
   damage: 1.5
   isRanged: 0
   attackRange: 3
@@ -1404,6 +1404,17 @@ MonoBehaviour:
   viewIdField: 0
   instantiationId: -1
   isRuntimeInstantiated: 0
+--- !u!114 &11484124
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 127868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a19b39e7aab7ab049a31c991ae67f321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11491224
 MonoBehaviour:
   m_ObjectHideFlags: 1

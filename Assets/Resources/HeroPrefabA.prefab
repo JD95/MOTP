@@ -17,6 +17,7 @@ GameObject:
   - 195: {fileID: 19563318}
   - 114: {fileID: 11442006}
   - 54: {fileID: 5428882}
+  - 114: {fileID: 11475802}
   m_Layer: 0
   m_Name: HeroPrefabA
   m_TagString: teamA
@@ -1448,7 +1449,6 @@ MonoBehaviour:
   maxHealth: 500
   creeps: 0
   level: 1
-  range: 10
   damage: 5
   isRanged: 0
   attackRange: 10
@@ -1478,6 +1478,17 @@ MonoBehaviour:
   viewIdField: 0
   instantiationId: -1
   isRuntimeInstantiated: 0
+--- !u!114 &11475802
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a19b39e7aab7ab049a31c991ae67f321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11495030
 MonoBehaviour:
   m_ObjectHideFlags: 1
