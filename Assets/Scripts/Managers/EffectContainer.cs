@@ -56,6 +56,11 @@ namespace Effect_Management{
 		{
 			lasting_effects.Add(newEffect);
 		}
+
+        public void remove_lastingEffect(string id)
+        {
+            lasting_effects = lasting_effects.Where(x => x.id != id).ToList();
+        }
 		
 		// For all timed effects
 		public void add_timedEffect(Timed_Effect<T> newEffect)

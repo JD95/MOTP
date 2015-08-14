@@ -20,7 +20,6 @@ namespace Effect_Management{
         public T apply(DateTime time)
         {
             T test = app(time);
-            //Debug.Log("app returned " + test.ToString());
             return test;
 
         }

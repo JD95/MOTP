@@ -27,12 +27,13 @@ public class Combat : MonoBehaviour {
 
     public double baseAttackRange;
     public double baseAttackSpeed;
+    public double baseHealthRegen;
 
 	// Combat
 	private double basicAttackCoolDown = 0;
 	
 	private Character character;
-    private Stats stats;
+    public Stats stats;
 	
 	// Use this for initialization
 	void Start () {
@@ -49,15 +50,6 @@ public class Combat : MonoBehaviour {
 			basicAttackCoolDown--;
 		}
 
-		if(target != null && target.transform != null)
-		{
-			targetName = target.name;
-		}else if (target == null){
-			targetName = "Target is null";
-		}else {
-			targetName = "Target location is null";
-		}
-
 		stats.effects.stepTime();
 		updateHealth();
 		
@@ -72,7 +64,12 @@ public class Combat : MonoBehaviour {
 
 	public void updateHealth()
 	{
-        health = (float)stats.effects.getHP_Changes().applyTo(health);
+        health = (float)stats.effects.getChangesFor(attribute.HP).applyTo(health);
+
+        if(health <= 0)
+        {
+            die();
+        }
 
 		oldHealth = health;
 	}
@@ -84,12 +81,12 @@ public class Combat : MonoBehaviour {
 	
 	public double attackSpeed()
 	{
-		return stats.effects.getAS_Changes().applyTo(baseAttackSpeed);
+        return stats.effects.getChangesFor(attribute.AS).applyTo(baseAttackSpeed);
 	}
 
     public double attackRange()
     {
-        return stats.effects.getAR_Changes().applyTo(baseAttackRange);
+        return stats.effects.getChangesFor(attribute.AR).applyTo(baseAttackRange);
     }
 
     public int level()

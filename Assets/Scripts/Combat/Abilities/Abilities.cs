@@ -44,10 +44,10 @@ public class Abilities : MonoBehaviour {
     {
         combatData = GetComponent<Combat>();
 
-        initAbility(ref q_Slot, q);
-        //initAbility(w_Slot, w);
-        //initAbility(e_Slot, e);
-        //initAbility(r_Slot, r);
+        //initAbility(ref q_Slot, q);
+        initAbility(ref w_Slot, w);
+        initAbility(ref e_Slot, e);
+        //initAbility(ref r_Slot, r);
 
     }
 
@@ -59,17 +59,19 @@ public class Abilities : MonoBehaviour {
 
     void Update()
     {
+        /*
         if(Input.GetKeyDown("q"))
         { useAbility(q_Slot, q_Level, q_ResourceCost); Debug.Log("q was used!"); }
+        */
 
-        /*
-        if(Input.GetKey("w"))
+        if (Input.GetKeyDown("w"))
         { useAbility(w_Slot, w_Level, w_ResourceCost); Debug.Log("w was used!"); }
 
-        if(Input.GetKey("e"))
+        if (Input.GetKeyDown("e"))
         { useAbility(e_Slot, e_Level, e_ResourceCost); Debug.Log("e was used!"); }
 
-        if(Input.GetKey("r"))
+        /*
+        if(Input.GetKeyDown("r"))
         { useAbility(r_Slot, r_Level, r_ResourceCost); Debug.Log("r was used!"); }
         */
     }

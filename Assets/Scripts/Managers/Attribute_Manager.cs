@@ -2,79 +2,76 @@
 using System;
 using System.Collections;
 
+
+public enum attribute { HP = 0, HPReg = 1, AR = 2, AS = 3, AP = 4, AD = 5 };
+
 namespace Effect_Management{
 
 	public class Attribute_Manager {
 
-        public enum attribute {HP,HPReg,AR,AS,AP,AD};
+        Effect_Container<Attribute>[] attributes = new Effect_Container<Attribute>[6];
 
-		Effect_Container<Attribute> HP; // Health Points
-        public Attribute getHP_Changes() { return HP.compileEffects(); }
+        public Attribute_Manager()
+        {
+            for(int i = 0; i < attributes.Length; i++)
+            {
+                attributes[i] = new Effect_Container<Attribute>();
+            }
 
-        Effect_Container<Attribute> HPReg; // Health Regen
-        public Attribute getHPReg_Changes() { return HPReg.compileEffects(); }
-
-        Effect_Container<Attribute> AR; // Attack Range
-        public Attribute getAR_Changes() { return AR.compileEffects(); }
-
-        Effect_Container<Attribute> AS; // Attack Speed
-        public Attribute getAS_Changes() { return AS.compileEffects(); }
-
-        Effect_Container<Attribute> AP; // Attack Power
-        public Attribute getAP_Changes() { return AP.compileEffects(); }
-
-        Effect_Container<Attribute> AD; // Attack Damage
-        public Attribute getAD_Changes() { return AD.compileEffects(); }
-
-
-		public Attribute_Manager()
-		{
-			HP      = new Effect_Container<Attribute>();
-            HPReg   = new Effect_Container<Attribute>();
-            AR      = new Effect_Container<Attribute>();
-            AS      = new Effect_Container<Attribute>();
-            AP      = new Effect_Container<Attribute>();
-            AD      = new Effect_Container<Attribute>();
-		}
+            /*
+            attributes[(int)attribute.HP].add_timedEffect(new Timed_Effect<Attribute>(
+                    DateTime.Now, 10.0,
+                    Attribute_Effects.periodic_changeBy(1.0, -5.0),
+                    Utility_Effects.doNothing_Stop())
+                ); */
+        }
 
 		public void stepTime()
 		{
-			HP.stepTime();
-            HPReg.stepTime();
-            AR.stepTime();
-            AS.stepTime();
-            AP.stepTime();
-            AD.stepTime();
+            foreach(var attr in attributes)
+            {
+                attr.stepTime();
+            }
+
 		}
 
-        // This is inside the Attribute_Manager class because we cannot decalre private classes in a namepsace
-        private class Attribute_Effects
+        public Attribute getChangesFor(attribute attr)
         {
-
-            // Transforms a constant EffectApply function into a periodic one
-            private static EffectApply<Attribute> periodic(EffectApply<Attribute> app, double period_secs)
-            {
-                DateTime startTime = DateTime.Now;
-
-                return (x => x.Subtract(startTime).Duration().TotalSeconds % period_secs < 0.01 ?
-                        app(x) : Attribute.zero());
-            }
-
-            // Creates a new function that will ignore time and return a certain amount
-            public static EffectApply<Attribute> changeBy(double amount)
-            {
-                return (x => new Attribute(amount,1));
-            }
-
-            // Creates a new function that will periodically change by a certain amount
-            public static EffectApply<Attribute> periodic_changeBy(double period, double amount)
-            {
-                return periodic(changeBy(amount), period);
-            }
-
-            public static void doNothing() { }
+            return attributes[(int)attr].compileEffects();
         }
+
+        public void addTimedEffectFor(attribute attr, Timed_Effect<Attribute> newEffect)
+        {
+            attributes[(int)attr].add_timedEffect(newEffect);
+        }
+
+        public void addLastingEffectFor(attribute attr, Lasting_Effect<Attribute> newEffect)
+        {
+            attributes[(int)attr].add_lastingEffect(newEffect);
+        }
+
+        public void removeLastingEffectFor(attribute attr, string id)
+        {
+            attributes[(int)attr].remove_lastingEffect(id);
+        }
+
 	}
 
+
+    public class Attribute_Effects
+    {
+        // Creates a new function that will ignore time and return a certain amount
+        public static EffectApply<Attribute> changeBy(double amount)
+        {
+            return (x => new Attribute(amount, 0.0));
+        }
+
+        // Creates a new function that will periodically change by a certain amount
+        public static EffectApply<Attribute> periodic_changeBy(double period, double amount)
+        {
+            return Utility_Effects.periodic<Attribute>(changeBy(amount), period);
+        }
+
+    }
 
 } // End of namespace

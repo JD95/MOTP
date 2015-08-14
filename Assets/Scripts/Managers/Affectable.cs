@@ -43,7 +43,7 @@ namespace Effect_Management{
 		public Tuple<directValue,percentValue> value;
 
 		public Attribute () {
-            value = new Tuple<directValue, percentValue>(0, 1);
+            value = new Tuple<directValue, percentValue>(0.0, 0.0);
 		}
 
 		public Attribute (double _direct, double _percent)
@@ -60,7 +60,7 @@ namespace Effect_Management{
 
         public double applyTo(double initial)
         {
-            return (initial + value.First) * value.Second;
+            return (initial + value.First) * (1.0 + value.Second);
         }
 
 		public override string ToString ()
