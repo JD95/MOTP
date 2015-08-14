@@ -9,7 +9,7 @@ public class Engage_Enemies_Creep : Engage_Enemies {
 		// Persue target
 
 		if(combatData.target.transform != null){
-			nav.moveTo(combatData.target.transform.position, combatData.attackRange);
+			nav.moveTo(combatData.target.transform.position, combatData.attackRange());
 		}
 	}
 }

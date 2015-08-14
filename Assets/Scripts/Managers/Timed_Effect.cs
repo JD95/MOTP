@@ -11,7 +11,9 @@ namespace Effect_Management{
 
 		// When the effect should stop
 		private DateTime stopTime;
+
 		private EffectApply<T> app;
+
 		private EffectStop end;
 		
 		public DateTime getStopTime()

@@ -19,7 +19,12 @@ namespace Effect_Management{
  * 	simplying adding numbers contained in T like you
  * 	would with attributes for champs, or combining graphical
  * 	changes as you would with graphical effects.
- */ 
+ */
+
+    using directValue       = System.Double;
+    using percentValue      = System.Double;
+    using AttributeChange   = Tuple<directValue, percentValue>;
+
 	public abstract class Affectable<T> where T : new(){
 
 		public static void doNothing(){} // Some zero functions need a doNothing value
@@ -34,24 +39,29 @@ namespace Effect_Management{
 
 	// The value that attribute effects produce
 	public class Attribute : Affectable<Attribute>{
-
-		public double value;
+        
+		public Tuple<directValue,percentValue> value;
 
 		public Attribute () {
-			value = 0;
+            value = new Tuple<directValue, percentValue>(0, 1);
 		}
 
-		public Attribute (double _value)
+		public Attribute (double _direct, double _percent)
 		{
-			value = _value;
+            value = new Tuple<directValue, percentValue>(_direct, _percent);
 		}
 
 		public override Attribute add(Attribute other)
 		{
-			Attribute test = new Attribute(other.value + this.value);
-			//Debug.Log("I ran add! I got " + test.ToString());
+			Attribute test = new Attribute(other.value.First  + this.value.First, 
+                                           other.value.Second + this.value.Second);
 			return test;
 		}
+
+        public double applyTo(double initial)
+        {
+            return (initial + value.First) * value.Second;
+        }
 
 		public override string ToString ()
 		{

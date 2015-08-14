@@ -19,6 +19,7 @@ GameObject:
   - 114: {fileID: 11475802}
   - 136: {fileID: 13676376}
   - 143: {fileID: 14317884}
+  - 114: {fileID: 11497260}
   m_Layer: 0
   m_Name: HeroPrefabA
   m_TagString: teamA
@@ -1446,18 +1447,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae22ef4fcf9b33d43b415269e22e7523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 500
-  targetName: 
-  maxHealth: 500
-  creeps: 0
-  level: 1
+  health: 100
+  maxHealth: 100
   damage: 5
   selectable: 1
   dead: 0
+  targetName: 
   target: {fileID: 0}
   isRanged: 0
-  attackRange: 10
-  baseAttackSpeed: 1
+  baseAttackRange: 3
+  baseAttackSpeed: 2
 --- !u!114 &11454182
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1507,6 +1506,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c59ba0703a79d54c93a0e9991174504, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &11497260
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f93c5c00ad857e4094172057d053c52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  q: {fileID: 162704, guid: be74bbed042d1fd4990c5ab97fae0086, type: 2}
+  q_Level: 1
+  q_UsePassive: 0
+  q_ResourceCost:
+  - 0
+  - 0
+  - 0
+  - 0
+  w: {fileID: 0}
+  w_Level: 0
+  w_UsePassive: 0
+  w_ResourceCost: []
+  e: {fileID: 0}
+  e_Level: 0
+  e_UsePassive: 0
+  e_ResourceCost: []
+  r: {fileID: 0}
+  r_Level: 0
+  r_UsePassive: 0
+  r_ResourceCost: []
 --- !u!136 &13676376
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -1631,6 +1661,10 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: q_ResourceCost.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
@@ -1648,6 +1682,30 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: baseAttackRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: baseAttackSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: health
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: maxHealth
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: q
+      value: 
+      objectReference: {fileID: 162704, guid: be74bbed042d1fd4990c5ab97fae0086, type: 2}
+    - target: {fileID: 0}
+      propertyPath: q_Level
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

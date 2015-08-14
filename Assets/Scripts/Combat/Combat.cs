@@ -13,37 +13,32 @@ public class Combat : MonoBehaviour {
 	public float health;
 	private float oldHealth;
 
-	public string targetName;
-
 	public float maxHealth;
 	
-	public int creeps = 0;
-	public int level = 1;
-	
-	//public float range = 2;
 	public float damage = 0.0F;
 
 	public bool selectable = true;
 	public bool dead = false;
+
+    public string targetName;
 	public GameObject target;
 
 	public bool isRanged = false;
 
-	// Combat
-	private float basicAttackCoolDown = 0;
+    public double baseAttackRange;
+    public double baseAttackSpeed;
 
-	public float attackRange;
-	public float baseAttackSpeed;
+	// Combat
+	private double basicAttackCoolDown = 0;
 	
 	private Character character;
-
-	private Effect_Management.Attribute_Manager attributes;
-
+    private Stats stats;
+	
 	// Use this for initialization
 	void Start () {
 		basicAttackCoolDown = 0;
 		character = GetComponent<Character>();
-		attributes = new Effect_Management.Attribute_Manager();
+        stats = new Stats();
 	}
 
 	// Update is called once per frame
@@ -63,7 +58,7 @@ public class Combat : MonoBehaviour {
 			targetName = "Target location is null";
 		}
 
-		attributes.stepTime();
+		stats.effects.stepTime();
 		updateHealth();
 		
 	}
@@ -77,10 +72,7 @@ public class Combat : MonoBehaviour {
 
 	public void updateHealth()
 	{
-		float healthChanges = (float) attributes.getHPChanges();
-
-		//Debug.Log(healthChanges.ToString());
-		health += healthChanges;
+        health = (float)stats.effects.getHP_Changes().applyTo(health);
 
 		oldHealth = health;
 	}
@@ -90,22 +82,27 @@ public class Combat : MonoBehaviour {
 		return health / maxHealth;
 	}
 	
-	float attackSpeed()
+	public double attackSpeed()
 	{
-		return baseAttackSpeed * 1; // * modifiers();
+		return stats.effects.getAS_Changes().applyTo(baseAttackSpeed);
 	}
+
+    public double attackRange()
+    {
+        return stats.effects.getAR_Changes().applyTo(baseAttackRange);
+    }
+
+    public int level()
+    {
+        return stats.level;
+    }
 
 	public bool targetWithin_AttackRange()
 	{
 		if (target.transform != null && transform != null)
-			return Vector3.Distance(target.transform.position, transform.position) <= attackRange;
+			return Vector3.Distance(target.transform.position, transform.position) <= baseAttackRange;
 		else return false;
 	}
-
-	/*-------------------------------------------------------------*/
-
-
-	/*---Combat Functions----------------------------------------------------------*/
 
 	// Character takes physical damage
 	public void recieve_Damage_Physical(float amount)
@@ -124,21 +121,21 @@ public class Combat : MonoBehaviour {
 	// Character takes magic damage
 	public void recieve_Damage_Magic(float amount)
 	{
-		// magicResistance();
+        // TODO magicResistance();
 		this.health -= amount;
 	}
 
 	// Character is healed
 	public void recieve_Healing(float amount)
 	{
-		// healingBuffs();
+        // TODO healingBuffs();
 		this.health += amount;
 	}
 
 	// Character causes physical damage (Auto Attack)
 	public void cause_Damage_Physical(Combat _target)
 	{
-		// damageBuffs();
+		// TODO damageBuffs();
 		_target.recieve_Damage_Physical(damage);
 	}
 
@@ -155,7 +152,7 @@ public class Combat : MonoBehaviour {
 					GetComponentInChildren<Projectile_Launcher>().fire(target);
 					basicAttackCoolDown = attackSpeed();
 				}else{
-					//Debug.Log("Attack!");
+
 					cause_Damage_Physical(target.GetComponent<Combat>());
 				}
 
@@ -207,7 +204,5 @@ public class Combat : MonoBehaviour {
 		}
 
 	}
-
-	/*-------------------------------------------------------------*/
 
 }

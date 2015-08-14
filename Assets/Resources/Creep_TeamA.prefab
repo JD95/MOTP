@@ -1354,14 +1354,12 @@ MonoBehaviour:
   health: 20
   targetName: 
   maxHealth: 20
-  creeps: 0
-  level: 1
   damage: 1.5
   selectable: 1
   dead: 0
   target: {fileID: 0}
   isRanged: 0
-  attackRange: 3
+  baseAttackRange: 2
   baseAttackSpeed: 1
 --- !u!114 &11469822
 MonoBehaviour:
@@ -1432,7 +1430,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75e99497b1edf1741aef092088b46448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flicker: 0
   secondObjectivesNames: []
   activeObjectiveNames: []
 --- !u!135 &13512500
@@ -1571,6 +1568,14 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: baseAttackRange
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: baseAttackSpeed
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -1,51 +1,58 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ *  This class controls navigation for characters which acts as a middle
+ * man for a Game Object's navMeshAgent. Instead of allowing direct access
+ * to the navMesh the agent is controled by updateMoving() which has a set
+ * of logic determining if the object should be moving or not.
+ *  
+ *  Different parts of the character control their own bool like "inCombat"
+ * which is then passed through the logic defined in updateMoving(). Each
+ * time an object changes their bool, the logic in updateMoving() is checked
+ * and will stop or resume movement when appropriate.
+ * 
+ *  This is to prevent different different pieces of code from constantly 
+ * swtiching motion on or off at will. Instead it is possible to now detect
+ * which parts of code are causing wacky beavhiour in movement as the bools
+ * for each are public visible.
+ * 
+ */
 public class Navigation : MonoBehaviour {
 
 	private float speed;
 	private NavMeshAgent navAgent;
 
+    private bool hasObjectiveDestination;
+    private Vector3 objectiveDestination;
+
 	public bool inCombat;
+    public bool withinRange;
 
 	public void turnOn_inCombat()
 	{
-		inCombat = true;
-
-		updateMoving();
+		inCombat = true; updateMoving();
 	}
 
 	public void turnOff_inCombat()
 	{
-		inCombat = false;
-
-		updateMoving();
+		inCombat = false; updateMoving();
 	}
-
-	public bool withinRange;
 
 	public void turnOn_withinRange()
 	{
-		withinRange = true;
-
-		updateMoving();
+		withinRange = true; updateMoving();
 	}
 
 	public void turnOff_withinRange()
 	{
-		withinRange = false;
-
-		updateMoving();
+		withinRange = false; updateMoving();
 	}
-
-	bool hasObjectiveDestination;
-	Vector3 objectiveDestination;
 
 	public void turnOn_ObjectiveDestination(Vector3 destination)
 	{
 		hasObjectiveDestination = true;
 		objectiveDestination = destination;
-
 		updateMoving();
 	}
 
@@ -53,7 +60,6 @@ public class Navigation : MonoBehaviour {
 	{
 		hasObjectiveDestination = false;
 		objectiveDestination = gameObject.transform.position;
-
 		updateMoving();
 	}
 
@@ -91,20 +97,15 @@ public class Navigation : MonoBehaviour {
 		return Vector3.Distance(navAgent.destination, transform.position).AlmostEquals(navAgent.stoppingDistance,1f);
 	}
 
-	public void moveTo (Vector3 location, float stopDistance = 0)
+	public void moveTo (Vector3 location, double stopDistance = 0)
 	{
 		if (location == null) return;
-
-		// If its asking to move to your current destination
 
 		// I have new destination
 		navAgent.Stop();
 		navAgent.ResetPath();
 		navAgent.SetDestination(location);
-		navAgent.stoppingDistance = stopDistance;
+		navAgent.stoppingDistance = (float) stopDistance;
 		navAgent.Resume();
-		//moveTo(location);
-		
-		//movementControler.SimpleMove(direction * speed);
 	}
 }

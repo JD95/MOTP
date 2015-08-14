@@ -33,14 +33,21 @@ namespace Effect_Management{
 		public T compileEffects()
 		{
 			T aggregate; aggregate = new T();
-			
+            DateTime now = DateTime.Now;
+
 			// Goes through each time block and adds up the effects
 			foreach(var block in timed_effects)
 			{
-				T effectResult = block.getEffects(DateTime.Now);
+				T effectResult = block.getEffects(now);
 				aggregate = aggregate.add(effectResult);
 			}
 			
+            // Adds up all lasting effects
+            foreach(var effect in lasting_effects)
+            {
+                aggregate.add(effect.apply(now));
+            }
+
 			return aggregate;
 		}
 		
@@ -98,4 +105,7 @@ namespace Effect_Management{
 			}
 		}
 	}
-}
+
+
+
+} // End of namespace

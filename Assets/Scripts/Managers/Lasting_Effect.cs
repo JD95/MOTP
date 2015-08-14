@@ -1,10 +1,29 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 namespace Effect_Management{
 
-	public class Lasting_Effect<T> where T : Affectable<T>, new(){
+	public class Lasting_Effect<T> where T : Affectable<T>, new()
+    {
+        public string id;
 
+        private EffectApply<T> app;
+
+        public Lasting_Effect (string _id, EffectApply<T> _app)
+        {
+            this.id = _id;
+            this.app = _app;
+        }
+
+        // Depending on the time, return either an effect or a "zero" value
+        public T apply(DateTime time)
+        {
+            T test = app(time);
+            //Debug.Log("app returned " + test.ToString());
+            return test;
+
+        }
 
 	}
 }

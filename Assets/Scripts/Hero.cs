@@ -2,11 +2,10 @@ using UnityEngine;
 using System;
 using System.Collections;
 
+using Utility;
+
 public class Hero : Photon.MonoBehaviour
 {
-	const string TeamA = "teamA";
-	const string TeamB = "teamB";
-
 	public string heroTeam;
 
 	private Character character;
@@ -18,7 +17,6 @@ public class Hero : Photon.MonoBehaviour
 	public Waypoint targetLocation;
 
 
-	/*-- Main Functions ---------------------------------------------------------------------------*/
 	void Start ()
 	{
 		character = GetComponent<Character> ();
@@ -37,58 +35,42 @@ public class Hero : Photon.MonoBehaviour
 		combatData.autoAttack();
 	}
 
-	/*-- Movement ---------------------------------------------------------------------------*/
-
-	/*
-	 * 	Adjusts location based on new clicks
-	 */
+	// Adjusts location based on new clicks
 	void adjustDestination ()
 	{
 		if (Input.GetButtonDown ("Fire1")) { //Debug.Log ("Click!");	
 
-			Tuple<Vector3, float> clicked =  filterClick(Input.mousePosition);
+			Tuple<Vector3, double> clicked =  filterClick(Input.mousePosition);
 			navigation.moveTo(clicked.First, clicked.Second);
 
 		}
 	
 	}
 
-
-	/*
-	 *	Checks for obstacles in the current path to
-	 *	clicked location
-	 */
-
-	Tuple<Vector3,float> filterClick (Vector2 point)
+	 // Checks for obstacles in the current path to clicked location 
+    Tuple<Vector3, double> filterClick(Vector2 point)
 	{
 		RaycastHit hit;
-		Vector3 click = new Vector3();
+
 		string hitName = name;
 
+        // Raycasts from camera view and ignores the "ignorePlayerClick" layer
 		Physics.Raycast(Camera.main.ScreenPointToRay (point), out hit, 100.0F,~(1<<8));
-
-		//Debug.Log (hit.collider.name);
 
 		if (hit.collider.name != transform.name) {
 
-			if(hit.collider.tag.Equals(oppositeTeam(heroTeam)))
+			if(hit.collider.tag.Equals(Utility.TeamLogic.oppositeTeam(heroTeam)))
 			{
 				combatData.target = hit.collider.gameObject;
-				return new Tuple<Vector3, float>(hit.point, combatData.attackRange);
+				return new Tuple<Vector3, double>(hit.point, combatData.attackRange());
 
 			}else{
 
-				return  new Tuple<Vector3, float>(hit.point, 0); //hitName = hit.collider.name;
+                return new Tuple<Vector3, double>(hit.point, 0);
 			}
 		} else {
-			return new Tuple<Vector3, float>(gameObject.transform.position, 0);
+            return new Tuple<Vector3, double>(gameObject.transform.position, 0);
 		}
-	}
-	
-	public string oppositeTeam(string thisPlayer)
-	{
-		if(thisPlayer == TeamA)return TeamB;
-		else return TeamA;
 	}
 
 }

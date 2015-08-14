@@ -135,7 +135,7 @@ public class Character : MonoBehaviour
 		GUI.EndGroup ();
 		
 		if (isHero) {
-			GUI.Label(new Rect (viewPos.x - 50, posYHealthBar - 23, 100, 25), "Level "+combatData.level);
+			GUI.Label(new Rect (viewPos.x - 50, posYHealthBar - 23, 100, 25), "Level " + combatData.level());
 		}
 			
 	}

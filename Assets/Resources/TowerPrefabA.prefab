@@ -409,12 +409,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 1000
   maxHealth: 1000
-  creeps: 0
-  level: 1
-  range: 10
-  damage: 1.5
+  damage: 10
+  selectable: 1
+  dead: 0
+  targetName: 
+  target: {fileID: 0}
   isRanged: 1
-  attackRange: 10
+  baseAttackRange: 10
   baseAttackSpeed: 1
 --- !u!135 &13574480
 SphereCollider:
@@ -1541,7 +1542,23 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: baseAttackRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: baseAttackSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: selectable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: damage
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}

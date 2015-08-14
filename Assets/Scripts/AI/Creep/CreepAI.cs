@@ -5,8 +5,7 @@ public abstract class CreepAI : MonoBehaviour
 {
 	protected List<AI_Objective> secondary_Objectives;
 	protected Stack<AI_Objective> active_Objectives;
-
-	public int flicker;
+	
 	protected AI_Objective main_Objective;
 
 	// This is where the creep's secondary objectives are added
@@ -26,8 +25,6 @@ public abstract class CreepAI : MonoBehaviour
 
 	protected void runObjectives()
 	{
-		if(flicker == 0) {flicker = 1;}
-		else {flicker = 0;}
 
 		// Debug.Log(active_Objectives.Count.ToString());
 		//active_Objectives.Peek().turnOn();
@@ -36,7 +33,7 @@ public abstract class CreepAI : MonoBehaviour
 		if(active_Objectives.Peek().end())
 		{
 			popObjective();
-			Debug.Log(gameObject.name + ": Objective Complete");
+			//Debug.Log(gameObject.name + ": Objective Complete");
 		}
 
 		// Add objectives to stack if they should begin
@@ -44,7 +41,7 @@ public abstract class CreepAI : MonoBehaviour
 		{
 			if(!objective.isActive() && objective.begin())
 			{
-				Debug.Log(gameObject.name + ": Adding New Objective");
+				//Debug.Log(gameObject.name + ": Adding New Objective");
 				pushObjective(objective);
 			}
 		}
@@ -72,7 +69,7 @@ public abstract class CreepAI : MonoBehaviour
 	// When adding a new objective to the stack
 	protected void popObjective()
 	{
-		Debug.Log(gameObject.name +"Removing objective!");
+		//Debug.Log(gameObject.name +"Removing objective!");
 		// Turn off previous objective
 		active_Objectives.Peek().turnOff();
 		

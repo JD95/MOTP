@@ -360,14 +360,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae22ef4fcf9b33d43b415269e22e7523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1000
-  maxHealth: 1000
-  creeps: 0
-  level: 1
-  range: 10
-  damage: 0
+  health: 200
+  maxHealth: 200
+  damage: 10
+  selectable: 1
+  dead: 0
+  targetName: 
+  target: {fileID: 0}
   isRanged: 1
-  attackRange: 10
+  baseAttackRange: 10
   baseAttackSpeed: 1
 --- !u!114 &11436898
 MonoBehaviour:
@@ -1541,7 +1542,27 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: baseAttackRange
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: baseAttackSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: health
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: maxHealth
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: damage
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}

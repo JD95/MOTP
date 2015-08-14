@@ -35,7 +35,7 @@ public abstract class Engage_Enemies : AI_Objective {
 	protected void OnTriggerEnter(Collider other) {
 
 		if(other.name == "AI_Collider") return;
-		Debug.Log(other.name + " is in my range!");
+		//Debug.Log(other.name + " is in my range!");
 
 		Combat test;
 		if (test = other.GetComponentInParent<Combat>())
@@ -173,7 +173,7 @@ public abstract class Engage_Enemies : AI_Objective {
 		{
 			nav.turnOff_inCombat();
 			inRangeEnemies.Clear();
-			Debug.Log(gameObject.name + " has no more enemies!");
+			//Debug.Log(gameObject.name + " has no more enemies!");
 			return true;
 		}else{
 			return false;
