@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 public class Combat : MonoBehaviour {
 
+    public bool hero;
 	public float health;
 	private float oldHealth;
 
@@ -31,6 +32,7 @@ public class Combat : MonoBehaviour {
 
 	// Combat
 	private double basicAttackCoolDown = 0;
+    private double regenClock = 0;
 	
 	private Character character;
     public Stats stats;
@@ -45,17 +47,31 @@ public class Combat : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if(basicAttackCoolDown != 0 && System.DateTime.Now.Millisecond <= 20)
+		if(basicAttackCoolDown > 0)
 		{
-			basicAttackCoolDown--;
+			basicAttackCoolDown -= Time.deltaTime * 1;
 		}
+
+        if (hero) { regen(); }
 
 		stats.effects.stepTime();
 		updateHealth();
 		
 	}
 
-	/*---Utility Functions----------------------------------------------------------*/
+	void regen()
+    {
+        if (regenClock > 0)
+        {
+            regenClock -= Time.deltaTime * 1;
+        }
+        else if(health < maxHealth)
+        {
+            var regen = (float)stats.effects.getChangesFor(attribute.HPReg).applyTo(baseHealthRegen);
+            health += regen;
+            regenClock = 5.0;
+        }
+    }
 
 	public bool beenDamaged()
 	{

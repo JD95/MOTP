@@ -61,7 +61,7 @@ namespace Effect_Management{
     public class Attribute_Effects
     {
         // Creates a new function that will ignore time and return a certain amount
-        public static EffectApply<Attribute> changeBy(double amount)
+        public static EffectApply  <Attribute> changeBy(double amount)
         {
             return (x => new Attribute(amount, 0.0));
         }

@@ -1447,6 +1447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae22ef4fcf9b33d43b415269e22e7523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hero: 1
   health: 100
   maxHealth: 100
   damage: 5
@@ -1457,6 +1458,7 @@ MonoBehaviour:
   isRanged: 0
   baseAttackRange: 3
   baseAttackSpeed: 2
+  baseHealthRegen: 2
 --- !u!114 &11454182
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1517,7 +1519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f93c5c00ad857e4094172057d053c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  q: {fileID: 162704, guid: be74bbed042d1fd4990c5ab97fae0086, type: 2}
+  q: {fileID: 0}
   q_Level: 1
   q_UsePassive: 0
   q_ResourceCost:
@@ -1525,14 +1527,22 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  w: {fileID: 0}
-  w_Level: 0
+  w: {fileID: 162704, guid: be74bbed042d1fd4990c5ab97fae0086, type: 2}
+  w_Level: 1
   w_UsePassive: 0
-  w_ResourceCost: []
-  e: {fileID: 0}
-  e_Level: 0
+  w_ResourceCost:
+  - 0
+  - 0
+  - 0
+  - 0
+  e: {fileID: 141674, guid: b919d4b4c442d6e4e957ab5e50c7e797, type: 2}
+  e_Level: 1
   e_UsePassive: 0
-  e_ResourceCost: []
+  e_ResourceCost:
+  - 0
+  - 0
+  - 0
+  - 0
   r: {fileID: 0}
   r_Level: 0
   r_UsePassive: 0
@@ -1665,6 +1675,14 @@ Prefab:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 0}
+      propertyPath: w_ResourceCost.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: e_ResourceCost.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
@@ -1703,10 +1721,38 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: q
       value: 
-      objectReference: {fileID: 162704, guid: be74bbed042d1fd4990c5ab97fae0086, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: q_Level
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: w
+      value: 
+      objectReference: {fileID: 162704, guid: be74bbed042d1fd4990c5ab97fae0086, type: 2}
+    - target: {fileID: 0}
+      propertyPath: w_Level
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: e
+      value: 
+      objectReference: {fileID: 141674, guid: b919d4b4c442d6e4e957ab5e50c7e797, type: 2}
+    - target: {fileID: 0}
+      propertyPath: e_Level
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: isHero
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: hero
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: baseHealthRegen
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

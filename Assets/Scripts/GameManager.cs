@@ -31,24 +31,17 @@ public class GameManager : Photon.MonoBehaviour
 		paused = true;
 	}
 	
-	public void InitGame(/*PhotonPlayer[] networkPlayers, int players */) {
+	public void InitGame() {
 		paused = false;
 		int count = 0;
 		init = true;
-		SpawnPlayer (/*playerPrefabA, player, spawnA.transform.position + new Vector3(-2-2*count,0.5f,0)*/);
+		SpawnPlayer ();
 	}
 	
 	
-	public void SpawnPlayer (/*Transform prefab, PhotonPlayer player, Vector3 position */)
+	public void SpawnPlayer ()
 	{
-//		string tempPlayerString = player.ToString ();
-//		int playerNumber = Convert.ToInt32 (tempPlayerString);
-//
-//		var newPlayer = PhotonNetwork.Instantiate ("HeroPrefabA", position, transform.rotation, playerNumber);
-//		newPlayer.transform.GetComponent<Character>().charID = charNumber++;
-//
-//
-//		GameObject.Find("Main Camera").GetComponent<CameraControl>().SetTarget(newPlayer.transform);
+
 		GameObject mySpawn = bluespawn[UnityEngine.Random.Range(0,redspawn.Length)];
 		GameObject myPlayer = PhotonNetwork.Instantiate("HeroPrefabA", mySpawn.transform.position, mySpawn.transform.rotation,0);
 
@@ -101,7 +94,7 @@ public class GameManager : Photon.MonoBehaviour
 		PhotonNetwork.Instantiate (prefab, 
 		                           spawn.transform.position + new Vector3(offset,0,offset), 
 		                           spawn.transform.rotation, 0)
-			.GetComponent<Character>().charID = charNumber++;
+			         .GetComponent<Character>().charID = charNumber++;
 	}
 	
 }
