@@ -3,13 +3,13 @@ using System;
 using System.Collections;
 
 
-public enum attribute { HP = 0, HPReg = 1, AR = 2, AS = 3, AP = 4, AD = 5 };
+public enum attribute { HP = 0, HPReg = 1, AR = 2, AS = 3, AP = 4, AD = 5, DO = 6 };
 
 namespace Effect_Management{
 
 	public class Attribute_Manager {
 
-        Effect_Container<Attribute>[] attributes = new Effect_Container<Attribute>[6];
+        Effect_Container<Attribute>[] attributes = new Effect_Container<Attribute>[7];
 
         public Attribute_Manager()
         {
@@ -17,13 +17,6 @@ namespace Effect_Management{
             {
                 attributes[i] = new Effect_Container<Attribute>();
             }
-
-            /*
-            attributes[(int)attribute.HP].add_timedEffect(new Timed_Effect<Attribute>(
-                    DateTime.Now, 10.0,
-                    Attribute_Effects.periodic_changeBy(1.0, -5.0),
-                    Utility_Effects.doNothing_Stop())
-                ); */
         }
 
 		public void stepTime()
@@ -57,13 +50,22 @@ namespace Effect_Management{
 
 	}
 
-
     public class Attribute_Effects
     {
         // Creates a new function that will ignore time and return a certain amount
         public static EffectApply  <Attribute> changeBy(double amount)
         {
-            return (x => new Attribute(amount, 0.0));
+            if (amount < 0) 
+                 return (x => new Attribute(0.0, 0.0, amount, 0.0));
+            else return (x => new Attribute(amount, 0.0, 0.0, 0.0));
+        }
+
+        // Creates a new function that will ignore time and return a certain amount
+        public static EffectApply<Attribute> changeBy_percent(double amount)
+        {
+            if (amount < 0)
+                return (x => new Attribute(0.0, 0.0, 0.0, amount));
+            else return (x => new Attribute(0.0, amount, 0.0, 0.0));
         }
 
         // Creates a new function that will periodically change by a certain amount

@@ -40,32 +40,45 @@ namespace Effect_Management{
 	// The value that attribute effects produce
 	public class Attribute : Affectable<Attribute>{
         
-		public Tuple<directValue,percentValue> value;
+		public double directIncrease;
+        public double percentIncrease;
+
+        public double directDecrease;
+        public double percentDecrease;
 
 		public Attribute () {
-            value = new Tuple<directValue, percentValue>(0.0, 0.0);
+            //value = new Tuple<directValue, percentValue>(0.0, 0.0);
 		}
 
-		public Attribute (double _direct, double _percent)
+		public Attribute (double _directIncrease, double _percentIncrease, 
+                          double _directDecrease, double _percentDecrease)
 		{
-            value = new Tuple<directValue, percentValue>(_direct, _percent);
+            directIncrease  = _directIncrease;
+            percentIncrease = _percentIncrease;
+
+            directDecrease  = _directDecrease;
+            percentDecrease = _percentDecrease;
+            
 		}
 
 		public override Attribute add(Attribute other)
 		{
-			Attribute test = new Attribute(other.value.First  + this.value.First, 
-                                           other.value.Second + this.value.Second);
+			Attribute test = new Attribute(other.directIncrease  + this.directIncrease,
+                                           other.percentIncrease + this.percentIncrease,
+                                           other.directDecrease  + this.directDecrease,
+                                           other.percentDecrease + this.percentDecrease);
 			return test;
 		}
 
         public double applyTo(double initial)
         {
-            return (initial + value.First) * (1.0 + value.Second);
+            return (initial + directIncrease + directDecrease) * (1.0 + percentIncrease + percentDecrease);
         }
 
 		public override string ToString ()
 		{
-			return value.ToString();
+			return "["+directIncrease.ToString()+","+percentIncrease.ToString()+","
+                    +directDecrease.ToString()+","+percentDecrease.ToString()+"]";
 		}
 	}
 

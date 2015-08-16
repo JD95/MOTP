@@ -11,6 +11,7 @@ using System.Collections.Generic;
 public class Combat : MonoBehaviour {
 
     public bool hero;
+
 	public float health;
 	private float oldHealth;
 
@@ -26,11 +27,12 @@ public class Combat : MonoBehaviour {
 
 	public bool isRanged = false;
 
+    // Base Stats
     public double baseAttackRange;
     public double baseAttackSpeed;
     public double baseHealthRegen;
 
-	// Combat
+	// Clocks
 	private double basicAttackCoolDown = 0;
     private double regenClock = 0;
 	
@@ -47,10 +49,7 @@ public class Combat : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if(basicAttackCoolDown > 0)
-		{
-			basicAttackCoolDown -= Time.deltaTime * 1;
-		}
+        autoAttackCD();
 
         if (hero) { regen(); }
 
@@ -58,6 +57,14 @@ public class Combat : MonoBehaviour {
 		updateHealth();
 		
 	}
+
+    void autoAttackCD()
+    {
+        if (basicAttackCoolDown > 0)
+        {
+            basicAttackCoolDown -= Time.deltaTime * 1;
+        }
+    }
 
 	void regen()
     {
