@@ -3,13 +3,13 @@ using System;
 using System.Collections;
 
 
-public enum attribute { HP = 0, HPReg = 1, AR = 2, AS = 3, AP = 4, AD = 5, DO = 6 };
+public enum attribute { HP = 0, HPReg = 1, AR = 2, AS = 3, AP = 4, AD = 5, DO = 6, ARM = 7, MR = 8, CDR = 9 };
 
 namespace Effect_Management{
 
 	public class Attribute_Manager {
 
-        Effect_Container<Attribute>[] attributes = new Effect_Container<Attribute>[7];
+        Effect_Container<Attribute>[] attributes = new Effect_Container<Attribute>[10];
 
         public Attribute_Manager()
         {

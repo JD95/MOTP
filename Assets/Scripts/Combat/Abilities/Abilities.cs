@@ -44,11 +44,12 @@ public class Abilities : MonoBehaviour {
     {
         combatData = GetComponent<Combat>();
 
-        //initAbility(ref q_Slot, q);
+        initAbility(ref q_Slot, q);
         initAbility(ref w_Slot, w);
         initAbility(ref e_Slot, e);
-        //initAbility(ref r_Slot, r);
+        initAbility(ref r_Slot, r);
 
+        applyPassives();
     }
 
     void initAbility(ref Ability ability, GameObject component)
@@ -59,10 +60,10 @@ public class Abilities : MonoBehaviour {
 
     void Update()
     {
-        /*
+        
         if(Input.GetKeyDown("q"))
         { useAbility(q_Slot, q_Level, q_ResourceCost); Debug.Log("q was used!"); }
-        */
+        
 
         if (Input.GetKeyDown("w"))
         { useAbility(w_Slot, w_Level, w_ResourceCost); Debug.Log("w was used!"); }
@@ -70,10 +71,18 @@ public class Abilities : MonoBehaviour {
         if (Input.GetKeyDown("e"))
         { useAbility(e_Slot, e_Level, e_ResourceCost); Debug.Log("e was used!"); }
 
-        /*
+        
         if(Input.GetKeyDown("r"))
         { useAbility(r_Slot, r_Level, r_ResourceCost); Debug.Log("r was used!"); }
-        */
+        
+    }
+
+    void applyPassives()
+    {
+        q_Slot.passiveEffect();
+        w_Slot.passiveEffect();
+        e_Slot.passiveEffect();
+        r_Slot.passiveEffect();
     }
 
     void useAbility(Ability ability, int level, float[] resourceCost)
@@ -88,4 +97,5 @@ public class Abilities : MonoBehaviour {
     {
         //combatData.
     }
+
 }

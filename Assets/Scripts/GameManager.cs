@@ -54,6 +54,7 @@ public class GameManager : Photon.MonoBehaviour
 	{
 		// No one else can control our character except for us!
 		player.GetComponent<Hero>().enabled = true;
+        player.GetComponent<Abilities>().enabled = true;
 		player.GetComponent<Character>().enabled = true;
 		player.GetComponent<AudioSource>().enabled = true;
 		player.GetComponent<CharacterController>().enabled = true;

@@ -35,18 +35,18 @@ namespace Effect_Management{
 			T aggregate; aggregate = new T();
             DateTime now = DateTime.Now;
 
+            // Adds up all lasting effects
+            foreach (var effect in lasting_effects)
+            {
+               aggregate = aggregate.add(effect.apply(now));
+            }
+
 			// Goes through each time block and adds up the effects
 			foreach(var block in timed_effects)
 			{
 				T effectResult = block.getEffects(now);
 				aggregate = aggregate.add(effectResult);
 			}
-			
-            // Adds up all lasting effects
-            foreach(var effect in lasting_effects)
-            {
-                aggregate.add(effect.apply(now));
-            }
 
 			return aggregate;
 		}

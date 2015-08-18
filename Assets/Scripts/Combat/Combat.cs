@@ -7,8 +7,11 @@ using System.Collections.Generic;
  * 	like attack range and speed.
  * 
  */
+public delegate void attackListener();
 
 public class Combat : MonoBehaviour {
+
+    private static System.Random random = new System.Random();
 
     public bool hero;
 
@@ -31,6 +34,7 @@ public class Combat : MonoBehaviour {
     public double baseAttackRange;
     public double baseAttackSpeed;
     public double baseHealthRegen;
+    public double baseDodgeRate;
 
 	// Clocks
 	private double basicAttackCoolDown = 0;
@@ -38,7 +42,17 @@ public class Combat : MonoBehaviour {
 	
 	private Character character;
     public Stats stats;
-	
+
+    public List<attackListener> attackListeners = new List<attackListener>();
+
+    void onAttacked()
+    {
+        foreach (var listener in attackListeners)
+        {
+            listener();
+        }
+    }
+
 	// Use this for initialization
 	void Start () {
 		basicAttackCoolDown = 0;
@@ -112,6 +126,16 @@ public class Combat : MonoBehaviour {
         return stats.effects.getChangesFor(attribute.AR).applyTo(baseAttackRange);
     }
 
+    public float attackDamage()
+    {
+        return (float) stats.effects.getChangesFor(attribute.AD).applyTo(damage);
+    }
+
+    public float dodgeRate()
+    {
+        return (float)stats.effects.getChangesFor(attribute.DO).applyTo(baseDodgeRate);
+    }
+
     public int level()
     {
         return stats.level;
@@ -127,22 +151,25 @@ public class Combat : MonoBehaviour {
 	// Character takes physical damage
 	public void recieve_Damage_Physical(float amount)
 	{
-		this.health -= amount;
-		
-		if (this.health <= 0)
-		{	
-			// deathAnimation();
-			// createTimer_to_destory model();
+        onAttacked();
 
-			die();
-		}
+        double chanceToHit   = random.NextDouble();
+        double chanceToDodge = dodgeRate();
+
+        if (chanceToHit > chanceToDodge)
+        {
+            this.health -= (float)stats.effects.getChangesFor(attribute.ARM).applyTo(amount);
+
+            if (this.health <= 0) { die(); }
+        }
 	}
 
 	// Character takes magic damage
 	public void recieve_Damage_Magic(float amount)
 	{
-        // TODO magicResistance();
-		this.health -= amount;
+        onAttacked();
+
+		this.health += (float) stats.effects.getChangesFor(attribute.MR).applyTo(amount);
 	}
 
 	// Character is healed
@@ -155,8 +182,9 @@ public class Combat : MonoBehaviour {
 	// Character causes physical damage (Auto Attack)
 	public void cause_Damage_Physical(Combat _target)
 	{
-		// TODO damageBuffs();
-		_target.recieve_Damage_Physical(damage);
+		_target.recieve_Damage_Physical(attackDamage());
+        
+        if (_target.dead) stats.killScore++;
 	}
 
 	public void autoAttack()
@@ -198,9 +226,8 @@ public class Combat : MonoBehaviour {
 				//revive();
 			}
 			
-			//giveKillPoints();
 			//if(hero) startRespawn_Timer();
-			//self.selectable = false;
+
 			this.dead = true;
 			this.selectable = false;
 

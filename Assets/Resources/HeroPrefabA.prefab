@@ -1643,6 +1643,7 @@ MonoBehaviour:
   baseAttackRange: 3
   baseAttackSpeed: 2
   baseHealthRegen: 2
+  baseDodgeRate: .10000000000000001
 --- !u!114 &11454182
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1703,9 +1704,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f93c5c00ad857e4094172057d053c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  q: {fileID: 0}
+  q: {fileID: 120876, guid: 86f400ed17a6bec46823326229a2380c, type: 2}
   q_Level: 1
-  q_UsePassive: 0
+  q_UsePassive: 1
   q_ResourceCost:
   - 0
   - 0
@@ -1943,7 +1944,7 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: q
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 120876, guid: 86f400ed17a6bec46823326229a2380c, type: 2}
     - target: {fileID: 0}
       propertyPath: q_Level
       value: 1
@@ -1975,6 +1976,14 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: baseHealthRegen
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: q_UsePassive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: baseDodgeRate
+      value: .10000000000000001
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

@@ -79,6 +79,11 @@ public class Navigation : MonoBehaviour {
 	void Start () {
 		navAgent = GetComponent<NavMeshAgent>();
 	}
+
+    public void Init()
+    {
+        navAgent = GetComponent<NavMeshAgent>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
