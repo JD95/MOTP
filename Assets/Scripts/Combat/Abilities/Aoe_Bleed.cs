@@ -11,7 +11,7 @@ public class Aoe_Bleed : Ability {
 
     public override bool trigger()
     {
-        Debug.Log("AOE_BLEED has been triggerd");
+        //Debug.Log("AOE_BLEED has been triggerd");
         var toSlice = TeamLogic.enemyCombatsInRange(caster, range);
 
         foreach(var enemy in toSlice)

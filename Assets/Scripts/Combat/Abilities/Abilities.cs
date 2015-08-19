@@ -6,10 +6,11 @@ using System.Collections;
  *  their abilities simpler.
  * 
  */ 
-
 public class Abilities : MonoBehaviour {
 
     private Combat combatData;
+
+    private AbilityFilter inputFilter;
 
     private Ability q_Slot;
     private Ability w_Slot;
@@ -50,6 +51,8 @@ public class Abilities : MonoBehaviour {
         initAbility(ref r_Slot, r);
 
         applyPassives();
+
+        inputFilter = defaultFilter;
     }
 
     void initAbility(ref Ability ability, GameObject component)
@@ -60,21 +63,38 @@ public class Abilities : MonoBehaviour {
 
     void Update()
     {
-        
-        if(Input.GetKeyDown("q"))
-        { useAbility(q_Slot, q_Level, q_ResourceCost); Debug.Log("q was used!"); }
-        
 
-        if (Input.GetKeyDown("w"))
-        { useAbility(w_Slot, w_Level, w_ResourceCost); Debug.Log("w was used!"); }
-
-        if (Input.GetKeyDown("e"))
-        { useAbility(e_Slot, e_Level, e_ResourceCost); Debug.Log("e was used!"); }
-
+        if (inputFilter() == false)
+        {
+            inputFilter = defaultFilter;
+        }
         
-        if(Input.GetKeyDown("r"))
-        { useAbility(r_Slot, r_Level, r_ResourceCost); Debug.Log("r was used!"); }
-        
+    }
+
+    bool defaultFilter()
+    {
+        if (Input.GetKeyDown("q"))
+        { 
+            useAbility(q_Slot, q_Level, q_ResourceCost);
+            inputFilter = returnOverride(q_Slot); 
+        }
+        else if (Input.GetKeyDown("w"))
+        { 
+            useAbility(w_Slot, w_Level, w_ResourceCost);
+            inputFilter = returnOverride(w_Slot);
+        }
+        else if (Input.GetKeyDown("e"))
+        { 
+            useAbility(e_Slot, e_Level, e_ResourceCost);
+            inputFilter = returnOverride(e_Slot);
+        }
+        else if (Input.GetKeyDown("r"))
+        { 
+            useAbility(r_Slot, r_Level, r_ResourceCost);
+            inputFilter = returnOverride(r_Slot);
+        }
+
+        return true;
     }
 
     void applyPassives()
@@ -83,6 +103,20 @@ public class Abilities : MonoBehaviour {
         w_Slot.passiveEffect();
         e_Slot.passiveEffect();
         r_Slot.passiveEffect();
+    }
+
+    AbilityFilter returnOverride(Ability _slot)
+    {
+        var slot = _slot as hasOverride;
+
+        if(slot != null)
+        {
+            return slot.abilityOverride();
+        }
+        else
+        {
+            return defaultFilter;
+        }
     }
 
     void useAbility(Ability ability, int level, float[] resourceCost)

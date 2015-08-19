@@ -33,7 +33,7 @@ public class GameManager : Photon.MonoBehaviour
 	
 	public void InitGame() {
 		paused = false;
-		int count = 0;
+		//int count = 0;
 		init = true;
 		SpawnPlayer ();
 	}

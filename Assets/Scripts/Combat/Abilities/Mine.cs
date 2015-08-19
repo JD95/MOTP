@@ -13,12 +13,7 @@ public class Mine : MonoBehaviour {
         { 
             if(TeamLogic.areEnemies(unit.gameObject, this.gameObject))
             {
-                var explosionRange = Utility.TeamLogic.enemyCombatsInRange(gameObject, 5.0f);
-                
-                /*Physics.OverlapSphere(this.gameObject.transform.position, 5.0f)
-                                             .Where(x => TeamLogic.areEnemies(x.gameObject, this.gameObject))
-                                             .Select(x => x.GetComponent<Combat>()); */
-                
+                var explosionRange = Utility.TeamLogic.enemyCombatsInRange(gameObject, 5.0f);     
 
                 foreach (var enemy in explosionRange)
                 { enemy.recieve_Damage_Physical(5.0f);}
