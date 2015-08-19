@@ -75,23 +75,23 @@ public class Abilities : MonoBehaviour {
     {
         if (Input.GetKeyDown("q"))
         { 
-            useAbility(q_Slot, q_Level, q_ResourceCost);
-            inputFilter = returnOverride(q_Slot); 
+            if(useAbility(q_Slot, q_Level, q_ResourceCost)) 
+                inputFilter = returnOverride(q_Slot); 
         }
         else if (Input.GetKeyDown("w"))
         { 
-            useAbility(w_Slot, w_Level, w_ResourceCost);
-            inputFilter = returnOverride(w_Slot);
+            if(useAbility(w_Slot, w_Level, w_ResourceCost))
+                inputFilter = returnOverride(w_Slot);
         }
         else if (Input.GetKeyDown("e"))
         { 
-            useAbility(e_Slot, e_Level, e_ResourceCost);
-            inputFilter = returnOverride(e_Slot);
+            if(useAbility(e_Slot, e_Level, e_ResourceCost))
+                inputFilter = returnOverride(e_Slot);
         }
         else if (Input.GetKeyDown("r"))
         { 
-            useAbility(r_Slot, r_Level, r_ResourceCost);
-            inputFilter = returnOverride(r_Slot);
+            if(useAbility(r_Slot, r_Level, r_ResourceCost))
+                inputFilter = returnOverride(r_Slot);
         }
 
         return true;
@@ -119,17 +119,27 @@ public class Abilities : MonoBehaviour {
         }
     }
 
-    void useAbility(Ability ability, int level, float[] resourceCost)
+
+    // Returns a bool if the ability was actually triggered or not
+    // eg. if you have a target spell, but did not target anything
+    bool useAbility(Ability ability, int level, float[] resourceCost)
     {
-        if (ability.trigger())
+        bool haveEnoughMana = combatData.mana - resourceCost[level] >= 0;
+
+        if (haveEnoughMana && ability.trigger())
         {
             consumeResource(resourceCost[level]);
+            return true;
+        }
+        else
+        {
+            return false; // Ability was not used
         }
     }
 
     void consumeResource(float cost)
     {
-        //combatData.
+        combatData.mana -= cost;
     }
 
 }

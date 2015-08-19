@@ -5,7 +5,9 @@ using System.Collections.Generic;
 
 public class GameManager : Photon.MonoBehaviour
 {
-	
+
+    public string currentHero;
+
 	// hero prefabs
 	public Transform playerPrefabA;
 	public Transform playerPrefabB;
@@ -17,6 +19,9 @@ public class GameManager : Photon.MonoBehaviour
 	// Hero Spawn Locations
 	public GameObject[] redspawn;
 	public GameObject[] bluespawn;
+
+    public GameObject _playerStats;
+    private StatsManager playerStats; 
 	
 	public static bool paused = true;
 	
@@ -29,6 +34,7 @@ public class GameManager : Photon.MonoBehaviour
 
 	void Start() {
 		paused = true;
+        playerStats = _playerStats.GetComponent<StatsManager>();
 	}
 	
 	public void InitGame() {
@@ -43,9 +49,10 @@ public class GameManager : Photon.MonoBehaviour
 	{
 
 		GameObject mySpawn = bluespawn[UnityEngine.Random.Range(0,redspawn.Length)];
-		GameObject myPlayer = PhotonNetwork.Instantiate("HeroPrefabA", mySpawn.transform.position, mySpawn.transform.rotation,0);
-
+        GameObject myPlayer = PhotonNetwork.Instantiate(currentHero, mySpawn.transform.position, mySpawn.transform.rotation, 0);
+        myPlayer.name = "player";
 		enablePlayer (myPlayer);
+        playerStats.Init();
 
 		GameObject.Find("Main Camera").GetComponent<CameraControl>().SetTarget(myPlayer.transform);
 	}

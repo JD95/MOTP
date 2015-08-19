@@ -19,6 +19,8 @@ public class Combat : MonoBehaviour {
 	private float oldHealth;
 
 	public float maxHealth;
+
+    public float mana;
 	
 	public float damage = 0.0F;
 
@@ -35,6 +37,8 @@ public class Combat : MonoBehaviour {
     public double baseAttackSpeed;
     public double baseHealthRegen;
     public double baseDodgeRate;
+    public double baseManaRegen;
+    public double baseMaxMana;
 
 	// Clocks
 	private double basicAttackCoolDown = 0;

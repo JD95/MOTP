@@ -35,11 +35,11 @@ public class Character : MonoBehaviour
 		//movementControler = GetComponent<CharacterController>();
 		combatData = GetComponent<Combat>();
 
-		backgroundTexture = new Texture2D (1, 1, TextureFormat.RGB24, false);
-		backgroundTexture.SetPixel (0, 0, Color.black);
-		backgroundTexture.Apply ();
+		//backgroundTexture = new Texture2D (1, 1, TextureFormat.RGB24, false);
+		//backgroundTexture.SetPixel (0, 0, Color.black);
+		//backgroundTexture.Apply ();
 
-		if(!isBase){
+		if(!isBase && !isHero){
 			charID = numchars++;
 			gameObject.name = "char" + charID;
 		}
@@ -59,13 +59,13 @@ public class Character : MonoBehaviour
 		}
 
 		// Perform next animation
-		animate ();
+		//animate ();
 
 		characterState.stepTime();
 		//characterState.applyLivingChanges(game);
 	}
 
-
+    /*
 	void animate()
 	{
 		if(avatar == null) return;
@@ -83,10 +83,10 @@ public class Character : MonoBehaviour
 		}
 	}
 
-
+    */
 
 	
-
+    /*
 	// Health Bar (all) and level (hero only)
 	void OnGUI ()
 	{
@@ -139,7 +139,8 @@ public class Character : MonoBehaviour
 		}
 			
 	}
-	
+	*/
+
 //	public Vector3 getVelocity()
 //	{
 //		return movementControler.velocity;
