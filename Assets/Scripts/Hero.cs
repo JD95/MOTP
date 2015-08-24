@@ -21,8 +21,6 @@ public class Hero : Photon.MonoBehaviour
 	{
 		character = GetComponent<Character> ();
 
-		targetLocation = GameObject.Find("A").GetComponent<Waypoint>();
-
 		navigation = GetComponent<Navigation>();
 
 		combatData = GetComponent<Combat>();

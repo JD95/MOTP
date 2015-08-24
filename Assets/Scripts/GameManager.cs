@@ -47,8 +47,7 @@ public class GameManager : Photon.MonoBehaviour
 	
 	public void SpawnPlayer ()
 	{
-
-		GameObject mySpawn = bluespawn[UnityEngine.Random.Range(0,redspawn.Length)];
+		GameObject mySpawn = bluespawn[UnityEngine.Random.Range(0,bluespawn.Length)];
         GameObject myPlayer = PhotonNetwork.Instantiate(currentHero, mySpawn.transform.position, mySpawn.transform.rotation, 0);
         myPlayer.name = "player";
 		enablePlayer (myPlayer);
@@ -78,6 +77,7 @@ public class GameManager : Photon.MonoBehaviour
 
 	private void spawnWaves()
 	{
+
 		if (init) {
 			if (time >= 30) {
 				//				// creep A
@@ -85,7 +85,7 @@ public class GameManager : Photon.MonoBehaviour
 				SpawnCreep("Creep_TeamA", GameObject.Find("blueSpawn2").GetComponent<Waypoint>(), 0);
 				SpawnCreep("Creep_TeamA", GameObject.Find("blueSpawn3").GetComponent<Waypoint>(), 0);
 				SpawnCreep("Creep_TeamA", GameObject.Find("blueSpawn4").GetComponent<Waypoint>(), 0);
-				//				
+		
 				//				// creep B
 				SpawnCreep("Creep(ranged)_TeamB", GameObject.Find("redSpawn1").GetComponent<Waypoint>(), 0);
 				SpawnCreep("Creep_TeamB", GameObject.Find("redSpawn2").GetComponent<Waypoint>(), 0);

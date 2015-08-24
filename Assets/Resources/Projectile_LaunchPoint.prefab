@@ -39,14 +39,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7b54dca7e18094da61061bcab20ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 5455124, guid: f05078ae6c30e9842b41f7fe22f5f978, type: 2}
+  default_Projectile: Projectile_Creep_Auto
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: projectile
+      value: Projectile_Creep_Auto
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: default_Projectile
+      value: Projectile_Creep_Auto
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 110744}

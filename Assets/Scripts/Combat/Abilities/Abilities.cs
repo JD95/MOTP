@@ -64,7 +64,7 @@ public class Abilities : MonoBehaviour {
     void Update()
     {
 
-        if (inputFilter() == false)
+        if (inputFilter == null || inputFilter() == false)
         {
             inputFilter = defaultFilter;
         }
@@ -82,6 +82,8 @@ public class Abilities : MonoBehaviour {
         { 
             if(useAbility(w_Slot, w_Level, w_ResourceCost))
                 inputFilter = returnOverride(w_Slot);
+
+            Debug.Log("w was pressed!");
         }
         else if (Input.GetKeyDown("e"))
         { 
@@ -99,10 +101,10 @@ public class Abilities : MonoBehaviour {
 
     void applyPassives()
     {
-        q_Slot.passiveEffect();
-        w_Slot.passiveEffect();
-        e_Slot.passiveEffect();
-        r_Slot.passiveEffect();
+        if (q_UsePassive) q_Slot.passiveEffect();
+        if (w_UsePassive) w_Slot.passiveEffect();
+        if (e_UsePassive) e_Slot.passiveEffect();
+        if (r_UsePassive) r_Slot.passiveEffect();
     }
 
     AbilityFilter returnOverride(Ability _slot)

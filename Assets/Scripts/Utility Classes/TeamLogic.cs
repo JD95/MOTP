@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Utility
 {
-    public class TeamLogic
+    public static class TeamLogic
     {
         public const string TeamA = "teamA";
         public const string TeamB = "teamB";
@@ -19,6 +19,11 @@ namespace Utility
         {
             // Is b on the opposite team of a?
            return a.CompareTag(Utility.TeamLogic.oppositeTeam(b.tag));
+        }
+
+        public static bool areAllies(GameObject a, GameObject b)
+        {
+            return !areEnemies(a, b);
         }
 
         public static List<GameObject> enemyObjsInRange(GameObject unit,float radius)

@@ -20,14 +20,11 @@ public class Projectile : MonoBehaviour {
 		}
 		if(transform.position != target.transform.position)
 		{
-			transform.position = Vector3.Lerp(transform.position, target.transform.position, (speed / 60.0F)); 
+			transform.position = Vector3.MoveTowards(transform.position, target.transform.position, speed * Time.deltaTime); 
 		}
 	}
 
 	void OnTriggerEnter(Collider hit){
-
-		//Debug.Log(hit.name);
-		//Debug.Log("I hit something!!");
 
 		if (hit.gameObject == target)
 		{

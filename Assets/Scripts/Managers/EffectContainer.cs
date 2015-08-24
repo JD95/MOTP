@@ -65,8 +65,11 @@ namespace Effect_Management{
 		// For all timed effects
 		public void add_timedEffect(Timed_Effect<T> newEffect)
 		{
+            // If the ability is already being applied, add a stack
+            if (tryToAddStack(newEffect.info.getName())) return;
+
 			// Find the appropriate timeblock that matches the stop 
-			Time_Block<T> match = tryToMatchTime(newEffect.getStopTime());
+			Time_Block<T> match = tryToMatchTime(newEffect.info.getStopTime());
 			
 			if (match == null)
 			{
@@ -77,10 +80,7 @@ namespace Effect_Management{
 				newList.Add(newEffect);
 				
 				// Create a new Time block and add it to the list of timed effects
-				timed_effects.Add(new Time_Block<T>(newEffect.getStopTime(), newList));
-				
-				// Sort the list so the front is still the next to be removed
-				//timed_effects.Sort((a,b) => a.getStopTime().CompareTo(b.getStopTime()));
+				timed_effects.Add(new Time_Block<T>(newEffect.info.getStopTime(), newList));
 				
 			}else{
 				
@@ -89,11 +89,34 @@ namespace Effect_Management{
 			}
 			
 		}
+
+        bool tryToAddStack(string effectName)
+        {
+            foreach (var timedBlock in timed_effects)
+            {
+                var potential = timedBlock.has(effectName);
+                if(potential != null)
+                {
+                    potential.info.addStack();
+                    return true;
+                }
+            }
+
+            return false;
+        }
 		
 		Time_Block<T> tryToMatchTime(DateTime time)
 		{
 			return timed_effects.Find(x => x.getStopTime().Equals(time));
 		}
+
+        public void removeHarmful()
+        {
+            foreach (var timeBlock in timed_effects)
+            {
+                timeBlock.removeHarmful();
+            }
+        }
 
 		// Tick through time for the container
 		public void stepTime()
@@ -109,6 +132,7 @@ namespace Effect_Management{
 				timed_effects.RemoveAt(0);
 			}
 		}
+
 	}
 
 

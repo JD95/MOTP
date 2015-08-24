@@ -13,12 +13,11 @@ namespace Effect_Management
         {
             DateTime startTime = DateTime.Now;
 
-            return (x => x.Subtract(startTime).Duration().TotalSeconds % period_secs < 0.01 ?
-                    app(x) : Affectable<T>.zero());
+            return ((x,y) => x.Subtract(startTime).Duration().TotalSeconds % period_secs < 0.01 ?
+                    app(x,y) : Affectable<T>.zero());
         }
 
         public static EffectStop doNothing_Stop() { return (() => {}); }
-        /*public static EffectApply<T> doNothing_Apply<T>() where T : Affectable<T>, new()
-        { return ((x) => { }); } */
+
     }
 }

@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 
+using CharacterState_Effects = Effect_Management.CharacterState_Effects;
+
 /*
  * 	Handles all combat functionality. Location of Health and other combat data
  * 	like attack range and speed.
@@ -86,16 +88,24 @@ public class Combat : MonoBehaviour {
 
 	void regen()
     {
-        if (regenClock > 0)
-        {
-            regenClock -= Time.deltaTime * 1;
-        }
-        else if(health < maxHealth)
+
+        var _maxMana = maxMana(); // Calculate this here to avoid having to call function twice
+
+        if (regenClock > 0) { regenClock -= Time.deltaTime * 1; return; }
+
+        if(health < maxHealth) // Regen Health
         {
             var regen = (float)stats.effects.getChangesFor(attribute.HPReg).applyTo(baseHealthRegen);
             health += regen;
-            regenClock = 5.0;
-        }
+        } else if (health > maxHealth){ health = maxHealth; }
+
+        if (mana < _maxMana) // Regen Mana
+        {
+            var regen = (float)stats.effects.getChangesFor(attribute.MPReg).applyTo(baseManaRegen);
+            mana += regen;
+        } else if (mana > _maxMana) { mana =_maxMana; }
+
+        regenClock = 5.0;
     }
 
 	public bool beenDamaged()
@@ -140,6 +150,11 @@ public class Combat : MonoBehaviour {
         return (float)stats.effects.getChangesFor(attribute.DO).applyTo(baseDodgeRate);
     }
 
+    public float maxMana()
+    {
+        return (float)stats.effects.getChangesFor(attribute.MaxMP).applyTo(baseMaxMana);
+    }
+
     public int level()
     {
         return stats.level;
@@ -179,8 +194,14 @@ public class Combat : MonoBehaviour {
 	// Character is healed
 	public void recieve_Healing(float amount)
 	{
-        // TODO healingBuffs();
-		this.health += amount;
+        if (health + amount <= maxHealth)
+        {
+            this.health += amount;
+        }
+        else
+        {
+            this.health = maxHealth;
+        }
 	}
 
 	// Character causes physical damage (Auto Attack)
@@ -232,6 +253,7 @@ public class Combat : MonoBehaviour {
 			
 			//if(hero) startRespawn_Timer();
 
+            character.setAnimation_State(character.dead_State, true);
 			this.dead = true;
 			this.selectable = false;
 
@@ -250,7 +272,17 @@ public class Combat : MonoBehaviour {
 
 			GetComponent<NavMeshAgent>().enabled = false;
 			GetComponent<Rigidbody>().useGravity = false;
-			character.characterState.addLivingChange(gameObject);
+
+            if(hero)
+            {
+                var respawnFunc = CharacterState_Effects.respawnHero(gameObject);
+                character.characterState.addTimedEffect(respawnFunc);
+            }
+            else
+            {
+                var removeBodyFunc = CharacterState_Effects.destroyCharacterObject(gameObject);
+                character.characterState.addTimedEffect(removeBodyFunc);
+            }
 
 		}
 

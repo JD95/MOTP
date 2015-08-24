@@ -3,13 +3,15 @@ using System;
 using System.Collections;
 
 
-public enum attribute { HP = 0, HPReg = 1, AR = 2, AS = 3, AP = 4, AD = 5, DO = 6, ARM = 7, MR = 8, CDR = 9 };
+public enum attribute { HP, HPReg, MPReg, MaxMP, AR, AS, AP, AD, DO, ARM, MR, CDR};
 
 namespace Effect_Management{
 
 	public class Attribute_Manager {
 
-        Effect_Container<Attribute>[] attributes = new Effect_Container<Attribute>[10];
+        const int numAttributes = 12;
+
+        Effect_Container<Attribute>[] attributes = new Effect_Container<Attribute>[numAttributes];
 
         public Attribute_Manager()
         {
@@ -48,6 +50,14 @@ namespace Effect_Management{
             attributes[(int)attr].remove_lastingEffect(id);
         }
 
+        public void removeHarmfulEffects()
+        {
+            foreach (var attribute in attributes)
+            {
+                attribute.removeHarmful();
+            }
+        }
+
 	}
 
     public class Attribute_Effects
@@ -56,16 +66,16 @@ namespace Effect_Management{
         public static EffectApply  <Attribute> changeBy(double amount)
         {
             if (amount < 0) 
-                 return (x => new Attribute(0.0, 0.0, amount, 0.0));
-            else return (x => new Attribute(amount, 0.0, 0.0, 0.0));
+                 return ((x,y) => new Attribute(0.0, 0.0, amount, 0.0));
+            else return ((x,y) => new Attribute(amount, 0.0, 0.0, 0.0));
         }
 
         // Creates a new function that will ignore time and return a certain amount
         public static EffectApply<Attribute> changeBy_percent(double amount)
         {
             if (amount < 0)
-                return (x => new Attribute(0.0, 0.0, 0.0, amount));
-            else return (x => new Attribute(0.0, amount, 0.0, 0.0));
+                return ((x,y) => new Attribute(0.0, 0.0, 0.0, amount));
+            else return ((x,y) => new Attribute(0.0, amount, 0.0, 0.0));
         }
 
         // Creates a new function that will periodically change by a certain amount

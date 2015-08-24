@@ -112,7 +112,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: .984267294, z: 0, w: -.176686242}
-  m_LocalPosition: {x: 28.7800007, y: .560000002, z: 26.3600006}
+  m_LocalPosition: {x: 32.4700012, y: .560000002, z: 16.2700005}
   m_LocalScale: {x: 1, y: 3.30134892, z: 1.0163666}
   m_Children:
   - {fileID: 491854}
@@ -340,14 +340,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621afe67e67e444cba6a698c80f873f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthTexture: {fileID: 2800000, guid: 6d28d934293344837bfbc57e3b213ce0, type: 3}
-  team: 
   charID: -4
   isHero: 0
   isBase: 0
-  skin: {fileID: 0}
+  running_State: -526601997
+  attacking_State: -2123461723
+  dead_State: 1293411866
   bloodPrefab: {fileID: 400000, guid: 8682bbbb15f5b48a8bc0e4f7451c5103, type: 2}
-  avatar: {fileID: 0}
   currentAnimation: 0
 --- !u!114 &11406956
 MonoBehaviour:
@@ -360,7 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7b54dca7e18094da61061bcab20ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 5455124, guid: f05078ae6c30e9842b41f7fe22f5f978, type: 2}
+  default_Projectile: Projectile_Creep_Auto
 --- !u!114 &11407162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -407,8 +406,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae22ef4fcf9b33d43b415269e22e7523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hero: 0
   health: 1000
   maxHealth: 1000
+  mana: 0
   damage: 10
   selectable: 1
   dead: 0
@@ -417,6 +418,10 @@ MonoBehaviour:
   isRanged: 1
   baseAttackRange: 10
   baseAttackSpeed: 1
+  baseHealthRegen: 0
+  baseDodgeRate: 0
+  baseManaRegen: 0
+  baseMaxMana: 0
 --- !u!135 &13574480
 SphereCollider:
   m_ObjectHideFlags: 1

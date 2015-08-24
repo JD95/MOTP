@@ -1,27 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class VectorHelp {
-
-    public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
-    {
-        Vector3 dir = point - pivot; // get point direction relative to pivot
-        dir = Quaternion.Euler(angles) * dir; // rotate it
-        point = dir + pivot; // calculate rotated point
-        return point; // return it
-    }
-
-    
-}
-
-public class transformData
+namespace Utility
 {
-    public transformData(Vector3 _position, Vector3 _rotation)
+
+    public static class VectorHelp
     {
-        position = _position;
-        rotation = _rotation;
+
+        public static Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
+        {
+            Vector3 dir = point - pivot; // get point direction relative to pivot
+            dir = Quaternion.Euler(angles) * dir; // rotate it
+            point = dir + pivot; // calculate rotated point
+            return point; // return it
+        }
+
+
     }
 
-    public Vector3 position;
-    public Vector3 rotation;
+    public class transformData
+    {
+        public transformData(Vector3 _position, Vector3 _rotation)
+        {
+            position = _position;
+            rotation = _rotation;
+        }
+
+        public Vector3 position;
+        public Vector3 rotation;
+    }
+
 }

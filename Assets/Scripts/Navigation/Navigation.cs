@@ -20,6 +20,8 @@ using System.Collections;
  */
 public class Navigation : MonoBehaviour {
 
+    private Character character;
+
 	private float speed;
 	private NavMeshAgent navAgent;
 
@@ -78,6 +80,7 @@ public class Navigation : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		navAgent = GetComponent<NavMeshAgent>();
+        character = GetComponent<Character>();
 	}
 
     public void Init()
@@ -87,9 +90,11 @@ public class Navigation : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//Debug.Log(navAgent.destination.ToString());
 
 		updateMoving();
+
+        character.setAnimation_State(character.running_State, navAgent.velocity.magnitude > 0);
+
 	}
 
 	public void stopNav()
@@ -106,11 +111,6 @@ public class Navigation : MonoBehaviour {
 	{
 		if (location == null) return;
 
-		// I have new destination
-		navAgent.Stop();
-		navAgent.ResetPath();
 		navAgent.SetDestination(location);
-		navAgent.stoppingDistance = (float) stopDistance;
-		navAgent.Resume();
 	}
 }

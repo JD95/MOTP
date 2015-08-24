@@ -6,53 +6,86 @@ namespace Effect_Management {
 
 	public class CharacterState_Manager {
 
-		Effect_Container<CharacterState> living;
-		public void applyLivingChanges(GameObject character)
+		Effect_Container<CharacterState> state;
+		public void applyCharacterChanges(GameObject character)
 		{
-		  living.compileEffects().value(character);
+            state.compileEffects().value(character);
 		}
-		public void addLivingChange(GameObject character)
+
+		public void addTimedEffect(Timed_Effect<CharacterState> effect)
 		{
-			living.add_timedEffect(new Timed_Effect<CharacterState>(
-				DateTime.Now,								// Birth time
-				10.0,										// Durration in seconds
-				x => CharacterState.zero(),	// Application funtion
-				CharacterState_Effects.destroyCharacter(character)
-				));	// Stopping function
+            state.add_timedEffect(effect);
 		}
 		
 		public CharacterState_Manager(GameObject character)
 		{
-			living = new Effect_Container<CharacterState>();
-
+            state = new Effect_Container<CharacterState>();
 		}
 		
 		public void stepTime()
 		{
-			living.stepTime();
+            state.stepTime();
 		}
 
-
-		private class CharacterState_Effects {
-		// Transforms a constant EffectApply function into a periodic one
-			private static EffectApply<CharacterState> periodic (EffectApply<CharacterState> app, double period_secs)
-			{
-				DateTime startTime = DateTime.Now;
-				
-				return ( x => x.Subtract(startTime).Duration().TotalSeconds % period_secs < 0.01 ? 
-				        app(x) : CharacterState.zero());
-			}
-
-			public static void doNothing(){}
-
-			public static EffectStop destroyCharacter(GameObject character)
-			{
-				return () => {
-					GameObject.Destroy(character);
-					//character.SetActive(false);
-					//GameObject.Destroy(character);
-				};
-			}
-		}
 	}
+
+    public class CharacterState_Effects
+    {
+        // Transforms a constant EffectApply function into a periodic one
+
+        public static EffectApply<CharacterState> doNothing()
+        {
+            return (x, y) => CharacterState.zero();
+        }
+
+        private static EffectStop destroyCharacter(GameObject character)
+        {
+            return () => { GameObject.Destroy(character); };
+        }
+
+        private static EffectStop respawnCharacter(GameObject character)
+        {
+            return () =>
+            {
+                var manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+                var combatData = character.GetComponent<Combat>();
+                var characterData = character.GetComponent<Character>();
+
+                // Consider character to be alive
+                combatData.dead = false;
+                combatData.selectable = true;
+
+                // Restore health
+                combatData.health = combatData.maxHealth;
+                combatData.mana = combatData.maxMana();
+
+                // Move Character to correct position
+                var spawn = manager.bluespawn[UnityEngine.Random.Range(0, manager.bluespawn.Length)];
+                character.transform.position = spawn.transform.position;
+
+                // Set animation state to alive
+                characterData.setAnimation_State(characterData.dead_State, false);
+
+                // Enable movement
+                character.GetComponent<NavMeshAgent>().enabled = true;
+                character.GetComponent<Rigidbody>().useGravity = true;
+            };
+        }
+
+        public static Timed_Effect<CharacterState> destroyCharacterObject(GameObject character)
+        {
+            return new Timed_Effect<CharacterState>(
+                   new effectInfo("Death", EffectType.Posion, 1, 10.0, DateTime.Now),
+                   doNothing(),
+                   destroyCharacter(character));
+        }
+
+        public static Timed_Effect<CharacterState> respawnHero(GameObject character)
+        {
+            return new Timed_Effect<CharacterState>(
+                new effectInfo("Respawn", EffectType.Posion, 1, 2.0, DateTime.Now),
+                doNothing(),
+                respawnCharacter(character));
+        }
+    }
 }

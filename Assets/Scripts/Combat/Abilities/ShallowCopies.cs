@@ -4,6 +4,8 @@ using System.Linq;
 using System.Collections.Generic;
 
 using TeamLogic = Utility.TeamLogic;
+using transformData = Utility.transformData;
+using VectorHelp = Utility.VectorHelp;
 using Effect_Management;
 
 
@@ -18,7 +20,7 @@ public class ShallowCopies : Ability, hasOverride {
     public override bool trigger()
     {
         Vector3 center     = caster.transform.position;
-        Vector3 realTarget = runDirection(Input.mousePosition);
+        Vector3 realTarget = Utility.AbilityHelp.getTerrain_UnderMouse();
         Vector3 firstPoint = Vector3.MoveTowards(center, realTarget, cloneSpawnDistance);
 
         caster.transform.position = firstPoint;
@@ -31,17 +33,7 @@ public class ShallowCopies : Ability, hasOverride {
         return true;
     }
 
-    private Vector3 runDirection(Vector2 mousePos)
-    {
-        RaycastHit hit;
-
-        // Get the point on the terrain where the mouse is
-        Physics.Raycast(Camera.main.ScreenPointToRay(mousePos), out hit, 100.0F, (1 << 10));
-
-        return hit.point;
-    }
-
-    private List<transformData> spawnPositions(int level, Vector3 center, Vector3 firstPoint)
+    private List<Utility.transformData> spawnPositions(int level, Vector3 center, Vector3 firstPoint)
     {
         List<transformData> transforms = new List<transformData>();
 
@@ -55,7 +47,7 @@ public class ShallowCopies : Ability, hasOverride {
         return transforms;
     }
 
-    private List<GameObject> makeClonesAt(List<transformData> tDatas)
+    private List<GameObject> makeClonesAt(List<Utility.transformData> tDatas)
     {
         List<GameObject> clones = new List<GameObject>();
 
@@ -145,11 +137,7 @@ public class ShallowCopies : Ability, hasOverride {
             foreach (var enemy in toSlice)
             {
                 enemy.recieve_Damage_Physical(1.0f);
-                enemy.stats.effects.addTimedEffectFor(attribute.HP, new Timed_Effect<Effect_Management.Attribute>(
-                        DateTime.Now, 10.0,
-                        Attribute_Effects.periodic_changeBy(1.0, -5.0),
-                        Utility_Effects.doNothing_Stop())
-                    );
+                enemy.stats.effects.addTimedEffectFor(attribute.HP, Aoe_Bleed.shadowSlash());
             }
 
             GameObject.Destroy(clone);

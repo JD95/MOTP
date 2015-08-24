@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace Effect_Management {
 
@@ -35,16 +35,16 @@ namespace Effect_Management {
 			switch (DateTime.Now.CompareTo(stopTime))
 			{
 				// stop time is before current time
-			case -1: return false; break;
+			case -1: return false;
 				
 				// it is currently stop time
-			case  0: return true; break;
+			case  0: return true;
 				
 				// it is not yet stop time
-			case  1: return true; break;
+			case  1: return true;
 				
 				//default case
-			default: return false; break;
+			default: return false;
 			}
 		}
 
@@ -77,5 +77,22 @@ namespace Effect_Management {
 		{
 			effects.Add(newEffect);
 		}
+
+        public void removeHarmful()
+        {
+            effects = effects.Where(x => 
+            {
+                var type = x.info.getEffectType();
+                return !(type == EffectType.Bleed ||
+                         type == EffectType.Posion ||
+                         type == EffectType.Slow ||
+                         type == EffectType.Stun);
+            }).ToList();
+        }
+
+        public Timed_Effect<T> has(string effectName)
+        {
+            return effects.Where(x => x.info.getName() == effectName).First();
+        }
 	}
 }

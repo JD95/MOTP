@@ -20,7 +20,7 @@ public class Dodge_EveryN : Ability{
 
         caster.GetComponent<Combat>().stats.effects.addLastingEffectFor(attribute.DO, new Lasting_Effect<Attribute>(
             "Dodge_EveryN",
-            (x) => {
+            (x, y) => {
                 if(dodgeRate == attackCount)
                 {
                     Debug.Log("Incite has taken effect!");
@@ -31,7 +31,7 @@ public class Dodge_EveryN : Ability{
                 {
                     return Attribute.zero();
                 }
-            }
-            ));
+            })
+         );
     }
 }
