@@ -60,7 +60,9 @@ namespace Effect_Management {
                 combatData.mana = combatData.maxMana();
 
                 // Move Character to correct position
-                var spawn = manager.bluespawn[UnityEngine.Random.Range(0, manager.bluespawn.Length)];
+                var spawn = character.tag == "TeamA" ?
+                        manager.bluespawn[UnityEngine.Random.Range(0, manager.bluespawn.Length)] :
+                        manager.redspawn[UnityEngine.Random.Range(0, manager.redspawn.Length)];
                 character.transform.position = spawn.transform.position;
 
                 // Set animation state to alive

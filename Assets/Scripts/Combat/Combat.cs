@@ -257,18 +257,6 @@ public class Combat : MonoBehaviour {
 			this.dead = true;
 			this.selectable = false;
 
-			CreepAI test;
-			if( test = GetComponent<CreepAI>())
-			{
-				var objectives = GetComponents<AI_Objective>();
-				foreach(var objective in objectives)
-				{
-					objective.enabled = false;
-				}
-
-				test.enabled = false;
-			}
-
 
 			GetComponent<NavMeshAgent>().enabled = false;
 			GetComponent<Rigidbody>().useGravity = false;
@@ -280,6 +268,19 @@ public class Combat : MonoBehaviour {
             }
             else
             {
+
+                CreepAI test;
+                if (test = GetComponent<CreepAI>())
+                {
+                    var objectives = GetComponents<AI_Objective>();
+                    foreach (var objective in objectives)
+                    {
+                        objective.enabled = false;
+                    }
+
+                    test.enabled = false;
+                }
+
                 var removeBodyFunc = CharacterState_Effects.destroyCharacterObject(gameObject);
                 character.characterState.addTimedEffect(removeBodyFunc);
             }

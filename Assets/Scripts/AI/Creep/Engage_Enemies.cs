@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using TeamLogic = Utility.TeamLogic;
 
 public enum AIState {Attacking, ChangingTarget, MovingIntoRange};
 
@@ -34,7 +35,7 @@ public abstract class Engage_Enemies : AI_Objective {
 	
 	protected void OnTriggerEnter(Collider other) {
 
-		if(other.name == "AI_Collider") return;
+		if(other.gameObject.layer == 8) return; // Non clickable object
 		//Debug.Log(other.name + " is in my range!");
 
 		Combat test;
@@ -42,7 +43,7 @@ public abstract class Engage_Enemies : AI_Objective {
 		{
 			//if (other.self.Equals(gameObject.transform)) return;
 
-			if (isEnemy(other.gameObject.tag) && !inList(other.gameObject)) {
+			if (TeamLogic.areEnemies(this.gameObject, other.gameObject) && !inList(other.gameObject)) {
 
 				//Debug.Log ("Adding " + other.gameObject.name);
 
@@ -54,12 +55,6 @@ public abstract class Engage_Enemies : AI_Objective {
 				inRangeEnemies.Add(other.gameObject);
 			}
 		}
-	}
-
-	protected bool isEnemy(string other)
-	{
-		//Debug.Log ("Tag 1: " + other.tag + " Tag2: " + transform.tag);
-		return other != gameObject.tag;
 	}
 
 	protected bool noCurrentTarget()
@@ -85,7 +80,7 @@ public abstract class Engage_Enemies : AI_Objective {
 		{
 
 			// If the target goes out of range change target
-			if (isEnemy (other.gameObject.tag) && inList(other.gameObject))
+			if (TeamLogic.areEnemies (this.gameObject, other.gameObject) && inList(other.gameObject))
 			{
 				// Deselect that enemy
 				if (other.gameObject == combatData.target)
@@ -127,7 +122,7 @@ public abstract class Engage_Enemies : AI_Objective {
 		else {flicker = 0;}
 
 		//Debug.Log("AI progressing");
-		inRangeEnemies.RemoveAll(item => item == null || item.transform == null || !item.transform.GetComponent<Combat>().selectable);
+        inRangeEnemies.RemoveAll(item => item == null); //|| item.transform == null || !item.GetComponent<Combat>().selectable);
 		enemyNames = convertList();
 
 		// Target alive but not in attack range
