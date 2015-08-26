@@ -4,6 +4,8 @@ using System;
 
 public class NetworkManager : Photon.MonoBehaviour {
 
+    public const string ROOM_NAME = "main";
+    private bool connected = false;
 
 	public int connectionPort = 25001;
 	string connectionIP = "127.0.0.1";
@@ -12,7 +14,7 @@ public class NetworkManager : Photon.MonoBehaviour {
 
 	GameManager gameManager;
 	
-	Boolean inGame;
+	bool inGame = false;
 	private int playersConnected = 0;
 	private PhotonPlayer[] networkPlayers;
 	public static int playerCount = 0;
@@ -24,49 +26,24 @@ public class NetworkManager : Photon.MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		PhotonNetwork.ConnectUsingSettings("0.1");
-		inGame = false;
+		PhotonNetwork.ConnectUsingSettings("v1.0");
 
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		// Displays connection status on screen
-		//GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
+
 	}
 
 	void OnJoinedLobby()
 	{
-		//PhotonNetwork.JoinRandomRoom();
+        connected = true;
 	}
-
-	void OnPhotonRandomJoinFailed()
-	{
-		Debug.Log("Can't join random room!");
-
-		// Creates opens the server for us to play on
-		PhotonNetwork.CreateRoom(null);
-	}
-
-//	void OnJoinedRoom ()
-//	{
-//		networkPlayers = new PhotonPlayer[players];
-//		networkPlayers[++playersConnected] = PhotonNetwork.player;
-//		if (playersConnected >= players) {
-//			gameManager.InitGame();
-//		}
-//	}
 
 	void OnJoinedRoom ()
 	{
 		Debug.Log("Player Connected");
-
-//		networkPlayers[playersConnected++] = player;
-//		if (playersConnected >= playerCount) {
-//			gameManager.InitGame(networkPlayers, playerCount);
-//		}
 
 		playerID = playerCount++;
 		gameManager.InitGame();
@@ -89,30 +66,17 @@ public class NetworkManager : Photon.MonoBehaviour {
 
 		jogadores = GUI.TextField (new Rect (100, 40, 50, 30), jogadores);
 		
-		if (GUI.Button (new Rect (160, 40, 240, 30), "Create Server")) {
-			playerCount = Convert.ToInt32 (jogadores);
-
-			createNewGame(); // Does same thing as join game for now
-		}
-		
 		GUI.Label (new Rect (0, 80, 40, 30), "IP: ");
 		connectionIP = GUI.TextField (new Rect (50, 80, 100, 30), connectionIP);
 
-		if (GUI.Button (new Rect (160, 80, 240, 30), "Join Game")) {
-			PhotonNetwork.JoinRandomRoom();
+		if (connected && GUI.Button (new Rect (160, 80, 240, 30), "Join Game")) {
+            PhotonNetwork.JoinRoom(ROOM_NAME,true);
 			inGame = true;
 		}
 		
 		GUI.EndGroup();
 	}
 
-	void createNewGame()
-	{
-		//PhotonNetwork.CreateRoom(null);
-		PhotonNetwork.JoinRandomRoom();
-		//PhotonNetwork.InstantiateSceneObject("GameManager",Vector3.zero,Quaternion.identity,0,null);
-		inGame = true;
-	}
 
 	void displayDisconnectButton()
 	{

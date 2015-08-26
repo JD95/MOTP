@@ -5,16 +5,8 @@ using System.Collections.Generic;
 
 public class GameManager : Photon.MonoBehaviour
 {
-
+    public const int WAVE_INTERVAL = 30;
     public string currentHero;
-
-	// hero prefabs
-	public Transform playerPrefabA;
-	public Transform playerPrefabB;
-	
-	// creep prefabs
-	public CreepAI creepPrefabA;
-	public CreepAI creepPrefabB;
 	
 	// Hero Spawn Locations
 	public GameObject[] redspawn;
@@ -35,11 +27,13 @@ public class GameManager : Photon.MonoBehaviour
 	void Start() {
 		paused = true;
         playerStats = _playerStats.GetComponent<StatsManager>();
+
+        // Connect to server
+
 	}
 	
 	public void InitGame() {
 		paused = false;
-		//int count = 0;
 		init = true;
 		SpawnPlayer ();
 	}
@@ -72,6 +66,8 @@ public class GameManager : Photon.MonoBehaviour
 
 	public void Update ()
 	{
+        // Display Menu
+
 		spawnWaves();
 	}
 
@@ -79,18 +75,10 @@ public class GameManager : Photon.MonoBehaviour
 	{
 
 		if (init) {
-			if (time >= 30) {
-				//				// creep A
-				SpawnCreep("Creep(ranged)_TeamA", GameObject.Find("blueSpawn1").GetComponent<Waypoint>(), 0);
-				SpawnCreep("Creep_TeamA", GameObject.Find("blueSpawn2").GetComponent<Waypoint>(), 0);
-				SpawnCreep("Creep_TeamA", GameObject.Find("blueSpawn3").GetComponent<Waypoint>(), 0);
-				SpawnCreep("Creep_TeamA", GameObject.Find("blueSpawn4").GetComponent<Waypoint>(), 0);
-		
-				//				// creep B
-				SpawnCreep("Creep(ranged)_TeamB", GameObject.Find("redSpawn1").GetComponent<Waypoint>(), 0);
-				SpawnCreep("Creep_TeamB", GameObject.Find("redSpawn2").GetComponent<Waypoint>(), 0);
-				SpawnCreep("Creep_TeamB", GameObject.Find("redSpawn3").GetComponent<Waypoint>(), 0);
-				SpawnCreep("Creep_TeamB", GameObject.Find("redSpawn4").GetComponent<Waypoint>(), 0);
+            if (time >= WAVE_INTERVAL)
+            {
+                spawnCreepWave("Creep_TeamA", 3, "Creep(ranged)_TeamA", 1, bluespawn);
+                spawnCreepWave("Creep_TeamB", 3, "Creep(ranged)_TeamB", 1, redspawn);
 				
 				time = 0;
 			}
@@ -98,9 +86,24 @@ public class GameManager : Photon.MonoBehaviour
 		}
 	}
 
-	private void SpawnCreep(String prefab, Waypoint spawn, int offset) {
+    delegate void spawner(string type);
+    private void spawnCreepWave(string meleeCreep, int meleeAmount, string rangedCreep, int rangedAmount, GameObject[] spawnPoints)
+    {
+        int waveCount =  meleeAmount + rangedAmount;
+
+        for (int i = 0; i < waveCount; i++)
+        {
+            string   spawnName  = spawnPoints[i % spawnPoints.Length].name;
+            Waypoint spawnLoc   = GameObject.Find(spawnName).GetComponent<Waypoint>();
+            spawner  spawn      = (x) => { SpawnCreep(x, spawnLoc); };
+
+            if (i <= meleeAmount) spawn(meleeCreep); else spawn(rangedCreep);
+        }
+    }
+
+	private void SpawnCreep(String prefab, Waypoint spawn) {
 		PhotonNetwork.Instantiate (prefab, 
-		                           spawn.transform.position + new Vector3(offset,0,offset), 
+		                           spawn.transform.position, 
 		                           spawn.transform.rotation, 0)
 			         .GetComponent<Character>().charID = charNumber++;
 	}

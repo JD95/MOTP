@@ -2881,8 +2881,10 @@ public static class PhotonNetwork
             Debug.LogError("missing settings script");
             return;
         }
-        UnityEngine.Object.DestroyImmediate(serverSettingTest);
-        
+        else
+        {
+            UnityEngine.Object.Destroy(serverSettingTest);
+        }
 
         // if still not loaded, create one
         if (PhotonNetwork.PhotonServerSettings == null)
