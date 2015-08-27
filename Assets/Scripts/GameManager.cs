@@ -3,11 +3,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum Champions { Gao, Shaffer };
+
 public class GameManager : Photon.MonoBehaviour
 {
     public const int WAVE_INTERVAL = 30;
+    private float time = 30;
     public string currentHero;
-	
+
+    public GameObject network;
+    public GameObject ChampionSelect;
+
 	// Hero Spawn Locations
 	public GameObject[] redspawn;
 	public GameObject[] bluespawn;
@@ -16,13 +22,14 @@ public class GameManager : Photon.MonoBehaviour
     private StatsManager playerStats; 
 	
 	public static bool paused = true;
-	
-	public List<Hero> playerScripts = new List<Hero> ();
+
 	private int charNumber = 0;
 	
  	private bool init = false;
-
 	public bool gameOver = false;
+
+    public int[] champSelect;
+    public int readyPlayers = 0;
 
 	void Start() {
 		paused = true;
@@ -35,14 +42,62 @@ public class GameManager : Photon.MonoBehaviour
 	public void InitGame() {
 		paused = false;
 		init = true;
-		SpawnPlayer ();
+        spawnPlayers();
 	}
 	
-	
-	public void SpawnPlayer ()
+    public void selectChampion(Champions selection, int playerId)
+    {
+        Debug.Log("A player has selected a champ!");
+        Debug.Log("Their ID = " + playerId.ToString());
+
+        bool selectionIsFree = champSelect[(int)selection] == 0;
+
+        if (selectionIsFree)
+        {
+            // Clear any previous selection for this player
+            for (int i = 0; i < champSelect.Length; i++)
+                if (champSelect[i] == playerId) champSelect[i] = 0;
+
+            // Put in the new selection
+            champSelect[(int)selection] = playerId;
+        }
+    }
+
+    public void playerIsReady()
+    {
+        Debug.Log("A player is ready!");
+        Debug.Log("Connected Characters = " + NetworkManager.playerCount.ToString());
+
+        if(++readyPlayers == NetworkManager.playerCount)
+        {
+            Debug.Log("All players are ready!");
+            ChampionSelect.SetActive(false);
+            InitGame();
+        }
+    }
+
+    public void spawnPlayers()
+    {
+        foreach(var teamSlot in champSelect)
+        {
+            if (teamSlot != 0) SpawnPlayer(intToName(teamSlot));
+        }
+    }
+
+    public string intToName(int selection)
+    {
+        switch (selection)
+        {
+            case 1:  return "Gao";
+            case 2:  return "Shaffer";
+            default: return "Gao";
+        }
+    }
+
+	public void SpawnPlayer (string prefabName)
 	{
 		GameObject mySpawn = bluespawn[UnityEngine.Random.Range(0,bluespawn.Length)];
-        GameObject myPlayer = PhotonNetwork.Instantiate(currentHero, mySpawn.transform.position, mySpawn.transform.rotation, 0);
+        GameObject myPlayer = PhotonNetwork.Instantiate(prefabName, mySpawn.transform.position, mySpawn.transform.rotation, 0);
         myPlayer.name = "player";
 		enablePlayer (myPlayer);
         playerStats.Init();
@@ -62,13 +117,11 @@ public class GameManager : Photon.MonoBehaviour
 
 	}
 
-	private float time = 30;
-
 	public void Update ()
 	{
         // Display Menu
+        spawnWaves();
 
-		spawnWaves();
 	}
 
 	private void spawnWaves()

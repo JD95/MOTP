@@ -117,7 +117,7 @@ Transform:
   - {fileID: 1036683011}
   - {fileID: 2144675378}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!1 &22149619
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,6 +920,7 @@ GameObject:
   - 222: {fileID: 551892459}
   - 114: {fileID: 551892458}
   - 114: {fileID: 551892457}
+  - 114: {fileID: 551892460}
   m_Layer: 5
   m_Name: SelectShaffer
   m_TagString: Untagged
@@ -983,7 +984,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 551892458}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 551892460}
+        m_MethodName: onClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &551892458
@@ -1013,6 +1025,20 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 551892455}
+--- !u!114 &551892460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 551892455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 788faf44e68c1594aba655b95a72c939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  network: {fileID: 1993049831}
+  game: {fileID: 1159620202}
+  champ: 1
 --- !u!1 &575445386
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,7 +1453,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
 --- !u!1 &858796181 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 179442, guid: f74a18030f02b3b4ba36258843df680b, type: 2}
@@ -1621,7 +1647,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
 --- !u!1001 &1036683010
 Prefab:
   m_ObjectHideFlags: 0
@@ -1731,6 +1757,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHero: Shaffer
+  network: {fileID: 1993049829}
+  ChampionSelect: {fileID: 1352278651}
   redspawn:
   - {fileID: 1483313265}
   - {fileID: 1339440443}
@@ -1742,8 +1770,9 @@ MonoBehaviour:
   - {fileID: 1531127106}
   - {fileID: 139036030}
   _playerStats: {fileID: 22149619}
-  playerScripts: []
   gameOver: 0
+  champSelect: 0000000000000000
+  readyPlayers: 0
 --- !u!4 &1159620203
 Transform:
   m_ObjectHideFlags: 0
@@ -1874,7 +1903,7 @@ GameObject:
   - 222: {fileID: 1352278654}
   - 114: {fileID: 1352278653}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: ChampionSelect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2237,8 +2266,9 @@ GameObject:
   - 222: {fileID: 1511255339}
   - 114: {fileID: 1511255338}
   - 114: {fileID: 1511255337}
+  - 114: {fileID: 1511255340}
   m_Layer: 5
-  m_Name: StartGame
+  m_Name: Ready
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2300,7 +2330,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1511255338}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1511255340}
+        m_MethodName: onClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1511255338
@@ -2330,6 +2371,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1511255335}
+--- !u!114 &1511255340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1511255335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1017578e25bf60545a80851fdc81e956, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 1159620201}
 --- !u!1 &1528183925
 GameObject:
   m_ObjectHideFlags: 0
@@ -2406,6 +2459,7 @@ GameObject:
   - 222: {fileID: 1536923097}
   - 114: {fileID: 1536923096}
   - 114: {fileID: 1536923095}
+  - 114: {fileID: 1536923098}
   m_Layer: 5
   m_Name: SelectGao
   m_TagString: Untagged
@@ -2469,7 +2523,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1536923096}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1536923098}
+        m_MethodName: onClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1536923096
@@ -2499,6 +2564,20 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1536923093}
+--- !u!114 &1536923098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1536923093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 788faf44e68c1594aba655b95a72c939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  network: {fileID: 1993049831}
+  game: {fileID: 1159620202}
+  champ: 0
 --- !u!1 &1582123006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2558,7 +2637,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Start Game
+  m_Text: 'Ready
 
 '
 --- !u!222 &1582123009
@@ -3506,8 +3585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f499fbbd6a511154396d66324746ed98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionPort: 25001
-  skin: {fileID: 0}
+  playerID: 0
 --- !u!4 &1993049832
 Transform:
   m_ObjectHideFlags: 0
