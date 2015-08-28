@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum Champions { Gao, Shaffer };
+public enum Champions { Gao, Shaffer};
 
 public class GameManager : Photon.MonoBehaviour
 {
@@ -88,8 +88,8 @@ public class GameManager : Photon.MonoBehaviour
     {
         switch (selection)
         {
-            case 1:  return "Gao";
-            case 2:  return "Shaffer";
+            case 0:  return "Gao";
+            case 1:  return "Shaffer";
             default: return "Gao";
         }
     }
