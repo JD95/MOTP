@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
+using System.Collections.Generic;
+
 
 
 public enum attribute { HP, HPReg, MPReg, MaxMP, AR, AS, AP, AD, DO, ARM, MR, CDR};
@@ -8,6 +9,21 @@ public enum attribute { HP, HPReg, MPReg, MaxMP, AR, AS, AP, AD, DO, ARM, MR, CD
 namespace Effect_Management{
 
 	public class Attribute_Manager {
+
+        /*
+         *  These tables serve to fix the problem of casting spells over the network. Because we cannot
+         *  send anything more complex than ints or strings through the server, we cannot directly apply
+         *  effects. Instead we want to pass a string (the name of the effect) to one of these tables in
+         *  the effect manager, and then the name would be looked up in the table and then return to new
+         *  effect to apply.
+         *  
+         *  Because abilities are classes, we can add the effect (if any) to our table when the object is
+         *  constructed or in Start(), which ever is more suitable. The key for the hash table is going to
+         *  be the name of the effect.
+         * 
+         */ 
+        public static TimedEffect_table<Attribute> timedEffects = new TimedEffect_table<Attribute>();
+        public static LastingEffect_table<Attribute> lastingEffects = new LastingEffect_table<Attribute>();
 
         const int numAttributes = 12;
 
@@ -35,14 +51,14 @@ namespace Effect_Management{
             return attributes[(int)attr].compileEffects();
         }
 
-        public void addTimedEffectFor(attribute attr, Timed_Effect<Attribute> newEffect)
+        public void addTimedEffectFor(attribute attr, string effect)
         {
-            attributes[(int)attr].add_timedEffect(newEffect);
+            attributes[(int)attr].add_timedEffect(timedEffects[effect]());
         }
 
-        public void addLastingEffectFor(attribute attr, Lasting_Effect<Attribute> newEffect)
+        public void addLastingEffectFor(attribute attr, string effect)
         {
-            attributes[(int)attr].add_lastingEffect(newEffect);
+            attributes[(int)attr].add_lastingEffect(lastingEffects[effect]());
         }
 
         public void removeLastingEffectFor(attribute attr, string id)

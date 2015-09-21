@@ -29,7 +29,8 @@ public class NetworkManager : Photon.MonoBehaviour {
 	void OnJoinedLobby()
 	{
         connected = true;
-        PhotonNetwork.JoinRoom("main", true);
+        //PhotonNetwork.JoinRoom("main", true);
+        PhotonNetwork.JoinOrCreateRoom("main", new RoomOptions(), new TypedLobby());
 	}
 
 	void OnJoinedRoom ()

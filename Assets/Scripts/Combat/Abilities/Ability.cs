@@ -8,6 +8,7 @@ public abstract class Ability  : Photon.MonoBehaviour
     public string   spawnName;
     public float    cooldownTime;
 
+    public abstract void registerEffects();
     public abstract bool trigger();
     public abstract void passiveEffect();
 

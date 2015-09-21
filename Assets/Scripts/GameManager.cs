@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum Champions { Gao, Shaffer};
+public enum Champions { Gao = 0, Shaffer = 1, Cliburn = 2};
 
 public class GameManager : Photon.MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class GameManager : Photon.MonoBehaviour
     private float time = 30;
     public string currentHero;
 
-    public GameObject network;
+    public NetworkManager network;
     public GameObject ChampionSelect;
 
 	// Hero Spawn Locations
@@ -33,6 +33,7 @@ public class GameManager : Photon.MonoBehaviour
 
 	void Start() {
 		paused = true;
+        champSelect = new int[8];
         playerStats = _playerStats.GetComponent<StatsManager>();
 
         // Connect to server
@@ -47,8 +48,7 @@ public class GameManager : Photon.MonoBehaviour
 	
     public void selectChampion(Champions selection, int playerId)
     {
-        Debug.Log("A player has selected a champ!");
-        Debug.Log("Their ID = " + playerId.ToString());
+        Debug.Log("Player " + playerId.ToString() + " has selected " + selection.ToString());
 
         bool selectionIsFree = champSelect[(int)selection] == 0;
 
@@ -78,10 +78,12 @@ public class GameManager : Photon.MonoBehaviour
 
     public void spawnPlayers()
     {
-        foreach(var teamSlot in champSelect)
+
+        for (int i = 0; i < champSelect.Length; i++)
         {
-            if (teamSlot != 0) SpawnPlayer(intToName(teamSlot));
+            if (champSelect[i] != 0) { SpawnPlayer(intToName(i), champSelect[i]); }
         }
+
     }
 
     public string intToName(int selection)
@@ -90,19 +92,23 @@ public class GameManager : Photon.MonoBehaviour
         {
             case 0:  return "Gao";
             case 1:  return "Shaffer";
+            case 2:  return "Cliburn";
             default: return "Gao";
         }
     }
 
-	public void SpawnPlayer (string prefabName)
+	public void SpawnPlayer (string prefabName, int playerId)
 	{
-		GameObject mySpawn = bluespawn[UnityEngine.Random.Range(0,bluespawn.Length)];
-        GameObject myPlayer = PhotonNetwork.Instantiate(prefabName, mySpawn.transform.position, mySpawn.transform.rotation, 0);
-        myPlayer.name = "player";
-		enablePlayer (myPlayer);
-        playerStats.Init();
+        if (network.playerID == playerId)
+        {
+            GameObject mySpawn = bluespawn[UnityEngine.Random.Range(0, bluespawn.Length)];
+            GameObject myPlayer = PhotonNetwork.Instantiate(prefabName, mySpawn.transform.position, mySpawn.transform.rotation, 0);
+            myPlayer.name = "player";
+            enablePlayer(myPlayer);
+            playerStats.Init();
 
-		GameObject.Find("Main Camera").GetComponent<CameraControl>().SetTarget(myPlayer.transform);
+            GameObject.Find("Main Camera").GetComponent<CameraControl>().SetTarget(myPlayer.transform);
+        }
 	}
 
 	void enablePlayer(GameObject player)
@@ -112,7 +118,7 @@ public class GameManager : Photon.MonoBehaviour
         player.GetComponent<Abilities>().enabled = true;
 		player.GetComponent<Character>().enabled = true;
 		player.GetComponent<AudioSource>().enabled = true;
-		player.GetComponent<CharacterController>().enabled = true;
+		//player.GetComponent<CharacterController>().enabled = true;
 		player.GetComponent<NetworkCharacter>().enabled = true;
 
 	}

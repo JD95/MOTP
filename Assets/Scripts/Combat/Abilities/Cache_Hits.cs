@@ -25,5 +25,10 @@ public class Cache_Hits : Ability {
     {
         // None
     }
+
+    public override void registerEffects()
+    {
+        //throw new System.NotImplementedException();
+    }
 }
 

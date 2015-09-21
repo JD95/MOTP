@@ -26,4 +26,9 @@ public class Valgrind : Ability {
     {
  	//throw new System.NotImplementedException();
     }
+
+    public override void registerEffects()
+    {
+        //throw new System.NotImplementedException();
+    }
 }

@@ -135,6 +135,13 @@ namespace Effect_Management{
 
 	}
 
-
+    /*
+     * These "classes" are just so we dont have to write Dictionary<Func<Timed_Effect<T>>, string> in places
+     * Essentially they are a table of fucntions that return new effects. The reason for returning functions
+     * is that, in the case of timed effects, the actual time the object is created is important, so the 
+     * effects must be created on the fly!
+     */
+    public class TimedEffect_table<T> : Dictionary<string, Func<Timed_Effect<T>>> { }
+    public class LastingEffect_table<T> : Dictionary<string, Func<Lasting_Effect<T>>> { }
 
 } // End of namespace

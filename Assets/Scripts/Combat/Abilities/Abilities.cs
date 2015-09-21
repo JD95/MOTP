@@ -59,6 +59,7 @@ public class Abilities : MonoBehaviour {
     {
         ability = component.GetComponent<Ability>();
         ability.setCaster(gameObject);
+        ability.registerEffects();
     }
 
     void Update()

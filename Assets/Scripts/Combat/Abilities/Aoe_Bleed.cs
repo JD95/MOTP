@@ -17,7 +17,7 @@ public class Aoe_Bleed : Ability {
         foreach(var enemy in toSlice)
         {
             enemy.recieve_Damage_Physical(5.0f);
-            enemy.stats.effects.addTimedEffectFor(attribute.HP, shadowSlash());
+            enemy.stats.effects.addTimedEffectFor(attribute.HP, "Shadow Slash");
         }
 
         return true;
@@ -25,7 +25,12 @@ public class Aoe_Bleed : Ability {
 
     public override void passiveEffect()
     {
-        
+        // None
+    }
+
+    public override void registerEffects()
+    {
+        Effect_Management.Attribute_Manager.timedEffects.Add("Shadow Slash", shadowSlash);
     }
 
     public static Timed_Effect<Effect_Management.Attribute> shadowSlash()

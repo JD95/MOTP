@@ -19,4 +19,9 @@ public class CreateObject : Ability {
         // None
     }
 
+    public override void registerEffects()
+    {
+        //throw new System.NotImplementedException();
+    }
+
 }
